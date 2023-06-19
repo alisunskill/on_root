@@ -1,0 +1,428 @@
+/* header */
+.headerhero {
+  padding: 30px 0px 35px 0px;
+}
+.logoimage {
+  max-width: 270px;
+  width: 100%;
+}
+.inputgroup {
+  height: 40px;
+  border-radius: 50px;
+}
+.searchbarbox {
+  height: auto;
+}
+.searchvally {
+  height: auto;
+  border-radius: 50px;
+  border: 2px solid #000000 !important;
+  border-radius: 50px !important;
+}
+.fa-search:before {
+  content: "\f002";
+  font-size: 30px;
+  margin-right: 18px;
+}
+.menimg {
+  width: 70px;
+  object-fit: cover;
+  height: 70px;
+}
+
+/* page body */
+.landingcentral1 {
+  width: 100%;
+  height: 100%;
+  background-color: #7cc5e5;
+  margin-bottom: 30px;
+  padding: 35px 20px;
+}
+.globalhero{
+  padding: 0px 33px;
+}
+.matchheader {
+  font-size: 24px;
+  line-height: 33px;
+}
+.landingeventheading {
+  font-size: 50px;
+}
+.bghut{
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(../public//images/hut.bg.svg); 
+  padding: 220px 50px 0px 50px;
+  width: 100%;
+}
+
+.landingimage {
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 400px;
+  color: #ffffff;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.newsletter {
+  font-size: 40px;
+  margin-top: 50px;
+}
+.offerbox {
+  width: 45%;
+}
+.landingnewsletterimage {
+  height: auto;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* mediaqueries */
+@media only screen and (max-width: 1444px) {
+  .landing_event-heading {
+    font-size: 32px;
+    padding: 70px 10px;
+    border-radius: 15px;
+  }
+  .newsletter {
+    font-size: 30px;
+  }
+}
+
+/* body {
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+} */
+.landingbtncolor {
+  background-color: white;
+  border: none;
+  color: black;
+  font-family: "Poppins", sans-serif;
+  text-align: left;
+  border-radius: 60px;
+}
+.landing_btn_width {
+  width: 40px;
+}
+
+/* forall */
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.letter-spac {
+  letter-spacing: 0.59em;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.fw-700 {
+  font-weight: 700;
+}
+.fw-600 {
+  font-weight: 600;
+}
+
+.white {
+  color: #ffffff;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.light-dark {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.4) 58.85%
+  );
+}
+
+.m1 {
+  margin-top: 5px;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-center {
+  justify-content: center;
+}
+
+.fw-400 {
+  font-weight: 400;
+}
+
+/* for all end */
+
+.landingcentral1 {
+  width: 100%;
+  height: 100%;
+  background-color: #7cc5e5;
+  margin-bottom: 30px;
+  padding: 35px 20px;
+}
+.landingbuttondivs {
+  padding: 0px;
+  margin-left: 40px;
+}
+.landingfont {
+  font-size: large;
+  font-weight: bolder;
+}
+.landingfont1 {
+  font-size: small;
+}
+@media (max-width: 321px) {
+  .landing_button-divs {
+    width: 310px;
+  }
+}
+.landingglobe {
+  height: 500px;
+  width: 100%;
+}
+
+.globe {
+  width: 100%;
+  height: 600px;
+}
+
+.landingheading {
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+}
+.landingcentral {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+.landingtext {
+  max-width: 430px;
+  width: 100%;
+  padding: 50px 20px;
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.4) 58.85%
+  );
+}
+.landingtextmidgrid {
+  padding: 20px;
+  text-align: center;
+}
+.landingtextfinalgrid {
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.4) 58.85%
+  );
+}
+.landingimage1 {
+  border-radius: 20px;
+  padding: 20px 0px;
+  height: 600px;
+  background-image: url("../public/Images/card-one.svg");
+  background-size: cover;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+  padding-bottom: 25px;
+}
+.landingimage2 {
+  border-radius: 20px;
+  background-image: url("../public/Images/card-two.svg");
+  background-size: cover;
+  height: 180px;
+  color: white;
+}
+.landingimage3 {
+  border-radius: 20px;
+  background-image: url("../public/Images/card-three.svg");
+  background-size: cover;
+  height: 180px;
+  color: white;
+}
+.landingimage4 {
+  border-radius: 20px;
+  background-image: url("../public/Images/card-three.svg");
+  background-size: cover;
+  height: 180px;
+  color: white;
+}
+.landingimage5 {
+  border-radius: 20px;
+  background-image: url("../public/Images/card-fove.svg");
+  background-size: cover;
+  height: 180px;
+  color: white;
+}
+.landingimage6 {
+  border-radius: 20px;
+  background-image: url("../public/Images/card-four.svg");
+  background-size: cover;
+  height: 390px;
+  color: white;
+  text-align: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+  flex-direction: column;
+  padding-bottom: 60px;
+}
+.landingnextbutton {
+  padding: 20px 40px;
+  background-color: #0f3d95;
+  color: white;
+  border-radius: 60px;
+  margin-top: 10px;
+  font-size: 22px;
+  border: none;
+}
+.landingdivendheading {
+  display: flex;
+  justify-content: center;
+  margin-top: 90px;
+  margin-bottom: 10px;
+}
+.landingendheading {
+  font-weight: bolder;
+  font-family: "Poppins", sans-serif;
+  font-size: 30px;
+}
+.landingdivsubheading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.landing_sub-heading {
+  font-size: 20px;
+}
+
+.landinginput1, .landingnewsletterimage{
+  width: 100%;
+}
+
+.landingmaincard {
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  margin: 10px 0px;
+
+}
+.landingendcard1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5rem;
+  flex-wrap: wrap;
+}
+.fw-600{
+  max-width: 500px;
+}
+.landingendcard2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.landingicon1 {
+  background-color: white;
+  height: 55px;
+  width: 55px;
+  border-radius: 40px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.landingicon1:hover {
+  background-color: #b2e1f5;
+}
+.landingsection3icon {
+  height: 35px;
+}
+.landingsection3content {
+  text-align: center;
+  color: white;
+  font-size: 20px;
+}
+
+.landingsection2rightcontainer {
+  padding: 49px 78px;
+  text-align: center;
+}
+/* form {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  border: 1px solid grey;
+  width: 100%;
+  padding: 1px;
+  border-radius: 20px;
+} */
+
+.input1 {
+  border: none;
+}
+.input1:focus {
+  outline: none;
+}
+.form1:focus-within {
+  outline: 1px solid blue;
+}
+
+
+.landinginput1 {
+  border-radius: 20px;
+  background-color: transparent;
+  color: black;
+  border: none;
+}
+.landingbtnlast {
+  font-size: 15px;
+  padding: 8px 10px;
+  text-transform: capitalize;
+  border-radius: 10rem;
+  background-color: #1264fa;
+  color: white;
+  transition: all 0.3s linear;
+}
+.landingbtnlast:hover,
+.landing_btn-last:active {
+  transform: scale(1.05);
+  color: white;
+}
+
+@media only screen and (max-width: 1440px) {
+  .landingimage {
+    height: 300px;
+  }
+  
+}
+
+
+@media only screen and (max-width: 700px) and (min-width: 300px) {
+  .landing_main-card {
+    border-radius: 46px;
+  }
+  .landing_next-button {
+    width: 35%;
+  }
+  .landing_button-divs {
+    width: 111px;
+  }
+}
+
