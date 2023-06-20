@@ -1,9 +1,6 @@
 /* Page 1 Landing page */
 
-body {
-    font-family: "Poppins", sans-serif;
-    overflow-x: hidden;
-  }
+
   .landing_btn_color {
     background-color: white;
     border: none;
@@ -21,7 +18,7 @@ body {
     margin-bottom: 0;
   }
   
-  .letter-spac {
+  .letterspac {
     letter-spacing: 0.59em;
     font-weight: 500;
     font-size: 16px;

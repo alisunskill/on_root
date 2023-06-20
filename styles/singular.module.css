@@ -1,0 +1,195 @@
+/* Page 2 Singular event info page */
+
+.eventicon1 {
+  height: 60px;
+}
+.eventicondiv {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgb(67, 63, 63);
+  border-radius: 30px;
+  padding: 5px;
+}
+.scenery {
+  max-width: 100%;
+}
+.foodIcons {
+  max-width: 80px;
+}
+.eventicondiv:hover {
+  background-color: rgb(142, 94, 94);
+}
+.eventicon {
+  padding: 0px 40px;
+}
+.eventicondiv1 {
+  margin-left: 5px;
+}
+.eventtopicons {
+  width: 30px;
+  padding: 6px;
+}
+.eventtoprighticon {
+  display: flex;
+  justify-content: flex-end;
+}
+.eventtoplefticon {
+  margin-top: 10px;
+  margin-left: 20px;
+}
+.eventmidicons {
+  margin-top: 118px;
+}
+.eventicons {
+  padding-top: 35px;
+  padding-right: 40px;
+}
+.eventmapimage {
+  width: 100%;
+}
+.carousel-indicators {
+  position: static;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+}
+.carousel-indicators li {
+  width: 300px;
+  height: 100%;
+  opacity: 0.8;
+  border-bottom: 0px;
+  border-radius: 0px;
+  margin-left: 0px;
+  margin-right: 2px;
+}
+.carousel-item {
+  border-radius: 0px;
+}
+
+.eventtitlepara {
+  font-family: "Poppins", sans-serif;
+  padding-top: 20px;
+}
+.eventmidsection {
+  background-image: url("../public/images/page2midimage.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 600px;
+  margin-top: 20px;
+}
+.eventoperationhours {
+  max-width: 350px;
+  width: 100%;
+  background-color: white;
+  border-radius: 60px;
+  height: 340px;
+}
+.eventcostattend {
+  width: 350px;
+  height: 250px;
+  background-color: white;
+  border-radius: 40px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.scenerypara{
+    padding-left: 60px;
+}
+.eventclockicon {
+  width: 50px;
+  margin-bottom: 10px;
+}
+.eventhourstext {
+  font-family: "Poppins", sans-serif;
+}
+.eventmoneyicon {
+  width: 60px;
+  margin-bottom: 10px;
+}
+
+.eventendheading {
+  font-size: 30px;
+}
+
+.eventmaincard {
+  padding: 90px 30px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  margin: 10px 0px;
+}
+.eventendcard1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.eventendcard2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media only screen and (max-width: 1440px) {
+  .eventoperationhours {
+    height: 300px;
+  }
+  .foodIcons {
+    max-width: 60px;
+  }
+  .scenerypara{
+    padding-left: 50px;
+}
+}
+
+@media only screen and (max-width: 600px) and (min-width: 300px) {
+  .eventtitleimage {
+    width: 220px;
+  }
+  .eventicon {
+    display: flex;
+    flex-direction: column;
+    padding: 7px 14px;
+  }
+  .eventicondiv1 {
+    margin-left: 0px;
+    margin-top: 5px;
+  }
+  .eventmidicons {
+    display: flex;
+    flex-direction: row;
+    margin-top: -30px;
+    padding: 0px 33px;
+  }
+  .eventmapimage {
+    padding-top: 60px;
+  }
+  .eventmidsection {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .eventcostattend {
+    width: 240px;
+    margin-left: -3px;
+  }
+}
+
+@media only screen and (max-width: 991px) and (min-width: 600px) {
+  .eventtopsection {
+    display: flex;
+    flex-direction: row;
+  }
+  .eventicon {
+    padding: 0px 20px;
+  }
+  .eventmidicons {
+    display: flex;
+    flex-direction: row;
+    margin-top: -60px;
+    padding: 0px 270px;
+  }
+}

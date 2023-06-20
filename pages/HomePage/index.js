@@ -6,7 +6,7 @@ import foodicon from "../../public/Images/foodicon.svg";
 import cultureicon from "../../public/Images/cultureicon.svg";
 import hikingicon from "../../public/images/hikingicon.svg";
 import newsletter from "../../public/images/card-two.svg";
-
+import PostCard from "../../website/components/PostCards";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -49,15 +49,6 @@ const data = [
   },
 ];
 export default () => {
-  const [{ bgImg }] = data;
-  const imageUrl = bgImg;
-  const cardStyle = {
-    backgroundImage: `url(${imageUrl})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRpeat: "no-repeat",
-    borderRadius: "20px",
-  };
   return (
     <>
       {/* filtered zone */}
@@ -293,17 +284,15 @@ export default () => {
         </p>
       </div>
 
-      <div className={`row ${styles.landingendcard1}`}>
+      <div className={`row px-4 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}>
         {data.map((item, index) => {
           return (
-            <div key={index} className="col-12 col-md-6 col-lg-4 p-3">
-              <div className={styles.landingimage} style={cardStyle}>
-                <h6 className={`fw-400 mb-0 ${styles.landingeventheading}`}>
-                  {item.city} <br />
-                  <span className={`my-3`}>{item.country}</span>
-                </h6>
-              </div>
-            </div>
+            <PostCard
+              key={index}
+              imageUrl={item.bgImg}
+              city={item.city}
+              country={item.country}
+            />
           );
         })}
       </div>
