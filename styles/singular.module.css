@@ -40,6 +40,11 @@
 .eventmidicons {
   margin-top: 118px;
 }
+
+.tikicon{
+  color: green;
+  font-size: 25px;
+}
 .eventicons {
   padding-top: 35px;
   padding-right: 40px;

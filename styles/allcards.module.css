@@ -12,16 +12,45 @@
     align-items: center;
     justify-content: center;
   }
+  .landingimage1{
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 380px;
+    color: #ffffff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .landingeventheading {
     font-size: 50px;
   }
-
+  .letterspac {
+    letter-spacing: 0.50em;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+  }
+  .placeImg{
+    border-radius: 20px;
+    max-width: 400px;
+    height: 300px;
+    object-fit: inherit;
+    width: 100%;
+  }
 /* mediaqueries */
+
   @media only screen and (max-width: 1440px) {
     .landingimage {
       height: 300px;
     }
+    .landingimage1{
+      height: 260px;
+    }
     .landingeventheading {
       font-size: 30px;
     } 
+    .placeImg{
+      height: 270px;
+    }
   }

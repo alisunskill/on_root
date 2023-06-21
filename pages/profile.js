@@ -1,10 +1,10 @@
 import React from "react";
-import InfoPage from "../website/InfoPage";
+import Profile from "../website/Profile";
 
 export default () => {
   return (
     <div>
-      <InfoPage />
+      <Profile />
     </div>
   );
 };

@@ -60,7 +60,7 @@ const data = [
 function Singularevent() {
   return (
     <>
-      <div className="container-fluid py-5">
+      <div className="container-fluid pb-5">
         <div className="row">
           <div
             className={`col-lg-5 col-12 col-md-12 mt-3 ${styles.scenerypara}`}
