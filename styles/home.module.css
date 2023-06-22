@@ -38,7 +38,7 @@
   margin-bottom: 30px;
   padding: 35px 20px;
 }
-.globalhero{
+.globalhero {
   padding: 0px 33px;
 }
 .matchheader {
@@ -48,10 +48,10 @@
 .landingeventheading {
   font-size: 50px;
 }
-.bghut{
+.bghut {
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url(../public//images/hut.bg.svg); 
+  background-image: url(../public//images/hut.bg.svg);
   padding: 220px 50px 0px 50px;
   width: 100%;
 }
@@ -79,8 +79,30 @@
   object-fit: cover;
 }
 
+.paintgoal{
+  width: 90px;
+  height: 90px;
+  border-radius: 50px;
+  background-color: #ffffff;
+}
+.paintgoal:hover {
+  background-color: #7CC5E5;
+}
+.paintgoal:focus {
+  background-color: #7CC5E5;
+}
+
+.herogrid{
+  position: absolute;
+  top: -200px;
+}
+
 /* mediaqueries */
 @media only screen and (max-width: 1444px) {
+  .paintgoal{
+    width: 75px;
+    height: 75px;
+  }
   .landing_event-heading {
     font-size: 32px;
     padding: 70px 10px;
@@ -92,12 +114,12 @@
   .landingeventheading {
     font-size: 40px;
   }
+  .matchheader {
+    font-size: 18px;
+    line-height: 25px;
+  }
 }
 
-/* body {
-  font-family: "Poppins", sans-serif;
-  overflow-x: hidden;
-} */
 .landingbtncolor {
   background-color: white;
   border: none;
@@ -314,7 +336,8 @@
   font-size: 20px;
 }
 
-.landinginput1, .landingnewsletterimage{
+.landinginput1,
+.landingnewsletterimage {
   width: 100%;
 }
 
@@ -323,7 +346,6 @@
   text-align: center;
   color: white;
   margin: 10px 0px;
-
 }
 .landingendcard1 {
   display: flex;
@@ -332,7 +354,7 @@
   padding: 2.5rem;
   flex-wrap: wrap;
 }
-.fw-600{
+.fw-600 {
   max-width: 500px;
 }
 .landingendcard2 {
@@ -387,7 +409,6 @@
   outline: 1px solid blue;
 }
 
-
 .landinginput1 {
   border-radius: 20px;
   background-color: transparent;
@@ -413,9 +434,7 @@
   .landingimage {
     height: 300px;
   }
-  
 }
-
 
 @media only screen and (max-width: 700px) and (min-width: 300px) {
   .landing_main-card {
@@ -428,4 +447,3 @@
     width: 111px;
   }
 }
-

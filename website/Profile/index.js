@@ -38,14 +38,13 @@ function Profile() {
     const showData = data.filter((items) => {
       items.id === e;
     });
-console.log(e, 'alll');
+    console.log(e, "alll");
     setIsFavorite(showData);
   };
   const handleImageClick = () => {
     if (!clickedImages.includes(imageUrl)) {
       setClickedImages([...clickedImages, imageUrl]);
       console.log(clickedImages, "ali");
-
     }
   };
   return (
@@ -143,8 +142,8 @@ console.log(e, 'alll');
                           onClick={() => handleFavoriteClick(item.id)}
                           className={styles.fvbtn}
                         >
-                          {console.log(item.id, id, 'llll')}
-                          { isFavorite && item === item.id ? (
+                          {console.log(item.id, id, "llll")}
+                          {isFavorite && item === item.id ? (
                             <FontAwesomeIcon
                               icon={faHeart}
                               style={{ color: "red" }}

@@ -1,5 +1,4 @@
 import React from "react";
-// import "./mainstyle.css";
 import styles from "../../styles/home.module.css";
 import globe from "../../public/images/globe.svg";
 import foodicon from "../../public/Images/foodicon.svg";

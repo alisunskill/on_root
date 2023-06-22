@@ -84,10 +84,10 @@
 }
 .placeImg {
   border-radius: 20px;
-  max-width: 400px;
+  max-width: 600px;
+  width: 100%;
   height: 300px;
   object-fit: inherit;
-  width: 100%;
 }
 .landingeventheading {
   font-size: 50px;
@@ -104,7 +104,7 @@
     height: 400px;
   }
   .placeImg {
-    height: 270px;
+    height: 280px;
   }
   .landingeventheading {
     font-size: 30px;
