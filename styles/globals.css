@@ -2,7 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: Poppins;
+  font-family: "Poppins", sans-serif;
   overflow-x: hidden;
 }
 ul {
@@ -22,13 +22,16 @@ h3 {
 }
 
 /* forall */
-.fw-400{
+.cursor-pointer {
+  cursor: pointer;
+}
+.fw-400 {
   font-weight: 400;
 }
-.fw-500{
+.fw-500 {
   font-weight: 500;
 }
-.fw-600{
+.fw-600 {
   font-weight: 600;
 }
 .mb-0 {
@@ -38,6 +41,12 @@ h3 {
 .letterspac {
   letter-spacing: 0.59em;
   font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.ltr-shrt-spec {
+  letter-spacing: 0.39em;
   font-size: 16px;
   line-height: 22px;
 }
@@ -83,7 +92,14 @@ h3 {
 .flex-center {
   justify-content: center;
 }
-
+.savebtn {
+  background-color: #7cc5e5;
+  padding: 8px 45px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: none;
+  font-size: 20px;
+}
 /* for all end */
 
 @media (prefers-color-scheme: dark) {
@@ -98,4 +114,10 @@ h3 {
 
 input::placeholder {
   padding-left: 10px;
+}
+.h-full {
+  height: 100vh;
+}
+.w-100 {
+  width: 100%;
 }

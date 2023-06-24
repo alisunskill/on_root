@@ -1,13 +1,14 @@
 import React from "react";
 import styles from "../../styles/home.module.css";
+import newsletterimg from "../../public/images/card-two.svg";
 import globe from "../../public/images/globe.svg";
 import foodicon from "../../public/Images/foodicon.svg";
 import cultureicon from "../../public/Images/cultureicon.svg";
 import hikingicon from "../../public/images/hikingicon.svg";
-import newsletter from "../../public/images/card-two.svg";
 import PostCard from "../../website/components/PostCards";
 import Image from "next/image";
 import Link from "next/link";
+import NewsLetter from "../../website/components/NewsLetter";
 
 const data = [
   {
@@ -47,6 +48,7 @@ const data = [
     country: "USA",
   },
 ];
+
 export default () => {
   return (
     <>
@@ -55,13 +57,13 @@ export default () => {
         <div className={`btn-group px-lg-4 ${styles.landingbuttondivs} `}>
           {/* 1 */}
           <button
-            className={`btn btn-secondary btn-lg  mb-0 fw-bold ${styles.landingbtncolor}`}
+            className={`btn btn-secondary btn-lg bg-light border-0 rounded-5 mb-0 fw-bold ${styles.landingbtncolor}`}
             type="button"
           >
             <Link
               passHref
               href="/singular"
-              className="text-decoration-none text-dark"
+              className={`text-decoration-none text-dark bg-light ${styles.filterbtn}`}
             >
               Filter by
             </Link>
@@ -283,7 +285,9 @@ export default () => {
         </p>
       </div>
 
-      <div className={`row px-4 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}>
+      <div
+        className={`row px-4 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
+      >
         {data.map((item, index) => {
           return (
             <PostCard
@@ -347,51 +351,14 @@ export default () => {
 
       {/* subscribe newsletter */}
 
-      <div className={`pt-3`}>
-        <h3 className={`mb-0 fw-700 text-center ${styles.newsletter}`}>
-          Subscribe to our Newsletter
-        </h3>
-
-        <div className={` mt-4 pt-2 m-5 ${styles.landingcontainer}`}>
-          <div className="row border rounded-5">
-            <div
-              className={`col-lg-6 ${styles.landingsection2leftcontainer} p-0`}
-            >
-              <Image
-                src={newsletter}
-                alt=""
-                className={styles.landingnewsletterimage}
-              />
-            </div>
-
-            <div className="col-lg-6 d-flex flex-column align-center justify-content-center">
-              <div className={`${styles.offerbox} text-center`}>
-                <h4 className="mb-0 fw-600">
-                  Get Special Offers and more from Traveller
-                </h4>
-                <p className={`mb-0 ${styles.textgrey} mt-3`}>
-                  Subscribe to see secret deals prices drop the moment you sign
-                  up!
-                </p>
-                <div className="d-flex border w-100 justify-content-between px-1 rounded-5 mt-4">
-                  <input
-                    type="text"
-                    placeholder="Email Address"
-                    className={`${styles["landinginput1"]} ${styles["input1"]}`}
-                  />
-                  <a
-                    style={{ textDecoration: "none" }}
-                    href="#"
-                    className={styles.landingbtnlast}
-                  >
-                    Subscribe
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <NewsLetter
+        newsletterimg={newsletterimg}
+        heading={"Subscribe to our Newsletter"}
+        title={"Get Special Offers and more from Traveller"}
+        para={
+          "Subscribe to see secret deals prices drop the moment you sign up!"
+        }
+      />
     </>
   );
 };

@@ -1,10 +1,10 @@
-import React from 'react'
-import UpcomingTrips from '../website/UpcomingTrips'
+import React from "react";
+import UpcomingTrips from "../website/UpcomingTrips";
 
-export default () => {
+export default function upcomingtrips() {
   return (
     <div>
-        <UpcomingTrips />
+      <UpcomingTrips />
     </div>
-  )
+  );
 }

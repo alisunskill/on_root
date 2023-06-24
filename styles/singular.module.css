@@ -41,7 +41,7 @@
   margin-top: 118px;
 }
 
-.tikicon{
+.tikicon {
   color: green;
   font-size: 25px;
 }
@@ -101,8 +101,8 @@
   justify-content: center;
   align-items: center;
 }
-.scenerypara{
-    padding-left: 60px;
+.scenerypara {
+  padding-left: 60px;
 }
 .eventclockicon {
   width: 50px;
@@ -138,13 +138,52 @@
   align-items: center;
 }
 /* recommendations */
-.recommendtriphero{
+.recommendtriphero {
   margin-top: 70px;
 }
-.recommendtrip{
-  background-color: #EAEEF3;
+.recommendtrip {
+  background-color: #eaeef3;
 }
-
+/* upcoming trips */
+.dayshero {
+  background-color: #eeeeee;
+  border: none;
+  padding: 13px 20px !important;
+}
+.days {
+  padding: 20px 15px;
+  margin-bottom: 0px;
+}
+.dayshero:hover {
+  background-color: #cccccc !important;
+}
+.dayshero:focus {
+  background-color: #cccccc !important;
+}
+.days{
+  background-color: #eeeeee;
+}
+.notestext {
+  height: 200px;
+  border: 1px solid #cccccc;
+  background-color: #fff;
+  width: 100%;
+  font-size: 20px;
+  color: black;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+}
+.notestext::placeholder {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 8px;
+  font-size: 14px;
+  color: #999999;
+}
+.notestext:focus {
+  border: 1px solid #999999 !important;
+}
 
 @media only screen and (max-width: 1440px) {
   .eventoperationhours {
@@ -153,9 +192,9 @@
   .foodIcons {
     max-width: 60px;
   }
-  .scenerypara{
+  .scenerypara {
     padding-left: 50px;
-}
+  }
 }
 
 @media only screen and (max-width: 600px) and (min-width: 300px) {

@@ -1,56 +1,86 @@
 .landingendcard1 {
-    padding: 2.5rem;
-    flex-wrap: wrap;
-  }
-  .landingimage {
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 400px;
-    color: #ffffff;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .landingimage1{
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 380px;
-    color: #ffffff;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .landingeventheading {
-    font-size: 50px;
-  }
-  .letterspac {
-    letter-spacing: 0.50em;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
-  }
-  .placeImg{
-    border-radius: 20px;
-    max-width: 400px;
-    height: 300px;
-    object-fit: inherit;
-    width: 100%;
-  }
+  padding: 2.5rem;
+  flex-wrap: wrap;
+}
+.landingimage {
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 400px;
+  color: #ffffff;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.landingimage1 {
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 380px;
+  color: #ffffff;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.landingimageb {
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 313px;
+  color: #ffffff;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.landingeventheading {
+  font-size: 50px;
+}
+.letterspac {
+  letter-spacing: 0.5em;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+}
+.placeImg {
+  border-radius: 20px;
+  max-width: 400px;
+  height: 300px;
+  object-fit: inherit;
+  width: 100%;
+}
+.plusicon {
+  width: 25px;
+  height: 25px;
+  color: black;
+  font-weight: 600;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 20px;
+  cursor: pointer;
+  position: absolute;
+  right: 17px;
+  top: 16px;
+}
 /* mediaqueries */
 
-  @media only screen and (max-width: 1440px) {
-    .landingimage {
-      height: 300px;
-    }
-    .landingimage1{
-      height: 260px;
-    }
-    .landingeventheading {
-      font-size: 30px;
-    } 
-    .placeImg{
-      height: 270px;
-    }
+@media only screen and (max-width: 1440px) {
+  .plusicon {
+    width: 20px;
+    height: 20px;
   }
+  .landingimage {
+    height: 300px;
+  }
+  .landingimage1 {
+    height: 240px;
+  }
+  .landingimageb {
+    height: 240px;
+  }
+  .landingeventheading {
+    font-size: 30px;
+  }
+  .placeImg {
+    height: 270px;
+  }
+}

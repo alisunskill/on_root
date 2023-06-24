@@ -1,0 +1,108 @@
+/* sign up */
+.signupheading1 {
+  font-size: 30px;
+  color: #ffffff;
+  margin: 0%;
+  text-align: center;
+  font-weight: 700;
+}
+
+.signupmycontainer {
+  height: 100vh;
+  width: 100%;
+  background-image: url("../public/images/bgimage.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+}
+.signupsignupcontainer {
+  width: 45%;
+  background-image: url("../public/images/Rectangle\ 103.png");
+  background-size: cover;
+  border-radius: 20px;
+  padding: 80px 30px;
+}
+.signupinputfield {
+  text-align: center;
+}
+.signupinput {
+  text-align: center;
+  width: 30%;
+  padding: 10px;
+  border-radius: 10px;
+  border-color: white;
+  margin-top: 10px;
+  outline: none;
+  border: 0px;
+  font-weight: 400;
+}
+.signupinputinfo {
+  width: 66%;
+}
+.signupbutton {
+  padding: 10px;
+  width: 66%;
+  background-color: #7cc5e5;
+  color: white;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* confirm sign in   */
+.confirmme {
+  height: 100vh;
+  background-image: url("../public/images/bgimage.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  background-position: center;
+}
+.confirm_container {
+  max-width: 55%;
+  background-image: url("../public/images/Rectangle\ 103.png");
+  background-size: cover;
+  border-radius: 20px;
+  text-align: center;
+}
+.confirm_font {
+  color: white;
+  font-weight: 700;
+  padding: 140px 50px;
+  font-size: 30px;
+}
+
+@media only screen and (max-width: 1440px) {
+  .signupsignupcontainer {
+    width:43%;
+    padding: 60px 20px;
+  }
+  .confirm_container {
+    max-width: 45%;
+  }
+  .confirm_font {
+    padding: 100px 50px;
+    font-size: 25px;
+  }
+  .confirm_font {
+    padding: 90px 50px;
+    font-size: 25px;
+  }
+}
+
+@media only screen and (max-width: 600px) and (min-width: 300px) {
+  .signupsignupcontainer {
+    width: 90%;
+  }
+  .signupinputinfo {
+    width: 86%;
+  }
+  .signupinput {
+    width: 42%;
+  }
+}
