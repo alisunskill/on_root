@@ -100,6 +100,12 @@ h3 {
   border: none;
   font-size: 20px;
 }
+.signupheading1 {
+  font-size: 30px;
+  color: #ffffff;
+  margin: 0;
+  text-align: center;
+}
 /* for all end */
 
 @media (prefers-color-scheme: dark) {

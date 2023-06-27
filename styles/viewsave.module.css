@@ -173,6 +173,42 @@
 .btn:active {
   transform: scale(1.05);
 }
+
+.thumbnail {
+  color: #767676;
+}
+.herosaves {
+  border: 1px solid #767676;
+  border-radius: 20px;
+  padding: 20px 50px;
+  margin-top: 20px;
+}
+.radiobtn:checked {
+  color: black;
+  background-color: black;
+  border-color: black;
+}
+
+.herobtn {
+  border-radius: 20px;
+  padding: 20px 50px;
+  background-color: #7cc5e5;
+  font-size: 22px;
+  color: #fff;
+  border: none;
+  width: 100%;
+  text-align: left;
+  margin-top: 20px;
+}
+.modal-content {
+  padding: 30px !important;
+}
+
+.modal.show .modal-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 @media (max-width: 300px) {
   .yoursave_section2_right_container {
     padding: 0px 10px;
@@ -183,13 +219,14 @@
   .yoursave_image1 {
     height: 650px;
   }
-  .plusicon{
+  .plusicon {
     width: 25px;
     height: 25px;
   }
 }
 @media only screen and (max-width: 1440px) {
-  .plusicon, .plusicon2 {
+  .plusicon,
+  .plusicon2 {
     width: 20px;
     height: 20px;
   }

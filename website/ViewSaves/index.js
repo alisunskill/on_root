@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import styles from "../../styles/viewsave.module.css";
-import PlaceFullSubCard from "../components/PlaceFullSubCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import NewsLetter from "../../website/components/NewsLetter";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
 import newsletterimg from "../../public/images/card-two.svg";
+import styles from "../../styles/viewsave.module.css";
+import NewsLetter from "../../website/components/NewsLetter";
+import PlaceFullSubCard from "../components/PlaceFullSubCard";
+import Trip from "./components/Trip";
 
 const eventData = [
   {
@@ -42,6 +43,7 @@ const eventData2 = [
 ];
 function ViewSaves() {
   const [showIcon, setShowIcon] = useState(true);
+  const [modalShow, setModalShow] = useState(false);
   return (
     <>
       <div className="container-fluid">
@@ -52,8 +54,18 @@ function ViewSaves() {
               className={` d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_image1}`}
             >
               <div className="col-lg-12 yoursave_text">
-                <FontAwesomeIcon className={styles.plusicon} icon={faPlus} />
-
+                <FontAwesomeIcon
+                  onClick={() => setModalShow(true)}
+                  className={styles.plusicon}
+                  icon={faPlus}
+                />
+                <div className="text-center w-100  d-flex justify-content-center align-items-center">
+                  <Trip
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                    setModalShow={setModalShow}
+                  />
+                </div>{" "}
                 <p className="letterspac">ITINERARY</p>
                 <h3 className="landingeventheading"> Saved Activity 1 </h3>
                 <p className="mb-0 fw-500">Paris, France</p>
@@ -62,9 +74,14 @@ function ViewSaves() {
             <div className="row ">
               <div className="col-lg-12 col-md-12 pt-0 mt-0">
                 <div
-                  className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
+                  className={`row  d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
                   style={{ background: "white" }}
                 >
+                  <Trip
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                    setModalShow={setModalShow}
+                  />
                   {eventData1.map((item, index) => {
                     return (
                       <PlaceFullSubCard
@@ -75,6 +92,7 @@ function ViewSaves() {
                         title={item.title}
                         place={item.place}
                         time={item.time}
+                        setModalShow={setModalShow}
                       />
                     );
                   })}
@@ -89,6 +107,7 @@ function ViewSaves() {
                   className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
                   style={{ background: "white" }}
                 >
+                  <Trip show={modalShow} onHide={() => setModalShow(false)} />
                   {eventData.map((item, index) => {
                     return (
                       <PlaceFullSubCard
@@ -99,6 +118,7 @@ function ViewSaves() {
                         title={item.title}
                         place={item.place}
                         time={item.time}
+                        setModalShow={setModalShow}
                       />
                     );
                   })}
@@ -113,9 +133,11 @@ function ViewSaves() {
                     className={`col-lg-12 position-relative d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_text}`}
                   >
                     <FontAwesomeIcon
+                      onClick={() => setModalShow(true)}
                       className={styles.plusicon2}
                       icon={faPlus}
                     />
+                    <Trip show={modalShow} onHide={() => setModalShow(false)} />
                     <p className="fw-500 ltr-shrt-spec">ITINERARY</p>
                     <h3 className="landingeventheading"> Saved Activity 1 </h3>
                     <p className="mb-0 fw-500">Paris, France</p>
@@ -137,6 +159,7 @@ function ViewSaves() {
                         title={item.title}
                         place={item.place}
                         time={item.time}
+                        setModalShow={setModalShow}
                       />
                     );
                   })}

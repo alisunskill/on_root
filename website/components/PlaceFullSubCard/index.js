@@ -3,7 +3,7 @@ import styles from "../../../styles/allcards.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-export default ({ imageUrl, itinerary, title, place, time, showIcon }) => {
+export default ({ imageUrl, itinerary, title, place, time, showIcon ,setModalShow}) => {
   const cardStyle = {
     backgroundImage: `url(${imageUrl})`,
     backgroundSize: "cover",
@@ -19,7 +19,7 @@ export default ({ imageUrl, itinerary, title, place, time, showIcon }) => {
       >
         {showIcon && (
           <div className={`col-lg-12 ${styles.yoursave_plusi}`}>
-            <FontAwesomeIcon className={styles.plusicon} icon={faPlus} />
+            <FontAwesomeIcon className={styles.plusicon} icon={faPlus}  onClick={() => setModalShow(true)} />
           </div>
         )}
         <p className={`mb-0 ${styles.letterspac}`}>{itinerary}</p>

@@ -63,6 +63,17 @@
   justify-content: center;
   background-position: center;
 }
+.confirmme1 {
+  height: 100vh;
+  background-image: url("../public/images/bgrecm.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  background-position: center;
+}
 .confirm_container {
   max-width: 55%;
   background-image: url("../public/images/Rectangle\ 103.png");
@@ -70,16 +81,28 @@
   border-radius: 20px;
   text-align: center;
 }
+.confirm_container1 {
+  max-width: 55%;
+  background-image: url("../public/images/Rectangle\ 103.png");
+  background-size: cover;
+  border-radius: 20px;
+  text-align: center;
+  padding: 90px 50px;
+}
 .confirm_font {
   color: white;
   font-weight: 700;
   padding: 140px 50px;
   font-size: 30px;
 }
-
+.confirm_font1 {
+  color: white;
+  font-size: 30px;
+  font-weight: 700;
+}
 @media only screen and (max-width: 1440px) {
   .signupsignupcontainer {
-    width:43%;
+    width: 43%;
     padding: 60px 20px;
   }
   .confirm_container {
