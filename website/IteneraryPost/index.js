@@ -23,14 +23,14 @@ export default () => {
             <button href="#" className={styles.itin_button}>
               {" "}
               <FontAwesomeIcon icon={faPlus} />
-              <h1>Recommendation</h1>
+              <h2>Recommendation</h2>
             </button>
           </div>
           <div className="pt-4 d-flex justify-content-end">
             <button href="#" className={styles.itin_button}>
               {" "}
               <FontAwesomeIcon icon={faPlus} />
-              <h1>Recommendation</h1>
+              <h2>Recommendation</h2>
             </button>
           </div>
         </div>
