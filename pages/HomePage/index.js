@@ -6,6 +6,7 @@ import foodicon from "../../public/Images/foodicon.svg";
 import cultureicon from "../../public/Images/cultureicon.svg";
 import hikingicon from "../../public/images/hikingicon.svg";
 import PostCard from "../../website/components/PostCards";
+import Dropdown from "react-bootstrap/Dropdown";
 import Image from "next/image";
 import Link from "next/link";
 import NewsLetter from "../../website/components/NewsLetter";
@@ -71,87 +72,59 @@ export default () => {
         </div>
         {/* 2 */}
         <div className="btn-group px-lg-4">
-          <button
-            type="button"
-            className="btn btn-light rounded-5 dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <Link href="/infopage" className="text-decoration-none text-dark">
+          <Dropdown>
+            <Dropdown.Toggle
+              className="btn btn-light rounded-5"
+              variant="primary"
+              id="dropdown-basic"
+            >
               Region
-            </Link>
-          </button>
-          <div className="dropdown-menu">
-            <Link className="dropdown-item" passHref href="/SigularEvents">
-              Region
-            </Link>
-            <a className="dropdown-item" href="#">
-              Another action
-            </a>
-            <a className="dropdown-item" href="#">
-              Something else here
-            </a>
-            <div className={`dropdown-divider`}></div>
-            <a className="dropdown-item" href="#">
-              Separated link
-            </a>
-          </div>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
 
         {/* 3 */}
         <div className="btn-group px-lg-4">
-          <button
-            type="button"
-            className={`btn btn-light rounded-5 dropdown-toggle`}
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Price
-          </button>
-          <div className={`dropdown-menu`}>
-            <a className={`dropdown-item`} href="#">
-              Region
-            </a>
-            <a className={`dropdown-item`} href="#">
-              Another action
-            </a>
-            <a className={`dropdown-item`} href="#">
-              Something else here
-            </a>
-            <div className={`dropdown-divider`}></div>
-            <a className={`dropdown-item`} href="#">
-              Separated link
-            </a>
-          </div>
+          <Dropdown>
+            <Dropdown.Toggle
+              className="btn btn-light rounded-5"
+              variant="primary"
+              id="dropdown-basic"
+            >
+              Price
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
         {/* 4 */}
-        <div className={`btn-group`}>
-          <button
-            type="button"
-            className={`btn btn-light rounded-5 dropdown-toggle`}
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Discriptor
-          </button>
-          <div className={`dropdown-menu`}>
-            <a className={`dropdown-item`} href="#">
-              Region
-            </a>
-            <a className={`dropdown-item`} href="#">
-              Another action
-            </a>
-            <a className={`dropdown-item`} href="#">
-              Something else here
-            </a>
-            <div className={`dropdown-divider`}></div>
-            <a className={`dropdown-item`} href="#">
-              Separated link
-            </a>
-          </div>
+        <div className={`btn-group mx-3`}>
+          <Dropdown>
+            <Dropdown.Toggle
+              className="btn btn-light rounded-5"
+              variant="primary"
+              id="dropdown-basic"
+            >
+              Discriptor
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item href="/signup">Sign Up</Dropdown.Item>
+              <Dropdown.Item href="/login">Login</Dropdown.Item>
+              <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+              <Dropdown.Item href="/infopage">Information Page</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
       </div>
       <div className={`row globalhero`} style={{ marginBottom: "20px;" }}>
