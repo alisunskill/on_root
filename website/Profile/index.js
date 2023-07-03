@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { faPlus, faHeart } from "@fortawesome/free-solid-svg-icons";
 import imageUrl from "../../public/images/add.svg";
+import Link from "next/link";
 
 const data = [
   {
@@ -60,30 +61,49 @@ function Profile() {
 
         <div className="row py-5">
           <div className="col-12 col-md-4 col-lg-4 text-center justify-content-center d-flex">
+          <Link
+                  href="/upcomingtrips"
+                  className="text-decoration-none text-light"
+                >
             <button
               href="#"
               className={`d-flex align-items-center justify-content-center d-flex  ${styles.profilebutton}`}
             >
-              <h6 className="mb-0">Upcoming Trips</h6>
+              <h6 className="mb-0">
+                
+                  Upcoming Trips
+
+              </h6>
               <FontAwesomeIcon className={styles.profileplus} icon={faPlus} />
             </button>
+            </Link>
           </div>
           <div className="col-12 col-md-4 col-lg-4 text-center justify-content-center d-flex">
-            <button
-              href="#"
-              className={`text-center d-flex align-items-center justify-content-between px-4 d-flex ${styles.profilebutton} ${styles.reccommendbtn}`}
+            <Link
+              href="/recommendation"
+              className="text-decoration-none text-light"
             >
-              Your Recommendtions
-            </button>
+              <button
+                href="#"
+                className={`text-center d-flex align-items-center justify-content-between px-4 d-flex ${styles.profilebutton} ${styles.reccommendbtn}`}
+              >
+                Your Recommendtions
+              </button>
+            </Link>
           </div>
           <div className="col-12 col-md-4 col-lg-4 text-center">
-            <button
-              href="#"
-              className={`text-center d-flex align-items-center justify-content-between px-4 d-flex ${styles.profilebutton} ${styles.heartbtn}`}
-            >
-              <h6 className="mb-0">Saves</h6>
-              <FontAwesomeIcon className={styles.profileheart} icon={faHeart} />
-            </button>
+            <Link href="/viewsave" className="text-decoration-none text-light">
+              <button
+                href="#"
+                className={`text-center d-flex align-items-center justify-content-between px-4 d-flex ${styles.profilebutton} ${styles.heartbtn}`}
+              >
+                <h6 className="mb-0">Saves</h6>
+                <FontAwesomeIcon
+                  className={styles.profileheart}
+                  icon={faHeart}
+                />
+              </button>
+            </Link>
           </div>
         </div>
 

@@ -100,6 +100,15 @@ h3 {
   border: none;
   font-size: 20px;
 }
+.react-calendar {
+  width: 100% !important;
+}
+.react-calendar button {
+  color: black;
+}
+.react-calendar__navigation button {
+  color: black;
+}
 .signupheading1 {
   font-size: 30px;
   color: #ffffff;
