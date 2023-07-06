@@ -6,6 +6,11 @@
   max-width: 270px;
   width: 100%;
 }
+.rangehero {
+  width: 300px;
+  min-height: 55px;
+  padding: 20px 10px !important;
+}
 .landingfirstcard {
   padding-right: 0px !important;
 }

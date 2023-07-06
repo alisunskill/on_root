@@ -9,9 +9,10 @@ import PostCard from "../../website/components/PostCards";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "next/image";
 import Sliders from "./Sliders";
-// import RangeSlider from "./RangeSlider"
+import RangeSlider from "./RangeSlider";
 import Link from "next/link";
 import NewsLetter from "../../website/components/NewsLetter";
+// import three from "../../public/images/card-three.svg"
 
 const data = [
   {
@@ -134,10 +135,12 @@ export default () => {
               Price
             </Dropdown.Toggle>
 
-            <Dropdown.Menu>
+            <Dropdown.Menu className={styles.rangehero}>
               <Dropdown.Item>
                 {" "}
-                <div className="w-100">{/* <RangeSlider /> */}</div>
+                <div>
+                  <RangeSlider />
+                </div>
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

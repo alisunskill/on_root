@@ -52,8 +52,6 @@ h3 {
   line-height: 22px;
 }
 
-
-
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 17px;
@@ -65,7 +63,7 @@ h3 {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #7CC5E5;
+  background-color: #7cc5e5;
   border-radius: 14px;
   border: 3px solid var(--primary);
 }
@@ -75,12 +73,10 @@ h3 {
   width: 10px !important;
 }
 
-
-
-
-
-
-
+input {
+  box-sizing: border-box;
+  padding-left: 15px;
+}
 
 .ltr-shrt-spec {
   letter-spacing: 0.39em;
@@ -167,8 +163,17 @@ h3 {
   }
 }
 
-input::placeholder {
-  padding-left: 10px;
+.example-track-0 {
+  border: 3px solid red !important;
+  border-radius: 15px;
+}
+.example-track-1 {
+  border: 3px solid #8194d3 !important;
+  border-radius: 15px;
+}
+.example-track-2 {
+  border: 3px solid greenyellow !important;
+  border-radius: 15px;
 }
 .h-full {
   height: 100vh;
