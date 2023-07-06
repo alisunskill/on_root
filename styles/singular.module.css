@@ -11,7 +11,14 @@
   padding: 5px;
 }
 .scenery {
-  max-width: 100%;
+  /* max-width: 100%; */
+  height: 450px;
+  width: 100%;
+}
+.smallimg{
+  max-width: 90px;
+  width: 100%;
+  margin-top: 7px;
 }
 .foodIcons {
   max-width: 80px;
@@ -159,6 +166,7 @@
   height: 230px;
   border-radius: 8px;
 }
+
 .tripimg1{
   width: 100%;
   height: 430px;

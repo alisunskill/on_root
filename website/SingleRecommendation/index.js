@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import plane from "../../public/images/aeroplan.svg";
 import Image from "next/image";
+import SliderApp from "./sliderApp";
 
 const data = [
   {
@@ -97,7 +98,8 @@ export default () => {
             </div>
             <div className="row">
               <div className="col-lg-12 col-md-12 mt-4">
-                <Image className={`h-auto ${styles.scenery}`} src={slide} />
+                {/* <Image className={`h-auto ${styles.scenery}`} src={slide} /> */}
+                <SliderApp />
               </div>
 
               <div className="col-12 col-md-12 col-lg-12 py-3">

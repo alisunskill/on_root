@@ -16,11 +16,18 @@ a {
 
 * {
   box-sizing: border-box;
+  font-family: "Poppins", sans-serif !important;
 }
 h3 {
   color: aquamarine;
 }
 
+.letter-spac {
+  letter-spacing: 0.59em;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+}
 /* forall */
 .cursor-pointer {
   cursor: pointer;
@@ -44,6 +51,36 @@ h3 {
   font-size: 16px;
   line-height: 22px;
 }
+
+
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 17px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #8194d3;
+  width: 10px !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #7CC5E5;
+  border-radius: 14px;
+  border: 3px solid var(--primary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--tertiary);
+  width: 10px !important;
+}
+
+
+
+
+
+
+
 
 .ltr-shrt-spec {
   letter-spacing: 0.39em;

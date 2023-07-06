@@ -7,10 +7,10 @@ export default ({ imageUrl, city, country }) => {
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRpeat: "no-repeat",
-    borderRadius: "25px",
+    borderRadius: "22px",
   };
   return (
-    <div className="col-12 col-md-6 col-lg-4 p-3">
+    <div className="col-12 col-md-6 col-lg-4 p-lg-3 p-2">
       <div className={styles.landingimage} style={cardStyle}>
         <h6 className={`fw-500 mb-0 ${styles.landingeventheading}`}>
           {city} <br />

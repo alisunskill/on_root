@@ -5,13 +5,13 @@ import Image from "next/image";
 export default ({ newsletterimg, heading, title, para }) => {
   return (
     <div>
-      <div className={`pt-3`}>
+      <div className={`py-3`}>
         <h3 className={`mb-0 fw-700 text-center ${styles.newsletter}`}>
           {heading}{" "}
         </h3>
 
-        <div className={` mt-4 pt-2 m-5 ${styles.landingcontainer}`}>
-          <div className="row border rounded-5">
+        <div className={` mt-4 pt-2 ${styles.landingcontainer}`}>
+          <div className={`row border rounded-5 ${styles.newsltrhero}`}>
             <div
               className={`col-lg-6 ${styles.landingsection2leftcontainer} p-0`}
             >

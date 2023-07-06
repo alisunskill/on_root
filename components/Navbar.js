@@ -4,6 +4,8 @@ import men from "../public/Images/men.svg";
 import plusicon from "../public/Images/plusicon.svg";
 import styles from "../styles/home.module.css";
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
 function Navbar() {
@@ -14,7 +16,7 @@ function Navbar() {
           <div className={`row d-flex align-items-center ${styles.headerhero}`}>
             {/* logo */}
             <div
-              className={` col-lg-3 d-flex justify-content-center ${styles.logo}`}
+              className={`col-xl-3 col-lg-3 col-md-3 col-sm-3  d-flex justify-content-center ${styles.logo}`}
             >
               <Link href="/">
                 <Image
@@ -27,40 +29,35 @@ function Navbar() {
               </Link>
             </div>
             {/* searchbar */}
-            <div className="searchbar col-lg-6">
-              <div className={styles.inputgroup}>
-                <input
-                  type="text"
-                  placeholder="Explore With Us....."
-                  aria-describedby="button-addon5"
-                  className={`form-control ${styles.searchvally}`}
-                />
-                <div className="input-group-append">
-                  <button
-                    id="button-addon5"
-                    type="submit"
-                    className={`btn ${styles.searchbtn}`}
-                  >
-                    <i className="fa fa-search"></i>
-                  </button>
-                </div>
-              </div>
+            <div
+              className={`col-xl-6 col-lg-6 col-md-6 col-sm-6  ${styles.inputgroup}`}
+            >
+              <input
+                type="text"
+                placeholder="Explore With Us....."
+                aria-describedby="button-addon5"
+                className={`form-control ${styles.searchvally}`}
+              />
+              <FontAwesomeIcon
+                className={styles.inputgroupicon}
+                icon={faSearch}
+              />
             </div>
             {/* uploaes */}
-            <div className="icons-right col-lg-3 d-flex justify-content-end align-items-center">
+            <div className="icons-right col-xl-3 col-lg-3 col-md-3 col-sm-3  d-flex justify-content-end align-items-center">
               <Image
                 width={50}
                 height={50}
                 src={plusicon}
                 alt="plusicon"
-                className="mx-4"
+                className={`mx-4 ${styles.plusicon}`}
               />
               <Image
                 width={50}
                 height={50}
-                className="men-img mx-3"
                 src={men}
                 alt=""
+                className={`mx-3 ${styles.menicon}`}
               />
             </div>
           </div>

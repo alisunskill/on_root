@@ -50,4 +50,16 @@
     align-items: flex-start;
     flex-direction: column;
   }
+  .footer_main {
+    padding: 30px 30px 40px 30px;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .socialhero {
+    margin-top: 20px !important;
+  }
+  .footer_main {
+    justify-content: flex-start !important;
+  }
 }

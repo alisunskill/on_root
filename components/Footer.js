@@ -22,7 +22,7 @@ export default function Footer() {
             plan your next adventure with ease."
           </p>
         </div>
-        <div className={`col-lg-2`}>
+        <div className={`col-lg-2 col-md-4 col-sm-4 col-6 `}>
           <p className={styles.footer_heading}>Quick Links</p>
           <a className={styles.footer_link} href="">
             Home
@@ -37,7 +37,7 @@ export default function Footer() {
             Sign Up
           </a>
         </div>
-        <div className={`col-lg-2`}>
+        <div className={`col-lg-2 col-md-4 col-sm-4 col-6 `}>
           <p className={styles.footer_heading}>Destinations</p>
           <a className={styles.footer_link} href="">
             New York
@@ -52,7 +52,7 @@ export default function Footer() {
             Norway
           </a>
         </div>
-        <div className="col-lg-2">
+        <div className={`col-lg-2 col-md-4 col-sm-4 col-6 ${styles.socialhero}`}>
           <p className={styles.footer_heading}>Social Media</p>
           <a href="">
             <FontAwesomeIcon className="mx-2 w-30px" icon={faFacebook} />

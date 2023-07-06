@@ -11,6 +11,7 @@ import moneyicon from "../../public/images/moneyicon.svg";
 import slide from "../../public/images/slide.svg";
 import PlaceCard from "../../website/components/PlaceCard";
 import Image from "next/image";
+import SliderEvent from "./sliderApp";
 
 const data = [
   {
@@ -96,7 +97,8 @@ function Singularevent() {
             </div>
             <div className="row">
               <div className="col-lg-12 col-md-12 mt-4">
-                <Image className={`h-auto ${styles.scenery}`} src={slide} />
+                {/* <Image className={`h-auto ${styles.scenery}`} src={slide} /> */}
+                <SliderEvent />
               </div>
 
               <div className="col-12 col-md-12 col-lg-12 py-3">

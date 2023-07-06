@@ -6,9 +6,20 @@
   max-width: 270px;
   width: 100%;
 }
+.landingfirstcard {
+  padding-right: 0px !important;
+}
+.inputgroupicon {
+  position: absolute;
+  right: 31px;
+  top: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
 .inputgroup {
   height: 40px;
   border-radius: 50px;
+  position: relative;
 }
 .searchbarbox {
   height: auto;
@@ -16,7 +27,7 @@
 .searchvally {
   height: auto;
   border-radius: 50px;
-  border: 2px solid #000000 !important;
+  border: 1px solid #000000 !important;
   border-radius: 50px !important;
 }
 .fa-search:before {
@@ -39,7 +50,7 @@
   padding: 35px 20px;
 }
 .globalhero {
-  padding: 0px 33px;
+  padding: 0px 20px;
 }
 .matchheader {
   font-size: 24px;
@@ -51,7 +62,7 @@
 .bghut {
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url(../public//images/hut.bg.svg);
+  /* background-image: url(../public//images/hut.bg.svg); */
   padding: 220px 50px 0px 50px;
   width: 100%;
 }
@@ -59,7 +70,7 @@
 .landingimage {
   background-size: cover;
   background-repeat: no-repeat;
-  height: 400px;
+  height: 330px;
   color: #ffffff;
   text-align: center;
   display: flex;
@@ -68,7 +79,7 @@
 }
 .newsletter {
   font-size: 40px;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 .offerbox {
   width: 45%;
@@ -77,75 +88,30 @@
   height: auto;
   width: 100%;
   object-fit: cover;
+  margin-bottom: 2px;
 }
 
-.paintgoal{
+.paintgoal {
   width: 90px;
   height: 90px;
   border-radius: 50px;
   background-color: #ffffff;
 }
 .paintgoal:hover {
-  background-color: #7CC5E5;
+  background-color: #7cc5e5;
 }
 .paintgoal:focus {
-  background-color: #7CC5E5;
+  background-color: #7cc5e5;
 }
 
-.herogrid{
+.herogrid {
   position: absolute;
   top: -200px;
-}
-
-/* mediaqueries */
-@media only screen and (max-width: 1444px) {
-  .paintgoal{
-    width: 75px;
-    height: 75px;
-  }
-  .landing_event-heading {
-    font-size: 32px;
-    padding: 70px 10px;
-    border-radius: 15px;
-  }
-  .newsletter {
-    font-size: 30px;
-  }
-  .landingeventheading {
-    font-size: 40px;
-  }
-  .matchheader {
-    font-size: 18px;
-    line-height: 25px;
-  }
-}
-
-.landingbtncolor {
-  background-color: white;
-  border: none;
-  color: black;
-  font-family: "Poppins", sans-serif;
-  text-align: left;
-  border-radius: 60px;
-  padding: 6px 20px !important;
-}
-.filterbtn{
-  font-size: 16px;
-}
-.landing_btn_width {
-  width: 40px;
 }
 
 /* forall */
 .mb-0 {
   margin-bottom: 0;
-}
-
-.letter-spac {
-  letter-spacing: 0.59em;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 22px;
 }
 
 .fw-700 {
@@ -193,13 +159,6 @@
 
 /* for all end */
 
-.landingcentral1 {
-  width: 100%;
-  height: 100%;
-  background-color: #7cc5e5;
-  margin-bottom: 30px;
-  padding: 35px 20px;
-}
 .landingbuttondivs {
   padding: 0px;
   margin-left: 40px;
@@ -241,6 +200,7 @@
   width: 100%;
   padding: 50px 20px;
   text-align: center;
+  border-radius: 20px;
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0) 0%,
@@ -259,17 +219,20 @@
     rgba(0, 0, 0, 0.4) 58.85%
   );
 }
+.landingcontainer {
+  padding: 40px 50px;
+}
 .landingimage1 {
   border-radius: 20px;
   padding: 20px 0px;
-  height: 600px;
+  height: 590px;
   background-image: url("../public/Images/card-one.svg");
   background-size: cover;
   color: white;
   display: flex;
   justify-content: flex-end;
   align-items: end;
-  padding-bottom: 25px;
+  padding-bottom: 0px;
 }
 .landingimage2 {
   border-radius: 20px;
@@ -287,7 +250,7 @@
 }
 .landingimage4 {
   border-radius: 20px;
-  background-image: url("../public/Images/card-three.svg");
+  background-image: url("../public/Images/usa.svg");
   background-size: cover;
   height: 180px;
   color: white;
@@ -313,12 +276,11 @@
   padding-bottom: 60px;
 }
 .landingnextbutton {
-  padding: 20px 40px;
+  padding: 10px 30px;
   background-color: #0f3d95;
   color: white;
   border-radius: 60px;
-  margin-top: 10px;
-  font-size: 22px;
+  font-size: 17px;
   border: none;
 }
 .landingdivendheading {
@@ -355,7 +317,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2.5rem;
+  padding: 0rem 2.5rem;
   flex-wrap: wrap;
 }
 .fw-600 {
@@ -435,7 +397,161 @@
 }
 
 @media only screen and (max-width: 1440px) {
+  .landingcentral1 {
+    padding: 15px 20px;
+    margin-bottom: 15px;
+  }
   .landingimage {
+    height: 300px;
+  }
+  .logoimage {
+    width: 120px;
+  }
+  .headerhero {
+    padding: 10px 0px 10px 0px;
+  }
+  .plusicon {
+    width: 30px;
+  }
+
+  .menicon {
+    width: 35px;
+  }
+}
+
+/* mediaqueries */
+@media only screen and (max-width: 1444px) {
+  .paintgoal {
+    width: 75px;
+    height: 75px;
+  }
+  .landing_event-heading {
+    font-size: 32px;
+    padding: 70px 10px;
+    border-radius: 15px;
+  }
+  .newsletter {
+    font-size: 30px;
+  }
+  .landingeventheading {
+    font-size: 40px;
+  }
+  .matchheader {
+    font-size: 18px;
+    line-height: 25px;
+  }
+}
+
+.landingbtncolor {
+  background-color: white;
+  border: none;
+  color: black;
+  text-align: left;
+  border-radius: 60px;
+  padding: 4px 15px !important;
+}
+.filterbtn {
+  font-size: 15px !important;
+}
+.landing_btn_width {
+  width: 40px;
+}
+
+@media only screen and (max-width: 990px) {
+  .landingcontainer {
+    padding: 40px 30px;
+  }
+  .newsltrhero {
+    gap: 20px;
+    padding-bottom: 30px;
+  }
+  .globalhero {
+    padding: 0px 33px;
+  }
+  .globe {
+    height: 500px;
+    margin-top: -30px;
+    padding: 20px 0px;
+  }
+  .landingimage1,
+  .landingimage2,
+  .landingimage3,
+  .landingimage4,
+  .landingimage5,
+  .landingimage6 {
+    height: 230px;
+    background-size: cover;
+    border-radius: 55px;
+  }
+  .landingtext,
+  .landingtextmidgrid {
+    max-width: 100%;
+    width: 100%;
+  }
+  .landingtext {
+    height: -webkit-fill-available;
+    border-radius: 55px;
+  }
+  .luxuryrow {
+    margin-top: 20px !important;
+    margin-bottom: 20px;
+    padding: 0px;
+  }
+  .landingtextinalgrid {
+    width: 100%;
+  }
+  .landingimage1 {
+    justify-content: center;
+    align-items: center;
+  }
+  .landingendcard1 {
+    padding: 20px;
+  }
+  .landingfirstcard,
+  .luxuryrow {
+    padding: 0px !important;
+  }
+  .landingdivsubheading {
+    padding: 0px 20px;
+    margin-bottom: 0px;
+  }
+  .offerbox {
+    width: 75%;
+  }
+  .newsletter {
+    padding: 0px 20px;
+    font-size: 25px;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .offerbox {
+    width: 90%;
+  }
+  .filterbtn {
+    font-size: 10px !important;
+  }
+  .headerhero {
+    gap: 7px;
+  }
+  .globe {
+    height: 350px;
+  }
+  .landingbuttondivs {
+    margin-left: 0px;
+  }
+  .landingcentral1 {
+    display: flex;
+    justify-content: center;
+    padding: 12px 10px !important;
+  }
+  .dropbtn {
+    font-size: 12px !important;
+  }
+}
+
+@media only screen and (max-width: 444px) {
+  .globe {
     height: 300px;
   }
 }
