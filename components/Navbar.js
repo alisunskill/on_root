@@ -4,9 +4,76 @@ import men from "../public/Images/men.svg";
 import plusicon from "../public/Images/plusicon.svg";
 import styles from "../styles/home.module.css";
 import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import Searchbar from "./Searchbar";
+
+// const items = ["Apple", "Banana", "Banana", "Orange", "Pear"];
+const items = [
+  {
+    id: "1",
+    event: "Event",
+    name: "Football Match LA FC vs NYC FC ",
+    country: "New York, USA",
+    bgImg:
+      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+  },
+  {
+    id: "2",
+    event: "Event",
+    name: "Football Match LA FC vs NYC FC ",
+    country: "New York, USA",
+    bgImg:
+      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+  },
+  {
+    id: "3",
+    event: "Event",
+    name: "Football Match LA FC vs NYC FC ",
+    country: "New York, USA",
+    bgImg:
+      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+  },
+  {
+    id: "4",
+    event: "Event",
+    name: "Football Match LA FC vs NYC FC ",
+    country: "New York, USA",
+    bgImg:
+      "https://images.unsplash.com/photo-1543261207-e5f1837778c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=773&q=80",
+  },
+  {
+    id: "5",
+    event: "Event",
+    name: "Football Match LA FC vs NYC FC ",
+    country: "New York, USA",
+    bgImg:
+      "https://images.unsplash.com/photo-1543261207-e5f1837778c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=773&q=80",
+  },
+  {
+    id: "6",
+    event: "Event",
+    name: "Football Match LA FC vs NYC FC ",
+    country: "New York, Pakistan",
+    bgImg:
+      "https://images.unsplash.com/photo-1543261207-e5f1837778c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=773&q=80",
+  },
+  {
+    id: "7",
+    event: "Event",
+    name: "Football Match LA FC vs NYC FC ",
+    country: "New York, Pakistan",
+    bgImg:
+      "https://images.unsplash.com/photo-1543261207-e5f1837778c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=773&q=80",
+  },
+  {
+    id: "8",
+    event: "Event",
+    name: "Football Match LA FC vs NYC FC ",
+    country: "New York, Pakistan",
+    bgImg:
+      "https://images.unsplash.com/photo-1543261207-e5f1837778c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=773&q=80",
+  },
+];
 
 function Navbar() {
   return (
@@ -29,20 +96,8 @@ function Navbar() {
               </Link>
             </div>
             {/* searchbar */}
-            <div
-              className={`col-xl-6 col-lg-6 col-md-6 col-sm-6  ${styles.inputgroup}`}
-            >
-              <input
-                type="text"
-                placeholder="Explore With Us....."
-                aria-describedby="button-addon5"
-                className={`form-control ${styles.searchvally}`}
-              />
-              <FontAwesomeIcon
-                className={styles.inputgroupicon}
-                icon={faSearch}
-              />
-            </div>
+            <Searchbar items={items} />
+
             {/* uploaes */}
             <div className="icons-right col-xl-3 col-lg-3 col-md-3 col-sm-3  d-flex justify-content-end align-items-center">
               <Image
