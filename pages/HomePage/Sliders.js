@@ -12,7 +12,6 @@ export default function Sliders({ bgimg, para }) {
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRpeat: "no-repeat",
-    borderRadius: "22px",
   };
   return (
     <div className={`row w-100 p-0 m-0`}>

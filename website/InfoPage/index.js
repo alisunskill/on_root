@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/singular.module.css";
 import plusicon2 from "../../public/images/plusicon2.svg";
 import hearticon21 from "../../public/images/hearticon21.svg";
 import burger from "../../public/images/burger.svg";
 import painticon from "../../public/images/painticon.svg";
 import travelicon from "../../public/images/travelicon.svg";
-import mapimage from "../../public/images/mapimage.svg";
+// import mapimage from "../../public/images/mapimage.svg";
 import PlaceCard from "../../website/components/PlaceCard";
 import Image from "next/image";
 import women from "../../public/images/women.svg";
@@ -13,51 +13,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import PlaceNameCard from "../components/PlaceNameCard";
 import PlaceCardFull from "../components/PlaceCardFull";
+import GoogleLoc from "./components/GoogleLoc";
+import axios from "axios";
 
-const data = [
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-];
 const highlights = [
   {
     para: "Browse the Font Squirrel fonts tagged as paragraph",
@@ -72,48 +30,117 @@ const highlights = [
     para: "Browse the Font Squirrel fonts tagged as paragraph",
   },
 ];
-const placeData = [
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "Auckland",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "Raglan",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "Rotorua",
-  },
-];
 
-const eventData = [
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-];
 function Singularevent() {
+  const [regionData, setRegion] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/recommendations?select=title,region")
+      .then((response) => {
+        const data = response.data;
+        const extractedTitles = data.Recommendations;
+        setRegion(extractedTitles);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+  const region = regionData.map((item) => {
+    return item.region;
+  });
+  const titleD = regionData.map((item) => {
+    return item.title;
+  });
+  const placeData = [
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: region[0],
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: region[1],
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: region[2],
+    },
+  ];
+
+
+  const eventData = [
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: titleD[0],
+      place: region[0],
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: titleD[1],
+      place: region[1],
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: titleD[2],
+      place: region[2],
+    },
+  ];
+
+
+
+
+  const data = [
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: titleD[0],
+      place: region[0],
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: titleD[2],
+      place: region[2],
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: titleD[1],
+      place: region[1],
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: titleD[0],
+      place: region[0],
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: titleD[2],
+      place: region[2],
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: titleD[2],
+      place: region[2],
+    },
+  ];
   return (
     <>
       <div className="container-fluid py-5">
@@ -200,11 +227,12 @@ function Singularevent() {
             </div>
           </div>
           <div className="col-lg-6 text-align-right p-0">
-            <Image
+            {/* <Image
               className={`h-auto ${styles.eventmapimage}`}
               src={mapimage}
               alt=""
-            />
+            /> */}
+            <GoogleLoc />
           </div>
         </div>
 

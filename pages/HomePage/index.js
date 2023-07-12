@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../../styles/home.module.css";
 import newsletterimg from "../../public/images/card-two.svg";
 import globe from "../../public/images/globe.svg";
@@ -12,71 +12,96 @@ import Sliders from "./Sliders";
 import RangeSlider from "./RangeSlider";
 import Link from "next/link";
 import NewsLetter from "../../website/components/NewsLetter";
-// import three from "../../public/images/card-three.svg"
-
-const data = [
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "California",
-    country: "USA",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "California",
-    country: "USA",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "California",
-    country: "USA",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "California",
-    country: "USA",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "California",
-    country: "USA",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "California",
-    country: "USA",
-  },
-];
+import GlobeMap from "./components/GlobeMap";
+import RecommendationGrid from "../../website/components/RecommendationGrid";
+import axios from "axios";
 
 const data1 = [
   {
     para: "Heavenly Expedition: Discovering the Beauty of Northern Pakistan",
     bgImg:
-      "https://images.unsplash.com/photo-1543373014-cfe4f4bc1cdf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1048&q=80",
+      "https://images.unsplash.com/photo-1589506356380-33c39d65a6a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
   },
   {
     para: "Heavenly Expedition: Discovering the Beauty of Northern Pakistan",
     bgImg:
-      "https://images.unsplash.com/photo-1588994581963-a854ade7c598?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      "https://images.unsplash.com/photo-1588668968719-194c0fd13773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=947&q=80",
   },
   {
     para: "Heavenly Expedition: Discovering the Beauty of Northern Pakistan",
     bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      "https://images.unsplash.com/photo-1589497836818-9ad2fa1df1a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80",
   },
   {
     para: "Heavenly Expedition: Discovering the Beauty of Northern Pakistan",
     bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      "https://images.unsplash.com/photo-1589497836818-9ad2fa1df1a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80",
   },
 ];
 
 export default () => {
+  // api
+  const [regionData, setRegion] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/recommendations?select=title,region")
+      .then((response) => {
+        const data = response.data;
+        const extractedTitles = data.Recommendations;
+        setRegion(extractedTitles);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const region = regionData.map((item) => {
+    return item.region;
+  });
+
+  const data = [
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: region[0],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: region[1],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: region[2],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: region[2],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: region[1],
+
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: region[0],
+
+      country: "USA",
+    },
+  ];
+  // const region
+
+  // api
   const settings = {
     dots: false,
     infinite: true,
@@ -98,7 +123,7 @@ export default () => {
           >
             <Link
               passHref
-              href="/singular"
+              href="/infinitescroll"
               className={`text-decoration-none text-dark bg-light m-0 p-0 ${styles.filterbtn}`}
             >
               Filter by
@@ -137,7 +162,6 @@ export default () => {
 
             <Dropdown.Menu className={styles.rangehero}>
               <Dropdown.Item>
-                {" "}
                 <div>
                   <RangeSlider />
                 </div>
@@ -171,162 +195,11 @@ export default () => {
       >
         {/* Events Zone */}
         <div className={`col-lg-8 p-0`}>
-          <div className={`container-fluid`}>
-            <div className={`row`}>
-              {/* football match */}
-
-              <div className={`col-lg-4 ${styles.landingfirstcard}`}>
-                <Link href="/infopage" className="text-decoration-none">
-                  <div className={styles.landingimage1}>
-                    <div className={`col-lg-12 ${styles.landingtext}`}>
-                      <p className={`mb-0 letter-spac ${styles.letterspac}`}>
-                        Event
-                      </p>
-                      <p
-                        className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
-                      >
-                        {" "}
-                        Football Match LA FC vs NYC FC{" "}
-                      </p>
-                      <p className={`mb-0 m1`}>New York, USA</p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-              {/* 2tour */}
-              <div className={`col-lg-5`}>
-                <div className={`row`}>
-                  <div className={`col-lg-12  ${styles.luxuryrow}`}>
-                    <Link href="/infopage" className="text-decoration-none">
-                      <div
-                        className={`${styles.landingimage2} d-flex align-center light-dark`}
-                      >
-                        <div
-                          className={`col-lg-12 ${styles.landingtextmidgrid}`}
-                        >
-                          <p
-                            className={`mb-0 letter-spac ${styles.letterspac}`}
-                          >
-                            ITINERARY
-                          </p>
-                          <p
-                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
-                          >
-                            {" "}
-                            PARIS LUXURY TOUR{" "}
-                          </p>
-                          <p className={`mb-0`}>Paris, France</p>
-                        </div>
-                      </div>
-                    </Link>
-
-                    <Link href="/infopage" className="text-decoration-none">
-                      <div
-                        className={`${styles.landingimage3} d-flex align-center my-4 light-dark`}
-                      >
-                        <div
-                          className={`col-lg-12 ${styles.landingtextmidgrid}`}
-                        >
-                          <p
-                            className={`mb-0 letter-spac ${styles.letterspac}`}
-                          >
-                            ITINERARY
-                          </p>
-                          <p
-                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
-                          >
-                            {" "}
-                            PARIS LUXURY TOUR{" "}
-                          </p>
-                          <p className={`mb-0 m1`}>Paris, France</p>
-                        </div>
-                      </div>
-                    </Link>
-                    <Link href="/infopage" className="text-decoration-none">
-                      <div
-                        className={`${styles.landingimage4} d-flex align-center light-dark`}
-                      >
-                        <div
-                          className={`col-lg-12 ${styles.landingtextmidgrid}`}
-                        >
-                          <p
-                            className={`mb-0 letter-spac ${styles.letterspac}`}
-                          >
-                            ITINERARY
-                          </p>
-                          <p
-                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
-                          >
-                            {" "}
-                            PARIS LUXURY TOUR{" "}
-                          </p>
-                          <p className={`mb-0 m1`}>Paris, France</p>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              {/* 3rd tour */}
-              <div className={`col-lg-3`}>
-                <div className={`row`}>
-                  <Link
-                    href="/infopage"
-                    className="text-decoration-none m-0 p-0"
-                  >
-                    <div className={`col-lg-12 p-0`}>
-                      <div
-                        className={`${styles.landingimage5} d-flex align-center p-0 m-0`}
-                      >
-                        <div
-                          className={`col-lg-12 mb-0 p-0 ${styles.landingtextmidgrid} light-dark d-flex align-center flex-column flex-center`}
-                          style={{ height: "100%", borderRadius: "55px" }}
-                        >
-                          <p
-                            className={`mb-0 letter-spac ${styles.letterspac}`}
-                          >
-                            EVENT
-                          </p>
-                          <p
-                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
-                          >
-                            {" "}
-                            Tokyo Night Run{" "}
-                          </p>
-                          <p className={`mb-0 m1`}>Tokyo, Japan</p>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/infopage"
-                    className="text-decoration-none m-0 p-0"
-                  >
-                    <div className={`${styles.landingimage6} my-4`}>
-                      <div
-                        className={`col-lg-12 ${styles.landingtextinalgrid}`}
-                      >
-                        <p className={`mb-0 letter-spac ${styles.letterspac}`}>
-                          ITINERARY
-                        </p>
-                        <p
-                          className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
-                        >
-                          Tokyo Night Run
-                        </p>
-                        <p className={`mb-0 m1`}>Paris, France</p>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+          <RecommendationGrid />
         </div>
         <div className="col-lg-4">
           <Image className={styles.globe} src={globe} alt="globe" />
+          {/* <GlobeMap /> */}
         </div>
       </div>
 
@@ -348,7 +221,7 @@ export default () => {
       </div>
 
       <div
-        className={`row  px-lg-4 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
+        className={`row  px-lg-6 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
       >
         {data.map((item, index) => {
           return (
@@ -356,7 +229,7 @@ export default () => {
               key={index}
               imageUrl={item.bgImg}
               city={item.city}
-              country={item.country}
+              // country={item.country}
             />
           );
         })}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import styles from "../../styles/singular.module.css";
 import clockicon from "../../public/images/clockicon.svg";
 import plusicon2 from "../../public/images/plusicon2.svg";
@@ -12,53 +12,96 @@ import slide from "../../public/images/slide.svg";
 import PlaceCard from "../../website/components/PlaceCard";
 import Image from "next/image";
 import SliderEvent from "./sliderApp";
-
-const data = [
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-];
+import axios from "axios";
 
 function Singularevent() {
+  // api
+  const [regionData, setRegion] = useState([]);
+  const [costD, setCostD] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/recommendations?select=title,region")
+      .then((response) => {
+        const data = response.data;
+        const extractedTitles = data.Recommendations;
+        setRegion(extractedTitles);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+  // cost api
+  useEffect(() => {
+    axios
+      .get(
+        "http://localhost:8000/api/recommendations?select=title,region,description,cost"
+      )
+      .then((response) => {
+        const data = response.data;
+        console.log(data.Recommendations[0]?.cost, "kkk");
+        setCostD(data.Recommendations);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  console.log(costD[0]?.cost, "cost");
+  console.log(costD, "description");
+
+  // costapi end
+  const region = regionData.map((item) => {
+    return item.region;
+  });
+  const title = regionData.map((item) => {
+    return item.title;
+  });
+
+  const data = [
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: title[0],
+      place: `City, ${region[0]}`,
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: title[1],
+      place: `City, ${region[1]}`,
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: title[2],
+      place: `City, ${region[0]}`,
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: title[1],
+      place: `City, ${region[2]}`,
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: title[2],
+      place: `City, ${region[1]}`,
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      itinerary: "ITINERARY",
+      title: title[0],
+      place: `City, ${region[2]}`,
+    },
+  ];
+
   return (
     <>
       <div className="container-fluid pb-5">
@@ -103,22 +146,9 @@ function Singularevent() {
 
               <div className="col-12 col-md-12 col-lg-12 py-3">
                 <p className={styles.eventtitlepara}>
-                  Join us for an exciting event celebrating the diverse and
-                  vibrant culture of the great state of New Jersey! The Garden
-                  State Gathering will be a day filled with music, food, and
-                  entertainment that showcases the unique history and traditions
-                  of the region. <br /> <br /> Discover the best of New Jersey's
-                  arts and crafts as you browse through our artisan market
-                  featuring handmade goods from local vendors. Taste the flavors
-                  of the state with a selection of food and drink from some of
-                  the best restaurants and breweries in the area. And don't miss
-                  out on our live performances, featuring musicians, dancers,
-                  and other artists who represent the many cultures that call
-                  New Jersey home. <br /> <br />
-                  Whether you're a lifelong resident or visiting for the first
-                  time, the Garden State Gathering is an event you won't want to
-                  miss. Come celebrate the rich heritage of New Jersey and
-                  experience all that this great state has to offer!
+                  {costD[0]?.description}
+                  <br /> <br /> {costD[1]?.description} <br /> <br />
+                  {costD[2]?.description}
                 </p>
               </div>
             </div>
@@ -182,8 +212,11 @@ function Singularevent() {
             <Image className={styles.eventmoneyicon} src={moneyicon} alt="" />
             <h5 className="fw-700 mb-4"> Cost to attend </h5>
 
-            <p className={styles.eventhourstext}>Adult:$50:00</p>
-            <p className={` pb-2 ${styles.eventhourstext}`}>Childern:$25:00</p>
+            <p className={styles.eventhourstext}>Adult: ${costD[0]?.cost}</p>
+            <p className={` pb-2 ${styles.eventhourstext}`}>
+              Childern:${costD[2]?.cost}
+            </p>
+
             <p></p>
             <br />
           </div>
