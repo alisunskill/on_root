@@ -7,7 +7,7 @@ export default ({ imageUrl, city, country }) => {
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRpeat: "no-repeat",
-    borderRadius: "22px",
+    // borderRadius: "22px",
   };
   return (
     <div className="col-12 col-md-6 col-lg-4 p-lg-2 p-2">

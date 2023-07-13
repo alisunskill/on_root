@@ -7,7 +7,7 @@
   width: 100%;
 }
 .rangehero {
-  width: 300px;
+  width: 323px;
   min-height: 55px;
   padding: 20px 10px !important;
 }
@@ -39,6 +39,10 @@
   content: "\f002";
   font-size: 30px;
   margin-right: 18px;
+}
+.foodIcons{
+  width: 30px;
+  margin-left: 10px;
 }
 .menimg {
   width: 70px;
@@ -241,14 +245,14 @@
 }
 .landingimage2 {
   border-radius: 20px;
-  background-image: url("../public/Images/card-two.svg");
+  background-image: url("../public/Images/fove.png");
   background-size: cover;
   height: 180px;
   color: white;
 }
 .landingimage3 {
   border-radius: 20px;
-  background-image: url("../public/Images/card-three.svg");
+  background-image: url("../public/Images/card1.png");
   background-size: cover;
   height: 180px;
   color: white;
@@ -262,14 +266,14 @@
 }
 .landingimage5 {
   border-radius: 20px;
-  background-image: url("../public/Images/card-fove.svg");
+  background-image: url("../public/Images/cardf.png");
   background-size: cover;
   height: 180px;
   color: white;
 }
 .landingimage6 {
   border-radius: 20px;
-  background-image: url("../public/Images/card-four.svg");
+  background-image: url("../public/Images/card4.png");
   background-size: cover;
   height: 390px;
   color: white;

@@ -21,8 +21,6 @@ export const fetchRecommendationsFailure = (error) => ({
 
 // Async action
 export const fetchRecommendations = () => {
-  console.log("Recommendation Action start");
-
   return (dispatch) => {
     dispatch(fetchRecommendationsRequest());
     axios

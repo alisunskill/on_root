@@ -12,6 +12,162 @@ import logo from "../../public/images/logo.svg";
 import { fetchRecommendations } from "../../store/actions/recommendationActions";
 import styles from "../../styles/home.module.css";
 import PlaceCardFull from "../components/PlaceCardFull";
+import InfiniteScroll from "react-infinite-scroll-component";
+
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Masonry from "@mui/lab/Masonry";
+import { styled } from "@mui/material/styles";
+const itemData = [
+  {
+    img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
+    title: "Fern",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f",
+    title: "Snacks",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
+    title: "Mushrooms",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1529655683826-aba9b3e77383",
+    title: "Tower",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
+    title: "Sea star",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
+    title: "Honey",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
+    title: "Basketball",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+    title: "Breakfast",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1627328715728-7bcc1b5db87d",
+    title: "Tree",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+    title: "Burger",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
+    title: "Camera",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
+    title: "Coffee",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1627000086207-76eabf23aa2e",
+    title: "Camping Car",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
+    title: "Hats",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
+    title: "Tomato basil",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1627328561499-a3584d4ee4f7",
+    title: "Mountain",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
+    title: "Bike",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+    title: "Breakfast",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1627328715728-7bcc1b5db87d",
+    title: "Tree",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+    title: "Burger",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
+    title: "Camera",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
+    title: "Coffee",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1627000086207-76eabf23aa2e",
+    title: "Camping Car",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
+    title: "Hats",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
+    title: "Tomato basil",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1627328561499-a3584d4ee4f7",
+    title: "Mountain",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
+    title: "Bike",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+    title: "Breakfast",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1627328715728-7bcc1b5db87d",
+    title: "Tree",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+    title: "Burger",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
+    title: "Camera",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
+    title: "Coffee",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1627000086207-76eabf23aa2e",
+    title: "Camping Car",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
+    title: "Hats",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
+    title: "Tomato basil",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1627328561499-a3584d4ee4f7",
+    title: "Mountain",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
+    title: "Bike",
+  },
+];
 
 const allTrips = [
   {
@@ -89,6 +245,264 @@ const infinteScroll = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
+  // scrolled
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = () => {
+    // Replace this with your static data array or import from a separate file
+    const staticPosts = [
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 1,
+        title: "Post 1",
+        body: "Lorem ipsum dolor sit amet.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      {
+        id: 2,
+        title: "Post 2",
+        body: "Consectetur adipiscing elit.",
+        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      },
+      // Add more static posts as needed
+    ];
+
+    const startIndex = (page - 1) * 10;
+    const endIndex = page * 10;
+    const newPosts = itemData.slice(startIndex, endIndex);
+
+    if (newPosts.length > 0) {
+      // Append new posts to the existing list
+      setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+      setPage((prevPage) => prevPage + 1);
+    } else {
+      // No more posts available
+      setHasMore(false);
+    }
+  };
+  useEffect(() => {
+    const scrollPageAfterDelay = () => {
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "smooth",
+        });
+      }, 3000); // Adjust the delay time in milliseconds (e.g., 3000 = 3 seconds)
+    };
+
+    scrollPageAfterDelay();
+  }, []);
+
+  // scrolled end
+
   // api
   useEffect(() => {
     fetchRecommendations();
@@ -108,7 +522,7 @@ const infinteScroll = ({
     const value = e.target.value;
     setSearchTerm(value);
 
-    const filteredCards = recommendationData.filter((card) =>
+    const filteredCards = posts.filter((card) =>
       card.title.toLowerCase().includes(value.toLowerCase())
     );
     setSearchResults(filteredCards);
@@ -124,7 +538,6 @@ const infinteScroll = ({
             <div
               className={`row d-flex align-items-center ${styles.headerhero}`}
             >
-              {/* logo */}
               <div
                 className={`col-xl-3 col-lg-3 col-md-3 col-sm-3  d-flex justify-content-center ${styles.logo}`}
               >
@@ -138,7 +551,6 @@ const infinteScroll = ({
                   />
                 </Link>
               </div>
-              {/* searchbar */}
               <Link
                 href="/infinitescroll"
                 className={`col-xl-6 col-lg-6 col-md-6 col-sm-6  ${styles.inputgroup}`}
@@ -153,7 +565,7 @@ const infinteScroll = ({
                     list="itemList"
                   />
                   <datalist id="itemList">
-                    {rdata.map((item) => (
+                    {itemData.map((item) => (
                       <option key={item.id} value={item.title} />
                     ))}
                   </datalist>
@@ -163,7 +575,6 @@ const infinteScroll = ({
                   />
                 </Form>
               </Link>
-              {/* uploaes */}
               <div className="icons-right col-xl-3 col-lg-3 col-md-3 col-sm-3  d-flex justify-content-end align-items-center">
                 <Image
                   width={50}
@@ -183,7 +594,7 @@ const infinteScroll = ({
             </div>
           </header>
         </div>
-      </div>{" "}
+      </div>
       <div className="container px-5 pt-3 pb-5">
         <div className="row d-flex w-100">
           <h1 className="dark bold text-center">New York</h1>
@@ -191,26 +602,69 @@ const infinteScroll = ({
             Discover the world's top destinations and plan your next adventure
             with ease using <br /> Onroot's curated posts and itineraries
           </p>
-
-          <div className="row p-0 m-0">
-            {rdata?.map((item, index) => {
-              return (
-                <div className="col-lg-6 p-0 m-0">
-                  <PlaceCardFull
-                    key={index}
-                    imageUrl={
-                      item?.images
-                        ? "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80"
-                        : ""
-                    }
-                    itinerary="Itenerary"
-                    title={item?.title}
-                    place={item?.region}
-                  />
-                </div>
-              );
-            })}
-          </div>
+          {searchResults ? (
+            <InfiniteScroll
+              className="w-100 overflow-hidden"
+              dataLength={posts.length}
+              next={fetchPosts}
+              hasMore={hasMore}
+              loader={<h4>Loading...</h4>}
+            >
+              <Box sx={{ minHeight: 829 }}>
+                <Masonry columns={3} spacing={2}>
+                  {searchResults.map((item, index) => (
+                    <div key={index}>
+                      <label className="fw-600">{item.title}</label>
+                      <Link href="/infopage">
+                        <img
+                          src={`${item.img}?w=162&auto=format`}
+                          srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
+                          alt={item.title}
+                          loading="lazy"
+                          style={{
+                            display: "block",
+                            width: "100%",
+                            borderRadius: "15px",
+                          }}
+                        />
+                      </Link>
+                    </div>
+                  ))}
+                </Masonry>
+              </Box>
+            </InfiniteScroll>
+          ) : (
+            <InfiniteScroll
+              className="w-100 overflow-hidden"
+              dataLength={posts.length}
+              next={fetchPosts}
+              hasMore={hasMore}
+              loader={<h4>Loading...</h4>}
+            >
+              <Box sx={{ minHeight: 829 }}>
+                <Masonry columns={3} spacing={2}>
+                  {itemData.map((item, index) => (
+                    <div key={index}>
+                      <label className="fw-600">{item.title}</label>
+                      <Link href="/infopage">
+                        <img
+                          src={`${item.img}?w=162&auto=format`}
+                          srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
+                          alt={item.title}
+                          loading="lazy"
+                          style={{
+                            display: "block",
+                            width: "100%",
+                            borderRadius: "15px",
+                          }}
+                        />
+                      </Link>
+                    </div>
+                  ))}
+                </Masonry>
+              </Box>
+            </InfiniteScroll>
+          )}
         </div>
       </div>
     </div>

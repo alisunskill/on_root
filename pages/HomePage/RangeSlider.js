@@ -1,25 +1,27 @@
-import React, { useState } from "react";
-import ReactSlider from "react-slider";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Slider from "@mui/material/Slider";
 
-export default () => {
-  const [values, setValues] = useState([0, 100]);
+function valuetext(value) {
+  return `${value}°C`;
+}
 
-  const renderThumb = (props, state) => <div {...props}>{state.valueNow}</div>;
+export default function RangeSlider() {
+  const [value, setValue] = React.useState([20, 37]);
 
-  const ariaValuetext = (state) => `Thumb value ${state.valueNow}`;
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   return (
-    <ReactSlider
-      className="horizontal-slider"
-      thumbClassName="example-thumb"
-      trackClassName="example-track"
-      defaultValue={values}
-      ariaLabel={["Lower thumb", "Upper thumb"]}
-      ariaValuetext={ariaValuetext}
-      renderThumb={renderThumb}
-      pearling
-      minDistance={10}
-      onChange={setValues}
-    />
+    <Box sx={{ width: 300 }}>
+      <Slider
+        getAriaLabel={() => "Temperature range"}
+        value={value}
+        onChange={handleChange}
+        valueLabelDisplay="auto"
+        getAriaValueText={valuetext}
+      />
+    </Box>
   );
-};
+}

@@ -4,6 +4,9 @@ import newsletterimg from "../../public/images/card-two.svg";
 import globe from "../../public/images/globe.svg";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
+import burger from "../../public/images/burger.svg";
+import painticon from "../../public/images/painticon.svg";
+import travelicon from "../../public/images/travelicon.svg";
 import "slick-carousel/slick/slick-theme.css";
 import PostCard from "../../website/components/PostCards";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -68,32 +71,32 @@ export default () => {
     },
     {
       bgImg:
-        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+        "https://images.unsplash.com/photo-1689072503598-638956beee7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=660&q=80",
       city: region[1],
       country: "USA",
     },
     {
       bgImg:
-        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+        "https://images.unsplash.com/photo-1593593595698-de9e5f682a14?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=834&q=80",
       city: region[2],
       country: "USA",
     },
     {
       bgImg:
-        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+        "https://images.unsplash.com/photo-1595112729465-942dafaa4e98?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=886&q=80",
       city: region[2],
       country: "USA",
     },
     {
       bgImg:
-        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+        "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
       city: region[1],
 
       country: "USA",
     },
     {
       bgImg:
-        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+        "https://images.unsplash.com/photo-1519638399535-1b036603ac77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80",
       city: region[0],
 
       country: "USA",
@@ -124,7 +127,7 @@ export default () => {
             <Link
               passHref
               href="/infinitescroll"
-              className={`text-decoration-none text-dark bg-light m-0 p-0 ${styles.filterbtn}`}
+              className={`text-decoration-none text-dark bg-light m-0 py-1 ${styles.filterbtn}`}
             >
               Filter by
             </Link>
@@ -142,9 +145,15 @@ export default () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+              {regionData.map((item, index) => {
+                return (
+                  <React.Fragment key={index}>
+                    <Dropdown.Item href="#/action-1">
+                      {item.region}
+                    </Dropdown.Item>
+                  </React.Fragment>
+                );
+              })}
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -161,11 +170,7 @@ export default () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu className={styles.rangehero}>
-              <Dropdown.Item>
-                <div>
-                  <RangeSlider />
-                </div>
-              </Dropdown.Item>
+              <RangeSlider />
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -181,10 +186,41 @@ export default () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="/signup">Sign Up</Dropdown.Item>
-              <Dropdown.Item href="/login">Login</Dropdown.Item>
-              <Dropdown.Item href="/profile">Profile</Dropdown.Item>
-              <Dropdown.Item href="/infopage">Information Page</Dropdown.Item>
+              <Dropdown.Item
+                href="/infinitescroll"
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <span>Food</span>
+                <Image
+                  className={`h-auto ${styles.foodIcons}`}
+                  src={burger}
+                  alt=""
+                />
+              </Dropdown.Item>
+              <Dropdown.Item
+                href="/infinitescroll"
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                {" "}
+                <span>Painting</span>
+                <Image
+                  className={`h-auto ${styles.foodIcons}`}
+                  src={painticon}
+                  alt=""
+                />
+              </Dropdown.Item>
+              <Dropdown.Item
+                href="/infinitescroll"
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                {" "}
+                <span>Travelling</span>
+                <Image
+                  className={`h-auto ${styles.foodIcons}`}
+                  src={travelicon}
+                  alt=""
+                />
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -205,9 +241,12 @@ export default () => {
 
       <div className="row">
         <div className={`col-lg-12 ${styles.landingcentral}`}>
-          <button href="#" className={`${styles.landingnextbutton} fw-600`}>
+          <Link
+            href="/infinitescroll"
+            className={`${styles.landingnextbutton} text-decoration-none fw-600`}
+          >
             View More
-          </button>
+          </Link>
         </div>
       </div>
       <div className={styles.landingdivendheading}>
