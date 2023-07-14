@@ -77,39 +77,37 @@ import { fetchRecommendations } from "../store/actions/recommendationActions";
 //   },
 // ];
 
-const Navbar = ({
-   recommendations, loading, error, fetchRecommendations 
-  }) => {
-    const [titles, setTitles] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
-  
-    // api
-    useEffect(() => {
-      fetchRecommendations();
-    }, [fetchRecommendations]);
-  
-    if (loading) {
-      return <p>Loading...</p>;
-    }
-  
-    if (error) {
-      return <p>Error: {error}</p>;
-    }
-  
-    const recommendationData = recommendations.Recommendations || [];
-  
-    const handleSearch = (e) => {
-      const value = e.target.value;
-      setSearchTerm(value);
-  
-      const filteredCards = recommendationData.filter((card) =>
-        card.title.toLowerCase().includes(value.toLowerCase())
-      );
-      setSearchResults(filteredCards);
-    };
-    const rdata = searchResults;
-    console.log(rdata, "rdata");
+const Navbar = ({ recommendations, loading, error, fetchRecommendations }) => {
+  const [titles, setTitles] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  // api
+  useEffect(() => {
+    fetchRecommendations();
+  }, [fetchRecommendations]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  const recommendationData = recommendations.Recommendations || [];
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    const filteredCards = recommendationData.filter((card) =>
+      card.title.toLowerCase().includes(value.toLowerCase())
+    );
+    setSearchResults(filteredCards);
+  };
+  const rdata = searchResults;
+  console.log(rdata, "rdata");
   return (
     <>
       <div>

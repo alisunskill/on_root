@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from "react";
-import styles from "../../styles/home.module.css";
-import newsletterimg from "../../public/images/card-two.svg";
-import globe from "../../public/images/globe.svg";
+import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import Dropdown from "react-bootstrap/Dropdown";
+import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import burger from "../../public/images/burger.svg";
+import newsletterimg from "../../public/images/card-two.svg";
+import globe from "../../public/images/globe.svg";
 import painticon from "../../public/images/painticon.svg";
 import travelicon from "../../public/images/travelicon.svg";
-import "slick-carousel/slick/slick-theme.css";
-import PostCard from "../../website/components/PostCards";
-import Dropdown from "react-bootstrap/Dropdown";
-import Image from "next/image";
-import Sliders from "./Sliders";
-import RangeSlider from "./RangeSlider";
-import Link from "next/link";
+import { fetchRecommendations } from "../../store/actions/recommendationActions";
+import styles from "../../styles/home.module.css";
 import NewsLetter from "../../website/components/NewsLetter";
-import GlobeMap from "./components/GlobeMap";
+import PostCard from "../../website/components/PostCards";
 import RecommendationGrid from "../../website/components/RecommendationGrid";
-import axios from "axios";
+import RangeSlider from "./RangeSlider";
+import Sliders from "./Sliders";
 
 const data1 = [
   {
@@ -43,61 +45,117 @@ const data1 = [
 ];
 
 export default () => {
+  const dispatch = useDispatch();
+  const recommendationsData = useSelector((state) => state.recommendation);
+  const { recommendations, loading, error } = recommendationsData;
+
+  // const loading = true;
+  useEffect(() => {
+    dispatch(fetchRecommendations());
+  }, [dispatch]);
+
   // api
   const [regionData, setRegion] = useState([]);
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/recommendations?select=title,region")
-      .then((response) => {
-        const data = response.data;
-        const extractedTitles = data.Recommendations;
-        setRegion(extractedTitles);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  const router = useRouter();
+  const { region } = router.query;
+  const { descriptor } = router.query;
+  const [filteredData, setFilteredData] = useState([]);
 
-  const region = regionData.map((item) => {
+  const recommendationData =
+    (recommendations && recommendations.Recommendations) || [];
+  useEffect(() => {
+    setRegion(recommendationData);
+  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:8000/api/recommendations?select=title,region")
+  //     .then((response) => {
+  //       const data = response.data;
+  //       const regions = data.Recommendations;
+  //       setRegion(regions);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, []);
+
+  useEffect(() => {
+    if (region) {
+      axios
+        .get(`http://localhost:8000/api/recommendations?region=${region}`)
+        .then((response) => {
+          const data = response.data;
+          const cregion = data.Recommendations;
+          setFilteredData(cregion);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [region]);
+
+  const regionp = regionData.map((item) => {
     return item.region;
   });
+
+  const regionDescriptor = regionData.map((item) => {
+    return item.descriptor;
+  });
+  // region urls
+  useEffect(() => {
+    if (region) {
+      const filteredRegionData = regionData.filter(
+        (item) => item.region === region
+      );
+      setFilteredData(filteredRegionData);
+    }
+  }, [region, regionData]);
+  // discripttors urls
+  useEffect(() => {
+    if (descriptor) {
+      const filteredDescriptorData = regionData.filter(
+        (item) => item.descriptor === descriptor
+      );
+      setFilteredData(filteredDescriptorData);
+    }
+  }, [descriptor, regionData]);
 
   const data = [
     {
       bgImg:
         "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-      city: region[0],
+      city: regionp[0],
       country: "USA",
     },
     {
       bgImg:
         "https://images.unsplash.com/photo-1689072503598-638956beee7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=660&q=80",
-      city: region[1],
+      city: regionp[1],
       country: "USA",
     },
     {
       bgImg:
         "https://images.unsplash.com/photo-1593593595698-de9e5f682a14?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=834&q=80",
-      city: region[2],
+      city: regionp[2],
       country: "USA",
     },
     {
       bgImg:
         "https://images.unsplash.com/photo-1595112729465-942dafaa4e98?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=886&q=80",
-      city: region[2],
+      city: regionp[2],
       country: "USA",
     },
     {
       bgImg:
         "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-      city: region[1],
+      city: regionp[1],
 
       country: "USA",
     },
     {
       bgImg:
         "https://images.unsplash.com/photo-1519638399535-1b036603ac77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80",
-      city: region[0],
+      city: regionp[0],
 
       country: "USA",
     },
@@ -116,6 +174,15 @@ export default () => {
   };
   return (
     <>
+      <div>
+        {filteredData.map((item) => (
+          <div key={item.title}>
+            <h3>{item.title}</h3>
+            {/* Render other card details */}
+          </div>
+        ))}
+      </div>
+
       {/* filtered zone */}
       <div className={styles.landingcentral1}>
         <div className={`btn-group px-2 ${styles.landingbuttondivs} `}>
@@ -148,8 +215,16 @@ export default () => {
               {regionData.map((item, index) => {
                 return (
                   <React.Fragment key={index}>
-                    <Dropdown.Item href="#/action-1">
-                      {item.region}
+                    <Dropdown.Item>
+                      <Link
+                        className="text-decoration-none text-dark"
+                        href={{
+                          pathname: "/infinitescroll",
+                          query: { region: item.region },
+                        }}
+                      >
+                        {item.region}
+                      </Link>
                     </Dropdown.Item>
                   </React.Fragment>
                 );
@@ -168,7 +243,6 @@ export default () => {
             >
               Price
             </Dropdown.Toggle>
-
             <Dropdown.Menu className={styles.rangehero}>
               <RangeSlider />
             </Dropdown.Menu>
@@ -182,12 +256,16 @@ export default () => {
               variant="primary"
               id="dropdown-basic"
             >
-              Discriptor
+              Descriptor
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item
-                href="/infinitescroll"
+              <Link
+                className="text-decoration-none text-dark  px-3 py-2"
+                href={{
+                  pathname: "/infinitescroll",
+                  query: { descriptor: regionDescriptor[0] },
+                }}
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <span>Food</span>
@@ -196,31 +274,39 @@ export default () => {
                   src={burger}
                   alt=""
                 />
-              </Dropdown.Item>
-              <Dropdown.Item
-                href="/infinitescroll"
+              </Link>
+              <Link
+                className="text-decoration-none text-dark  px-3 py-2"
+                href={{
+                  pathname: "/infinitescroll",
+                  query: { descriptor: regionDescriptor[1] },
+                }}
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 {" "}
-                <span>Painting</span>
-                <Image
-                  className={`h-auto ${styles.foodIcons}`}
-                  src={painticon}
-                  alt=""
-                />
-              </Dropdown.Item>
-              <Dropdown.Item
-                href="/infinitescroll"
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                {" "}
-                <span>Travelling</span>
+                <span>Hiking</span>
                 <Image
                   className={`h-auto ${styles.foodIcons}`}
                   src={travelicon}
                   alt=""
                 />
-              </Dropdown.Item>
+              </Link>
+              <Link
+                href={{
+                  pathname: "/infinitescroll",
+                  query: { descriptor: regionDescriptor[3] },
+                }}
+                className="text-decoration-none text-dark px-3 py-2"
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                {" "}
+                <span>Art</span>
+                <Image
+                  className={`h-auto ${styles.foodIcons}`}
+                  src={painticon}
+                  alt=""
+                />
+              </Link>
             </Dropdown.Menu>
           </Dropdown>
         </div>
