@@ -22,7 +22,12 @@ h3 {
   color: aquamarine;
 }
 
+/* card design */
 
+.text-white{
+  color: #ffffff !important;
+}
+/* card design */
 
 .letter-spac {
   letter-spacing: 0.59em;

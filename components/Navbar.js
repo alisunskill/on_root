@@ -77,37 +77,8 @@ import { fetchRecommendations } from "../store/actions/recommendationActions";
 //   },
 // ];
 
-const Navbar = ({ recommendations, loading, error, fetchRecommendations }) => {
-  const [titles, setTitles] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+const Navbar = () => {
 
-  // api
-  useEffect(() => {
-    fetchRecommendations();
-  }, [fetchRecommendations]);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
-  const recommendationData = recommendations.Recommendations || [];
-
-  const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-
-    const filteredCards = recommendationData.filter((card) =>
-      card.title.toLowerCase().includes(value.toLowerCase())
-    );
-    setSearchResults(filteredCards);
-  };
-  const rdata = searchResults;
-  console.log(rdata, "rdata");
   return (
     <>
       <div>
@@ -115,7 +86,7 @@ const Navbar = ({ recommendations, loading, error, fetchRecommendations }) => {
           <div className={`row d-flex align-items-center ${styles.headerhero}`}>
             {/* logo */}
             <div
-              className={`col-xl-3 col-lg-3 col-md-3 col-sm-3  d-flex justify-content-center ${styles.logo}`}
+              className={`col-xl-6 col-lg-6 col-md-6 col-sm-6  d-flex justify-content-start ${styles.logo}`}
             >
               <Link href="/">
                 <Image
@@ -126,11 +97,7 @@ const Navbar = ({ recommendations, loading, error, fetchRecommendations }) => {
                   alt="logo"
                 />
               </Link>
-            </div>
-            {/* searchbar */}
-            <Searchbar data={recommendationData} />
-
-            {/* uploaes */}
+                 {/* uploaes */}
             <div className="icons-right col-xl-3 col-lg-3 col-md-3 col-sm-3  d-flex justify-content-end align-items-center">
               <Image
                 width={50}
@@ -147,6 +114,11 @@ const Navbar = ({ recommendations, loading, error, fetchRecommendations }) => {
                 className={`mx-3 ${styles.menicon}`}
               />
             </div>
+            </div>
+            {/* searchbar */}
+            <Searchbar />
+
+         
           </div>
         </header>
       </div>

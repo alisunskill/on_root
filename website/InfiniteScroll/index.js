@@ -146,73 +146,10 @@ const InfiniteScrollComponent = () => {
 
   return (
     <div>
-      <div className="py-2 px-2">
-        <div>
-          <header className="container-fluid">
-            <div
-              className={`row d-flex align-items-center ${styles.headerhero}`}
-            >
-              <div
-                className={`col-xl-3 col-lg-3 col-md-3 col-sm-3  d-flex justify-content-center ${styles.logo}`}
-              >
-                <Link href="/">
-                  <Image
-                    width={270}
-                    height={50}
-                    className={styles.logoimage}
-                    src={logo}
-                    alt="logo"
-                  />
-                </Link>
-              </div>
-              <Link
-                href="/infinitescroll"
-                className={`col-xl-6 col-lg-6 col-md-6 col-sm-6  ${styles.inputgroup}`}
-              >
-                <Form>
-                  <FormControl
-                    type="text"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    // onKeyDown={handleSearchKeyDown}
-                    aria-describedby="button-addon5"
-                    className={`form-control ${styles.searchvally}`}
-                    list="itemList"
-                  />
-                  <datalist id="itemList">
-                    {itemData.map((item) => (
-                      <option key={item.id} value={item.title} />
-                    ))}
-                  </datalist>
-                  <FontAwesomeIcon
-                    className={styles.inputgroupicon}
-                    icon={faSearch}
-                  />
-                </Form>
-              </Link>
-              <div className="icons-right col-xl-3 col-lg-3 col-md-3 col-sm-3  d-flex justify-content-end align-items-center">
-                <Image
-                  width={50}
-                  height={50}
-                  src={plusicon}
-                  alt="plusicon"
-                  className={`mx-4 ${styles.plusicon}`}
-                />
-                <Image
-                  width={50}
-                  height={50}
-                  src={men}
-                  alt=""
-                  className={`mx-3 ${styles.menicon}`}
-                />
-              </div>
-            </div>
-          </header>
-        </div>
-      </div>
-      <div className="container px-5 pt-3 pb-5">
+      <div></div>
+      <div className="container-fluid px-5 pt-3 pb-5">
         <div className="row d-flex w-100">
-          <h1 className="dark bold text-center">New York</h1>
+          <h1 className="dark bold text-center fw-600">New York</h1>
           <p className="text-center mb-3 fw-500 pb-3 px-lg-5">
             Discover the world's top destinations and plan your next adventure
             with ease using <br /> Onroot's curated posts and itineraries
@@ -234,9 +171,21 @@ const InfiniteScrollComponent = () => {
                     : posts
                   ).map((item, index) => (
                     <div key={index}>
-                      <label className="fw-600">{item.region}</label>
-                      <Link href="/infopage">
+                      <Link
+                        href="/infopage"
+                        style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          opacity: "0.9",
+                        }}
+                      >
                         <img
+                          layout="fill"
+                          objectFit="cover"
                           src={`${
                             itemData[index % itemData.length].img
                           }?w=162&auto=format`}
@@ -247,8 +196,12 @@ const InfiniteScrollComponent = () => {
                             display: "block",
                             width: "100%",
                             borderRadius: "15px",
+                            opacity: "0.99990000999",
                           }}
                         />
+                        <div style={{ position: "absolute", zIndex: 9999 }}>
+                          <h3 className="w-700 text-white"> {item.region}</h3>
+                        </div>
                       </Link>
                     </div>
                   ))}
@@ -262,22 +215,40 @@ const InfiniteScrollComponent = () => {
                     : posts
                   ).map((item, index) => (
                     <div key={index}>
-                      <label className="fw-600">{item.descriptor}</label>
-
-                      <Link href="/infopage">
+                      <Link
+                        href="/infopage"
+                        style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          opacity: "0.9",
+                        }}
+                      >
                         <img
+                          layout="fill"
+                          objectFit="cover"
                           src={`${
                             itemData[index % itemData.length].img
                           }?w=162&auto=format`}
                           srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                          alt={item}
+                          alt={item.region}
                           loading="lazy"
                           style={{
                             display: "block",
                             width: "100%",
                             borderRadius: "15px",
+                            opacity: "0.99990000999",
                           }}
                         />
+                        <div style={{ position: "absolute", zIndex: 9999 }}>
+                          <h3 className="w-700 text-white">
+                            {" "}
+                            {item.descriptor}
+                          </h3>
+                        </div>
                       </Link>
                     </div>
                   ))}
@@ -287,9 +258,21 @@ const InfiniteScrollComponent = () => {
                   {(searchResults.length > 0 ? searchResults : posts).map(
                     (item, index) => (
                       <div key={index}>
-                        <label className="fw-600">{item.region}</label>
-                        <Link href="/infopage">
+                        <Link
+                          href="/infopage"
+                          style={{
+                            position: "relative",
+                            width: "100%",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            opacity: "0.9",
+                          }}
+                        >
                           <img
+                            layout="fill"
+                            objectFit="cover"
                             src={`${
                               itemData[index % itemData.length].img
                             }?w=162&auto=format`}
@@ -300,8 +283,12 @@ const InfiniteScrollComponent = () => {
                               display: "block",
                               width: "100%",
                               borderRadius: "15px",
+                              opacity: "0.99990000999",
                             }}
                           />
+                          <div style={{ position: "absolute", zIndex: 9999 }}>
+                            <h3 className="w-700 text-white"> {item.region}</h3>
+                          </div>
                         </Link>
                       </div>
                     )

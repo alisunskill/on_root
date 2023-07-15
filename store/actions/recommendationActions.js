@@ -1,4 +1,3 @@
-// store/actions/recommendationActions.js
 import axios from "axios";
 
 export const FETCH_RECOMMENDATIONS_REQUEST = "FETCH_RECOMMENDATIONS_REQUEST";
@@ -21,15 +20,13 @@ export const fetchRecommendationsFailure = (error) => ({
 
 // Async action
 export const fetchRecommendations = () => {
-  return (dispatch) => {
-    dispatch(fetchRecommendationsRequest());
-    axios
-      .get("http://localhost:8000/api/recommendations")
-      .then((response) => {
-        dispatch(fetchRecommendationsSuccess(response.data));
-      })
-      .catch((error) => {
-        dispatch(fetchRecommendationsFailure(error.message));
-      });
+  return async (dispatch) => {
+    try {
+      dispatch(fetchRecommendationsRequest());
+      const response = await axios.get("http://localhost:8000/api/recommendations");
+      dispatch(fetchRecommendationsSuccess(response.data));
+    } catch (error) {
+      dispatch(fetchRecommendationsFailure(error.message));
+    }
   };
 };

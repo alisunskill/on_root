@@ -20,6 +20,7 @@ import PostCard from "../../website/components/PostCards";
 import RecommendationGrid from "../../website/components/RecommendationGrid";
 import RangeSlider from "./RangeSlider";
 import Sliders from "./Sliders";
+// import Navbar from "../../components/Navbar";
 
 const data1 = [
   {
@@ -65,7 +66,7 @@ export default () => {
     (recommendations && recommendations.Recommendations) || [];
   useEffect(() => {
     setRegion(recommendationData);
-  }, []);
+  }, [regionData]);
   // useEffect(() => {
   //   axios
   //     .get("http://localhost:8000/api/recommendations?select=title,region")
@@ -174,6 +175,7 @@ export default () => {
   };
   return (
     <>
+    {/* <Navbar /> */}
       <div>
         {filteredData.map((item) => (
           <div key={item.title}>
