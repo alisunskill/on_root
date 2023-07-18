@@ -48,12 +48,41 @@ const data1 = [
 export default () => {
   const dispatch = useDispatch();
   const recommendationsData = useSelector((state) => state.recommendation);
+  const [searchTerm, setSearchTerm] = useState("");
   const { recommendations, loading, error } = recommendationsData;
 
   // const loading = true;
   useEffect(() => {
     dispatch(fetchRecommendations());
   }, [dispatch]);
+
+  // if (typeof window !== "undefined") {
+  //   const searchTerm = localStorage.getItem("searchTerm");
+  //   console.log(searchTerm);
+  // }
+
+  // useEffect(() => {
+
+  // }, []);
+  //   if (typeof window !== "undefined") {
+  //   const storedValue = localStorage.getItem("searchTerm");
+  //   if (storedValue !== null) {
+  //     setSearchTerm(storedValue);
+  //   }
+  // console.log(storedValue, " sea");
+  //   }
+
+  // if (typeof window !== "undefined") {
+  //   const storedValue = localStorage.getItem("searchTerm");
+  //   setSearchTerm(storedValue)
+  // }
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedValue = localStorage.getItem("searchTerm");
+      setSearchTerm(storedValue);
+    }
+  }, [searchTerm]);
 
   // api
   const [regionData, setRegion] = useState([]);
@@ -67,18 +96,6 @@ export default () => {
   useEffect(() => {
     setRegion(recommendationData);
   }, [regionData]);
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:8000/api/recommendations?select=title,region")
-  //     .then((response) => {
-  //       const data = response.data;
-  //       const regions = data.Recommendations;
-  //       setRegion(regions);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, []);
 
   useEffect(() => {
     if (region) {
@@ -175,218 +192,223 @@ export default () => {
   };
   return (
     <>
-    {/* <Navbar /> */}
-      <div>
-        {filteredData.map((item) => (
-          <div key={item.title}>
-            <h3>{item.title}</h3>
-            {/* Render other card details */}
+      {!searchTerm.length > 0 && (
+        <div>
+          <div>
+            {filteredData.map((item) => (
+              <div key={item.title}>
+                <h3>{item.title}</h3>
+                {/* Render other card details */}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* filtered zone */}
-      <div className={styles.landingcentral1}>
-        <div className={`btn-group px-2 ${styles.landingbuttondivs} `}>
-          {/* 1 */}
-          <button
-            className={`btn btn-secondary btn-lg bg-light d-flex align-center border-0 rounded-5 mb-0 fw-bold ${styles.landingbtncolor}`}
-            type="button"
+          {/* filtered zone */}
+          <div className={styles.landingcentral1}>
+            <div className={`btn-group px-2 ${styles.landingbuttondivs} `}>
+              {/* 1 */}
+              <button
+                className={`btn btn-secondary btn-lg bg-light d-flex align-center border-0 rounded-5 mb-0 fw-bold ${styles.landingbtncolor}`}
+                type="button"
+              >
+                <Link
+                  passHref
+                  href="/infinitescroll"
+                  className={`text-decoration-none text-dark bg-light m-0 py-1 ${styles.filterbtn}`}
+                >
+                  Filter by
+                </Link>
+              </button>
+            </div>
+            {/* 2 */}
+            <div className="btn-group px-2">
+              <Dropdown>
+                <Dropdown.Toggle
+                  className={`btn btn-light rounded-5 ${styles.filterbtn}`}
+                  variant="primary"
+                  id="dropdown-basic"
+                >
+                  Region
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  {regionData.map((item, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <Dropdown.Item>
+                          <Link
+                            className="text-decoration-none text-dark"
+                            href={{
+                              pathname: "/infinitescroll",
+                              query: { region: item.region },
+                            }}
+                          >
+                            {item.region}
+                          </Link>
+                        </Dropdown.Item>
+                      </React.Fragment>
+                    );
+                  })}
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+
+            {/* 3 */}
+            <div className="btn-group px-2">
+              <Dropdown>
+                <Dropdown.Toggle
+                  className={`btn btn-light rounded-5 ${styles.filterbtn}`}
+                  variant="primary"
+                  id="dropdown-basic"
+                >
+                  Price
+                </Dropdown.Toggle>
+                <Dropdown.Menu className={styles.rangehero}>
+                  <RangeSlider />
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+            {/* 4 */}
+            <div className={`btn-group px-2`}>
+              <Dropdown>
+                <Dropdown.Toggle
+                  className={`btn btn-light rounded-5 ${styles.filterbtn}`}
+                  variant="primary"
+                  id="dropdown-basic"
+                >
+                  Descriptor
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Link
+                    className="text-decoration-none text-dark  px-3 py-2"
+                    href={{
+                      pathname: "/infinitescroll",
+                      query: { descriptor: regionDescriptor[0] },
+                    }}
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <span>Food</span>
+                    <Image
+                      className={`h-auto ${styles.foodIcons}`}
+                      src={burger}
+                      alt=""
+                    />
+                  </Link>
+                  <Link
+                    className="text-decoration-none text-dark  px-3 py-2"
+                    href={{
+                      pathname: "/infinitescroll",
+                      query: { descriptor: regionDescriptor[1] },
+                    }}
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    {" "}
+                    <span>Hiking</span>
+                    <Image
+                      className={`h-auto ${styles.foodIcons}`}
+                      src={travelicon}
+                      alt=""
+                    />
+                  </Link>
+                  <Link
+                    href={{
+                      pathname: "/infinitescroll",
+                      query: { descriptor: regionDescriptor[3] },
+                    }}
+                    className="text-decoration-none text-dark px-3 py-2"
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    {" "}
+                    <span>Art</span>
+                    <Image
+                      className={`h-auto ${styles.foodIcons}`}
+                      src={painticon}
+                      alt=""
+                    />
+                  </Link>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </div>
+          <div
+            className={`row  ${styles.globalhero}`}
+            style={{ marginBottom: "20px;" }}
           >
-            <Link
-              passHref
-              href="/infinitescroll"
-              className={`text-decoration-none text-dark bg-light m-0 py-1 ${styles.filterbtn}`}
-            >
-              Filter by
-            </Link>
-          </button>
-        </div>
-        {/* 2 */}
-        <div className="btn-group px-2">
-          <Dropdown>
-            <Dropdown.Toggle
-              className={`btn btn-light rounded-5 ${styles.filterbtn}`}
-              variant="primary"
-              id="dropdown-basic"
-            >
-              Region
-            </Dropdown.Toggle>
+            {/* Events Zone */}
+            <div className={`col-lg-8 p-0`}>
+              <RecommendationGrid />
+            </div>
+            <div className="col-lg-4">
+              <Image className={styles.globe} src={globe} alt="globe" />
+              {/* <GlobeMap /> */}
+            </div>
+          </div>
 
-            <Dropdown.Menu>
-              {regionData.map((item, index) => {
-                return (
-                  <React.Fragment key={index}>
-                    <Dropdown.Item>
-                      <Link
-                        className="text-decoration-none text-dark"
-                        href={{
-                          pathname: "/infinitescroll",
-                          query: { region: item.region },
-                        }}
-                      >
-                        {item.region}
-                      </Link>
-                    </Dropdown.Item>
-                  </React.Fragment>
-                );
-              })}
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-
-        {/* 3 */}
-        <div className="btn-group px-2">
-          <Dropdown>
-            <Dropdown.Toggle
-              className={`btn btn-light rounded-5 ${styles.filterbtn}`}
-              variant="primary"
-              id="dropdown-basic"
-            >
-              Price
-            </Dropdown.Toggle>
-            <Dropdown.Menu className={styles.rangehero}>
-              <RangeSlider />
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-        {/* 4 */}
-        <div className={`btn-group px-2`}>
-          <Dropdown>
-            <Dropdown.Toggle
-              className={`btn btn-light rounded-5 ${styles.filterbtn}`}
-              variant="primary"
-              id="dropdown-basic"
-            >
-              Descriptor
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
+          <div className="row">
+            <div className={`col-lg-12 ${styles.landingcentral}`}>
               <Link
-                className="text-decoration-none text-dark  px-3 py-2"
-                href={{
-                  pathname: "/infinitescroll",
-                  query: { descriptor: regionDescriptor[0] },
-                }}
-                style={{ display: "flex", justifyContent: "space-between" }}
+                href="/infinitescroll"
+                className={`${styles.landingnextbutton} text-decoration-none fw-600`}
               >
-                <span>Food</span>
-                <Image
-                  className={`h-auto ${styles.foodIcons}`}
-                  src={burger}
-                  alt=""
-                />
+                View More
               </Link>
-              <Link
-                className="text-decoration-none text-dark  px-3 py-2"
-                href={{
-                  pathname: "/infinitescroll",
-                  query: { descriptor: regionDescriptor[1] },
-                }}
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                {" "}
-                <span>Hiking</span>
-                <Image
-                  className={`h-auto ${styles.foodIcons}`}
-                  src={travelicon}
-                  alt=""
-                />
-              </Link>
-              <Link
-                href={{
-                  pathname: "/infinitescroll",
-                  query: { descriptor: regionDescriptor[3] },
-                }}
-                className="text-decoration-none text-dark px-3 py-2"
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                {" "}
-                <span>Art</span>
-                <Image
-                  className={`h-auto ${styles.foodIcons}`}
-                  src={painticon}
-                  alt=""
-                />
-              </Link>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-      </div>
-      <div
-        className={`row  ${styles.globalhero}`}
-        style={{ marginBottom: "20px;" }}
-      >
-        {/* Events Zone */}
-        <div className={`col-lg-8 p-0`}>
-          <RecommendationGrid />
-        </div>
-        <div className="col-lg-4">
-          <Image className={styles.globe} src={globe} alt="globe" />
-          {/* <GlobeMap /> */}
-        </div>
-      </div>
+            </div>
+          </div>
+          <div className={styles.landingdivendheading}>
+            <h3 className={`mb-0 ${styles.landingendheading}`}>
+              Top Destinations
+            </h3>
+          </div>
+          <div className={styles.landingdivsubheading}>
+            <p className={`${styles.landingsubheading} mb-0`}>
+              Discover the world's top destinations and plan your next adventure
+              with ease using <br /> Onroot's curated posts and itineraries
+            </p>
+          </div>
 
-      <div className="row">
-        <div className={`col-lg-12 ${styles.landingcentral}`}>
-          <Link
-            href="/infinitescroll"
-            className={`${styles.landingnextbutton} text-decoration-none fw-600`}
+          <div
+            className={`row  px-lg-6 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
           >
-            View More
-          </Link>
+            {data.map((item, index) => {
+              return (
+                <PostCard
+                  key={index}
+                  imageUrl={item.bgImg}
+                  city={item.city}
+                  // country={item.country}
+                />
+              );
+            })}
+          </div>
+          <br />
+          <br />
+
+          <Slider {...settings}>
+            {data1.map((item, index) => {
+              return (
+                <Sliders
+                  key={index}
+                  para={item.para}
+                  bgimg={item.bgImg}
+                  settings={settings}
+                />
+              );
+            })}
+          </Slider>
+
+          {/* subscribe newsletter */}
+
+          <NewsLetter
+            newsletterimg={newsletterimg}
+            heading={"Subscribe to our Newsletter"}
+            title={"Get Special Offers and more from Traveller"}
+            para={
+              "Subscribe to see secret deals prices drop the moment you sign up!"
+            }
+          />
         </div>
-      </div>
-      <div className={styles.landingdivendheading}>
-        <h3 className={`mb-0 ${styles.landingendheading}`}>Top Destinations</h3>
-      </div>
-      <div className={styles.landingdivsubheading}>
-        <p className={`${styles.landingsubheading} mb-0`}>
-          Discover the world's top destinations and plan your next adventure
-          with ease using <br /> Onroot's curated posts and itineraries
-        </p>
-      </div>
-
-      <div
-        className={`row  px-lg-6 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
-      >
-        {data.map((item, index) => {
-          return (
-            <PostCard
-              key={index}
-              imageUrl={item.bgImg}
-              city={item.city}
-              // country={item.country}
-            />
-          );
-        })}
-      </div>
-      <br />
-      <br />
-
-      <Slider {...settings}>
-        {data1.map((item, index) => {
-          return (
-            <Sliders
-              key={index}
-              para={item.para}
-              bgimg={item.bgImg}
-              settings={settings}
-            />
-          );
-        })}
-      </Slider>
-
-      {/* subscribe newsletter */}
-
-      <NewsLetter
-        newsletterimg={newsletterimg}
-        heading={"Subscribe to our Newsletter"}
-        title={"Get Special Offers and more from Traveller"}
-        para={
-          "Subscribe to see secret deals prices drop the moment you sign up!"
-        }
-      />
+      )}
     </>
   );
 };

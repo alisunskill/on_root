@@ -24,7 +24,10 @@
 .inputgroup {
   height: 40px;
   border-radius: 50px;
-  position: relative;
+  position: absolute;
+  /* right: 11rem; */
+  top: 1rem;
+  text-align: center;
 }
 .searchbarbox {
   height: auto;
@@ -40,7 +43,7 @@
   font-size: 30px;
   margin-right: 18px;
 }
-.foodIcons{
+.foodIcons {
   width: 30px;
   margin-left: 10px;
 }
@@ -166,6 +169,10 @@
   font-weight: 400;
 }
 
+.right_box {
+  position: absolute;
+  right: 0.9rem;
+}
 /* for all end */
 
 .landingbuttondivs {

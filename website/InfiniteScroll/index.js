@@ -1,20 +1,11 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Masonry from "@mui/lab/Masonry";
 import Box from "@mui/material/Box";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Form from "react-bootstrap/Form";
-import FormControl from "react-bootstrap/FormControl";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { connect, useDispatch, useSelector } from "react-redux";
-import men from "../../public/Images/men.svg";
-import plusicon from "../../public/Images/plusicon.svg";
-import logo from "../../public/images/logo.svg";
 import { fetchRecommendations } from "../../store/actions/recommendationActions";
-import styles from "../../styles/home.module.css";
 
 const InfiniteScrollComponent = () => {
   const router = useRouter();
@@ -168,7 +159,7 @@ const InfiniteScrollComponent = () => {
                     ? filteredPosts
                     : searchResults.length > 0
                     ? searchResults
-                    : posts
+                    : recommendationData
                   ).map((item, index) => (
                     <div key={index}>
                       <Link
@@ -212,7 +203,7 @@ const InfiniteScrollComponent = () => {
                     ? filtereDescriptor
                     : searchResults.length > 0
                     ? searchResults
-                    : posts
+                    : recommendationData
                   ).map((item, index) => (
                     <div key={index}>
                       <Link

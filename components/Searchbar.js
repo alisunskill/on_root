@@ -9,10 +9,9 @@ import React, { useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchRecommendations } from "../store/actions/recommendationActions";
-import InfiniteScrollComponent from "../website/InfiniteScroll"
 import { Box } from "@mui/material";
 import { Masonry } from "@mui/lab";
-import Layout from "./Layout";
+import { searchData } from "../store/actions/recommendationActions";
 
 const Searchbar = () => {
   const router = useRouter();
@@ -38,39 +37,28 @@ const Searchbar = () => {
   const [hasMore, setHasMore] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [show, setShow] = useState(true);
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("searchTerm", searchTerm);
+  }, [searchTerm]);
+
+  console.log(searchTerm, "searchTerm");
 
   useEffect(() => {
     fetchPosts();
   }, []);
 
   const fetchPosts = () => {
-    // Replace this with your static data array or import from a separate file
-    const staticPosts = [
-      {
-        id: 1,
-        title: "Post 1",
-        body: "Lorem ipsum dolor sit amet.",
-        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-      },
-      {
-        id: 2,
-        title: "Post 2",
-        body: "Consectetur adipiscing elit.",
-        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-      },
-      // Add more static posts as needed
-    ];
-
     const startIndex = (page - 1) * 10;
     const endIndex = page * 10;
     const newPosts = recommendationData.slice(startIndex, endIndex);
 
     if (newPosts.length > 0) {
-      // Append new posts to the existing list
       setPosts((prevPosts) => [...prevPosts, ...newPosts]);
       setPage((prevPage) => prevPage + 1);
     } else {
-      // No more posts available
       setHasMore(false);
     }
   };
@@ -89,19 +77,37 @@ const Searchbar = () => {
 
   const recommendationData = recommendations.Recommendations || [];
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    // router.push(`/infinitescroll`)
+  const handleSearch = async (e) => {
     const value = e.target.value;
     setSearchTerm(value);
 
-    // Filter the recommendations based on the search term
     const filteredRecommendations = recommendationData.filter((item) =>
       item.region.toLowerCase().includes(value.toLowerCase())
     );
+
+    console.log(filteredRecommendations);
+    dispatch(searchData(filteredRecommendations));
+
     setPosts(filteredRecommendations);
+    setShowAll(false);
   };
 
+  const toggleShowAll = () => {
+    setShowAll(!showAll);
+  };
+
+  // keypress enter for search
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const filteredCards = posts.filter((card) =>
+        card.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSearchResults(filteredCards);
+      setShow(false);
+      router.push(`/infinitescroll?region=${encodeURIComponent(searchTerm)}`);
+    }
+  };
   // current post
   const filteredPosts = recommendationData.filter(
     (post) => post.region.toLowerCase() === region
@@ -142,212 +148,230 @@ const Searchbar = () => {
     return <p>Error: {error}</p>;
   }
 
-
-
-
   return (
-<>
-<div
-      className={`col-xl-6 col-lg-6 col-md-6 col-sm-6  ${styles.inputgroup}`}
-    >
-      <Form>
-        <FormControl
-          type="text"
-          value={searchTerm}
-          onChange={handleSearch}
-          aria-describedby="button-addon5"
-          className={`form-control ${styles.searchvally}`}
-          list="itemList"
-        />
-        <datalist id="itemList">
-          {itemData.map((item) => (
-            <option key={item.id} value={item.title} />
-          ))}
-        </datalist>
-        <FontAwesomeIcon className={styles.inputgroupicon} icon={faSearch} />
-      </Form>
-
-
-
-
-
-
-
-
-
-      
-    
-    </div>
-    <div>
-  {
-    searchTerm  &&
-    <div>
-    <div className="container-fluid px-5 pt-3 pb-5">
-      <div className="row d-flex w-100">
-      { searchTerm !== "" &&
-         (
-         <>
-          <h1 className="dark bold text-center fw-600">New York</h1>
-          <p className="text-center mb-3 fw-500 pb-3 px-lg-5">
-            Discover the world's top destinations and plan your next adventure
-            with ease using <br /> Onroot's curated posts and itineraries
-          </p>
-         </>
-         )
-      }
-        <InfiniteScroll
-          className="w-100 overflow-hidden"
-          dataLength={searchResults.length || posts.length}
-          next={recommendationData}
-          hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
-        >
-          <Box sx={{ minHeight: 829 }}>
-            { searchTerm !== ""  ? (
-              <Masonry columns={3} spacing={2}>
-                {(filteredPosts.length > 0
-                  ? filteredPosts
-                  : searchResults.length > 0
-                  ? searchResults
-                  : posts
-                ).map((item, index) => (
-                  <div key={index}>
-                    <Link
-                      href="/infopage"
-                      style={{
-                        position: "relative",
-                        width: "100%",
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        opacity: "0.9",
-                      }}
-                    >
-                      <img
-                        layout="fill"
-                        objectFit="cover"
-                        src={`${
-                          itemData[index % itemData.length].img
-                        }?w=162&auto=format`}
-                        srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                        alt={item.region}
-                        loading="lazy"
-                        style={{
-                          display: "block",
-                          width: "100%",
-                          borderRadius: "15px",
-                          opacity: "0.99990000999",
-                        }}
-                      />
-                      <div style={{ position: "absolute", zIndex: 9999 }}>
-                        <h3 className="w-700 text-white"> {item.region}</h3>
-                      </div>
-                    </Link>
-                  </div>
-                ))}
-              </Masonry>
-            ) : searchTerm !== "" ? (
-              <Masonry columns={3} spacing={2}>
-                {(filtereDescriptor.length > 0
-                  ? filtereDescriptor
-                  : searchResults.length > 0
-                  ? searchResults
-                  : posts
-                ).map((item, index) => (
-                  <div key={index}>
-                    <Link
-                      href="/infopage"
-                      style={{
-                        position: "relative",
-                        width: "100%",
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        opacity: "0.9",
-                      }}
-                    >
-                      <img
-                        layout="fill"
-                        objectFit="cover"
-                        src={`${
-                          itemData[index % itemData.length].img
-                        }?w=162&auto=format`}
-                        srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                        alt={item.region}
-                        loading="lazy"
-                        style={{
-                          display: "block",
-                          width: "100%",
-                          borderRadius: "15px",
-                          opacity: "0.99990000999",
-                        }}
-                      />
-                      <div style={{ position: "absolute", zIndex: 9999 }}>
-                        <h3 className="w-700 text-white">
-                          {" "}
-                          {item.descriptor}
-                        </h3>
-                      </div>
-                    </Link>
-                  </div>
-                ))}
-              </Masonry>
-            ) : (
-              // <Masonry columns={3} spacing={2}>
-              //   {(searchResults.length > 0 ? searchResults : posts).map(
-              //     (item, index) => (
-              //       <div key={index}>
-              //         <Link
-              //           href="/infopage"
-              //           style={{
-              //             position: "relative",
-              //             width: "100%",
-              //             height: "100%",
-              //             display: "flex",
-              //             alignItems: "center",
-              //             justifyContent: "center",
-              //             opacity: "0.9",
-              //           }}
-              //         >
-              //           <img
-              //             layout="fill"
-              //             objectFit="cover"
-              //             src={`${
-              //               itemData[index % itemData.length].img
-              //             }?w=162&auto=format`}
-              //             srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-              //             alt={item.region}
-              //             loading="lazy"
-              //             style={{
-              //               display: "block",
-              //               width: "100%",
-              //               borderRadius: "15px",
-              //               opacity: "0.99990000999",
-              //             }}
-              //           />
-              //           <div style={{ position: "absolute", zIndex: 9999 }}>
-              //             <h3 className="w-700 text-white"> {item.region}</h3>
-              //           </div>
-              //         </Link>
-              //       </div>
-              //     )
-              //   )}
-              // </Masonry> 
-            ""
-            )}
-          </Box>
-        </InfiniteScroll>
+    <>
+      <div
+        className={`col-xl-5 col-lg-5 col-md-5 col-sm-5  ${styles.inputgroup}`}
+      >
+        <Form>
+          <FormControl
+            type="text"
+            value={searchTerm}
+            onChange={handleSearch}
+            onKeyPress={handleKeyPress}
+            aria-describedby="button-addon5"
+            className={`form-control ${styles.searchvally}`}
+            list="itemList"
+          />
+          <datalist id="itemList">
+            {itemData.map((item) => (
+              <option key={item.id} value={item.title} />
+            ))}
+          </datalist>
+          <FontAwesomeIcon className={styles.inputgroupicon} icon={faSearch} />
+        </Form>
       </div>
-    </div>
-    </div>
-  }
-    </div>
-   
-</>
-
-
+      {show && (
+        <div>
+          {searchTerm && (
+            <div>
+              <div className="container-fluid px-5 pt-3 pb-5">
+                <div className="row d-flex w-100">
+                  {searchTerm !== "" && (
+                    <>
+                      <h1 className="dark bold text-center fw-600">New York</h1>
+                      <p className="text-center mb-3 fw-500 pb-3 px-lg-5">
+                        Discover the world's top destinations and plan your next
+                        adventure with ease using <br /> Onroot's curated posts
+                        and itineraries
+                      </p>
+                    </>
+                  )}
+                  <InfiniteScroll
+                    className="w-100 overflow-hidden"
+                    dataLength={searchResults.length || posts.length}
+                    next={recommendationData}
+                    hasMore={hasMore}
+                    loader={<h4>Loading...</h4>}
+                  >
+                    <Box>
+                      {/* {searchTerm !== "" ? (
+                      <Masonry columns={3} spacing={2}>
+                        {(filteredPosts.length > 0
+                          ? filteredPosts
+                          : searchResults.length > 0
+                          ? searchResults
+                          : posts
+                        ).map((item, index) => (
+                          <div key={index}>
+                            <Link
+                              href="/infopage"
+                              style={{
+                                position: "relative",
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                opacity: "0.9",
+                              }}
+                            >
+                              <img
+                                layout="fill"
+                                objectFit="cover"
+                                src={`${
+                                  itemData[index % itemData.length].img
+                                }?w=162&auto=format`}
+                                srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
+                                alt={item.region}
+                                loading="lazy"
+                                style={{
+                                  display: "block",
+                                  width: "100%",
+                                  borderRadius: "15px",
+                                  opacity: "0.99990000999",
+                                }}
+                              />
+                              <div
+                                style={{ position: "absolute", zIndex: 9999 }}
+                              >
+                                <h3 className="w-700 text-white">
+                                  {" "}
+                                  {item.region}
+                                </h3>
+                              </div>
+                            </Link>
+                          </div>
+                        ))}
+                      </Masonry>
+                    ) : searchTerm !== "" ? (
+                      <Masonry columns={3} spacing={2}>
+                        {(filtereDescriptor.length > 0
+                          ? filtereDescriptor
+                          : searchResults.length > 0
+                          ? searchResults
+                          : posts
+                        ).map((item, index) => (
+                          <div key={index}>
+                            <Link
+                              href="/infopage"
+                              style={{
+                                position: "relative",
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                opacity: "0.9",
+                              }}
+                            >
+                              <img
+                                layout="fill"
+                                objectFit="cover"
+                                src={`${
+                                  itemData[index % itemData.length].img
+                                }?w=162&auto=format`}
+                                srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
+                                alt={item.region}
+                                loading="lazy"
+                                style={{
+                                  display: "block",
+                                  width: "100%",
+                                  borderRadius: "15px",
+                                  opacity: "0.99990000999",
+                                }}
+                              />
+                              <div
+                                style={{ position: "absolute", zIndex: 9999 }}
+                              >
+                                <h3 className="w-700 text-white">
+                                  {" "}
+                                  {item.descriptor}
+                                </h3>
+                              </div>
+                            </Link>
+                          </div>
+                        ))}
+                      </Masonry>
+                    ) : (
+                    
+                      ""
+                    )} */}
+                      <Masonry columns={3} spacing={2}>
+                        {(showAll
+                          ? filteredPosts.length > 0
+                            ? filteredPosts
+                            : searchResults.length > 0
+                            ? searchResults
+                            : posts
+                          : filteredPosts.length > 0
+                          ? filteredPosts.slice(0, 2) // Display only the first two items
+                          : searchResults.length > 0
+                          ? searchResults.slice(0, 2) // Display only the first two items
+                          : posts.slice(0, 2)
+                        ) // Display only the first two items
+                          .map((item, index) => (
+                            <div key={index}>
+                              <Link
+                                href="/infopage"
+                                style={{
+                                  position: "relative",
+                                  width: "100%",
+                                  height: "100%",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  opacity: "0.9",
+                                }}
+                              >
+                                <img
+                                  layout="fill"
+                                  objectFit="cover"
+                                  src={`${
+                                    itemData[index % itemData.length].img
+                                  }?w=162&auto=format`}
+                                  srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
+                                  alt={item.region}
+                                  loading="lazy"
+                                  style={{
+                                    display: "block",
+                                    width: "100%",
+                                    borderRadius: "15px",
+                                    opacity: "0.99990000999",
+                                  }}
+                                />
+                                <div
+                                  style={{ position: "absolute", zIndex: 9999 }}
+                                >
+                                  <h3 className="w-700 text-white">
+                                    {" "}
+                                    {item.region}
+                                  </h3>
+                                </div>
+                              </Link>
+                            </div>
+                          ))}
+                      </Masonry>
+                    </Box>
+                  </InfiniteScroll>
+                  {!showAll && (
+                    <div className="text-center mt-3">
+                      <button
+                        onClick={toggleShowAll}
+                        className="btn text-light bold"
+                        style={{ background: "#7CC5E5" }}
+                      >
+                        Show All
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </>
   );
 };
 
@@ -362,7 +386,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Searchbar);
-
-
-
-

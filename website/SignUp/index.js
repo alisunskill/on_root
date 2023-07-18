@@ -88,7 +88,7 @@ function Signup() {
                         <div key={optionIndex}>
                           <label className="w-100">
                             <input
-                          style={{padding:"11px"}}
+                              style={{ padding: "11px" }}
                               type="radio"
                               name={`radio-${index}`}
                               value={option}
@@ -102,7 +102,7 @@ function Signup() {
                     ) : (
                       <div className="w-100">
                         <input
-                          style={{padding:"10px"}}
+                          style={{ padding: "10px" }}
                           className="form-control rounded-2 border-0 w-100"
                           type={field.type}
                           value={field.value}
@@ -129,4 +129,3 @@ function Signup() {
 }
 
 export default Signup;
-

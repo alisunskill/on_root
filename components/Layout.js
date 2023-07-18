@@ -3,6 +3,7 @@ import Footer from "./Footer";
 import React, { useState } from "react";
 
 export default function Layout({ children }) {
+  
   return (
     <div>
       <Navbar />

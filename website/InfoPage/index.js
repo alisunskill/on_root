@@ -15,6 +15,7 @@ import PlaceNameCard from "../components/PlaceNameCard";
 import PlaceCardFull from "../components/PlaceCardFull";
 import GoogleLoc from "./components/GoogleLoc";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const highlights = [
   {
@@ -32,6 +33,11 @@ const highlights = [
 ];
 
 function Singularevent() {
+  const searchDataList = useSelector((state) => state.recommendation);
+  const { getSearchData } = searchDataList;
+
+  console.log(getSearchData, "BOLDED");
+
   const [regionData, setRegion] = useState([]);
   useEffect(() => {
     axios
@@ -69,7 +75,6 @@ function Singularevent() {
     },
   ];
 
-
   const eventData = [
     {
       bgImg:
@@ -93,9 +98,6 @@ function Singularevent() {
       place: region[2],
     },
   ];
-
-
-
 
   const data = [
     {
