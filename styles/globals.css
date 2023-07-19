@@ -24,7 +24,7 @@ h3 {
 
 /* card design */
 
-.text-white{
+.text-white {
   color: #ffffff !important;
 }
 /* card design */
@@ -186,5 +186,5 @@ input {
   height: 100vh;
 }
 .w-100 {
-  width: 100%;
+  width: 100% !important;
 }

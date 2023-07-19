@@ -39,6 +39,7 @@ const Searchbar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [show, setShow] = useState(true);
   const [showAll, setShowAll] = useState(false);
+  const [regionData, setRegion] = useState([]);
 
   useEffect(() => {
     localStorage.setItem("searchTerm", searchTerm);
@@ -76,6 +77,9 @@ const Searchbar = () => {
   }, [fetchRecommendations]);
 
   const recommendationData = recommendations.Recommendations || [];
+  useEffect(() => {
+    setRegion(recommendationData);
+  }, [regionData]);
 
   const handleSearch = async (e) => {
     const value = e.target.value;
@@ -106,6 +110,7 @@ const Searchbar = () => {
       setSearchResults(filteredCards);
       setShow(false);
       router.push(`/infinitescroll?region=${encodeURIComponent(searchTerm)}`);
+      setSearchTerm("");
     }
   };
   // current post
@@ -148,6 +153,52 @@ const Searchbar = () => {
     return <p>Error: {error}</p>;
   }
 
+  // routes set for region
+
+  const regionp = regionData.map((item) => {
+    return item.region;
+  });
+  const data = [
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: regionp[0],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1689072503598-638956beee7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=660&q=80",
+      city: regionp[1],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1593593595698-de9e5f682a14?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=834&q=80",
+      city: regionp[2],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1595112729465-942dafaa4e98?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=886&q=80",
+      city: regionp[2],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      city: regionp[1],
+
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1519638399535-1b036603ac77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80",
+      city: regionp[0],
+
+      country: "USA",
+    },
+  ];
+
   return (
     <>
       <div
@@ -176,17 +227,14 @@ const Searchbar = () => {
           {searchTerm && (
             <div>
               <div className="container-fluid px-5 pt-3 pb-5">
-                <div className="row d-flex w-100">
-                  {searchTerm !== "" && (
-                    <>
-                      <h1 className="dark bold text-center fw-600">New York</h1>
-                      <p className="text-center mb-3 fw-500 pb-3 px-lg-5">
-                        Discover the world's top destinations and plan your next
-                        adventure with ease using <br /> Onroot's curated posts
-                        and itineraries
-                      </p>
-                    </>
-                  )}
+                <div
+                  className="row d-flex w-100 btn scroll-hidden border-0"
+                  data-toggle="collapse"
+                  href="#multiCollapseExample1"
+                  role="button"
+                  aria-expanded="false"
+                  aria-controls="multiCollapseExample1"
+                >
                   <InfiniteScroll
                     className="w-100 overflow-hidden"
                     dataLength={searchResults.length || posts.length}
@@ -195,133 +243,34 @@ const Searchbar = () => {
                     loader={<h4>Loading...</h4>}
                   >
                     <Box>
-                      {/* {searchTerm !== "" ? (
                       <Masonry columns={3} spacing={2}>
-                        {(filteredPosts.length > 0
-                          ? filteredPosts
-                          : searchResults.length > 0
-                          ? searchResults
-                          : posts
-                        ).map((item, index) => (
-                          <div key={index}>
-                            <Link
-                              href="/infopage"
-                              style={{
-                                position: "relative",
-                                width: "100%",
-                                height: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                opacity: "0.9",
-                              }}
-                            >
-                              <img
-                                layout="fill"
-                                objectFit="cover"
-                                src={`${
-                                  itemData[index % itemData.length].img
-                                }?w=162&auto=format`}
-                                srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                                alt={item.region}
-                                loading="lazy"
-                                style={{
-                                  display: "block",
-                                  width: "100%",
-                                  borderRadius: "15px",
-                                  opacity: "0.99990000999",
-                                }}
-                              />
-                              <div
-                                style={{ position: "absolute", zIndex: 9999 }}
-                              >
-                                <h3 className="w-700 text-white">
-                                  {" "}
-                                  {item.region}
-                                </h3>
-                              </div>
-                            </Link>
-                          </div>
-                        ))}
-                      </Masonry>
-                    ) : searchTerm !== "" ? (
-                      <Masonry columns={3} spacing={2}>
-                        {(filtereDescriptor.length > 0
-                          ? filtereDescriptor
-                          : searchResults.length > 0
-                          ? searchResults
-                          : posts
-                        ).map((item, index) => (
-                          <div key={index}>
-                            <Link
-                              href="/infopage"
-                              style={{
-                                position: "relative",
-                                width: "100%",
-                                height: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                opacity: "0.9",
-                              }}
-                            >
-                              <img
-                                layout="fill"
-                                objectFit="cover"
-                                src={`${
-                                  itemData[index % itemData.length].img
-                                }?w=162&auto=format`}
-                                srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                                alt={item.region}
-                                loading="lazy"
-                                style={{
-                                  display: "block",
-                                  width: "100%",
-                                  borderRadius: "15px",
-                                  opacity: "0.99990000999",
-                                }}
-                              />
-                              <div
-                                style={{ position: "absolute", zIndex: 9999 }}
-                              >
-                                <h3 className="w-700 text-white">
-                                  {" "}
-                                  {item.descriptor}
-                                </h3>
-                              </div>
-                            </Link>
-                          </div>
-                        ))}
-                      </Masonry>
-                    ) : (
-                    
-                      ""
-                    )} */}
-                      <Masonry columns={3} spacing={2}>
-                        {(showAll
-                          ? filteredPosts.length > 0
-                            ? filteredPosts
+                        <div
+                          className={`w-100 border-0 ${styles.masonery_data}`}
+                          data-toggle="collapse"
+                          href="#multiCollapseExample1"
+                          role="button"
+                          aria-expanded="false"
+                          aria-controls="multiCollapseExample1"
+                        >
+                          {(showAll
+                            ? filteredPosts.length > 0
+                              ? filteredPosts
+                              : searchResults.length > 0
+                              ? searchResults
+                              : posts
+                            : filteredPosts.length > 0
+                            ? filteredPosts.slice(0, 2)
                             : searchResults.length > 0
-                            ? searchResults
-                            : posts
-                          : filteredPosts.length > 0
-                          ? filteredPosts.slice(0, 2) // Display only the first two items
-                          : searchResults.length > 0
-                          ? searchResults.slice(0, 2) // Display only the first two items
-                          : posts.slice(0, 2)
-                        ) // Display only the first two items
-                          .map((item, index) => (
+                            ? searchResults.slice(0, 2)
+                            : posts.slice(0, 2)
+                          ).map((item, index) => (
                             <div key={index}>
                               <Link
-                                href="/infopage"
-                                style={{
-                                  position: "relative",
-                                  width: "100%",
-                                  height: "100%",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  opacity: "0.9",
+                                className="d-flex align-items-bottom text-decoration-none justify-content-between gap-3 w-100 mt-2"
+                                style={{ boxShadow: "0 8px 6px -6px black" }}
+                                href={{
+                                  pathname: "/infinitescroll",
+                                  query: { region: item.region },
                                 }}
                               >
                                 <img
@@ -335,22 +284,20 @@ const Searchbar = () => {
                                   loading="lazy"
                                   style={{
                                     display: "block",
-                                    width: "100%",
-                                    borderRadius: "15px",
-                                    opacity: "0.99990000999",
+                                    width: "10%",
+                                    borderRadius: "5px",
                                   }}
                                 />
-                                <div
-                                  style={{ position: "absolute", zIndex: 9999 }}
+                                <h5
+                                  className="text-dark text-end mb-0 d-flex align-items-end"
+                                  style={{ width: "15%" }}
                                 >
-                                  <h3 className="w-700 text-white">
-                                    {" "}
-                                    {item.region}
-                                  </h3>
-                                </div>
+                                  {item.region}
+                                </h5>
                               </Link>
                             </div>
                           ))}
+                        </div>
                       </Masonry>
                     </Box>
                   </InfiniteScroll>

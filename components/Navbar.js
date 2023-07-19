@@ -9,8 +9,7 @@ import Searchbar from "./Searchbar";
 import axios from "axios";
 import { connect } from "react-redux";
 import { fetchRecommendations } from "../store/actions/recommendationActions";
-import { useRouter } from "next/router";
-
+import { useRouter } from "next/navigation";
 const Navbar = () => {
   const router = useRouter();
   const handleReload = () => {

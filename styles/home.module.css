@@ -371,15 +371,9 @@
   padding: 49px 78px;
   text-align: center;
 }
-/* form {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  border: 1px solid grey;
-  width: 100%;
-  padding: 1px;
-  border-radius: 20px;
-} */
+.masonery_data {
+  max-width: 700px;
+}
 
 .input1 {
   border: none;

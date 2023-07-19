@@ -91,12 +91,6 @@ export default () => {
   const { descriptor } = router.query;
   const [filteredData, setFilteredData] = useState([]);
 
-  const recommendationData =
-    (recommendations && recommendations.Recommendations) || [];
-  useEffect(() => {
-    setRegion(recommendationData);
-  }, [regionData]);
-
   useEffect(() => {
     if (region) {
       axios
@@ -111,33 +105,15 @@ export default () => {
         });
     }
   }, [region]);
+  const recommendationData =
+    (recommendations && recommendations.Recommendations) || [];
+  useEffect(() => {
+    setRegion(recommendationData);
+  }, [regionData]);
 
   const regionp = regionData.map((item) => {
     return item.region;
   });
-
-  const regionDescriptor = regionData.map((item) => {
-    return item.descriptor;
-  });
-  // region urls
-  useEffect(() => {
-    if (region) {
-      const filteredRegionData = regionData.filter(
-        (item) => item.region === region
-      );
-      setFilteredData(filteredRegionData);
-    }
-  }, [region, regionData]);
-  // discripttors urls
-  useEffect(() => {
-    if (descriptor) {
-      const filteredDescriptorData = regionData.filter(
-        (item) => item.descriptor === descriptor
-      );
-      setFilteredData(filteredDescriptorData);
-    }
-  }, [descriptor, regionData]);
-
   const data = [
     {
       bgImg:
@@ -178,6 +154,28 @@ export default () => {
       country: "USA",
     },
   ];
+  const regionDescriptor = regionData.map((item) => {
+    return item.descriptor;
+  });
+  // region urls
+  useEffect(() => {
+    if (region) {
+      const filteredRegionData = regionData.filter(
+        (item) => item.region === region
+      );
+      setFilteredData(filteredRegionData);
+    }
+  }, [region, regionData]);
+  // discripttors urls
+  useEffect(() => {
+    if (descriptor) {
+      const filteredDescriptorData = regionData.filter(
+        (item) => item.descriptor === descriptor
+      );
+      setFilteredData(filteredDescriptorData);
+    }
+  }, [descriptor, regionData]);
+
   // const region
 
   // api

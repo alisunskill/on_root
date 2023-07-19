@@ -10,6 +10,7 @@ import { fetchRecommendations } from "../../store/actions/recommendationActions"
 const InfiniteScrollComponent = () => {
   const router = useRouter();
   const region = router.query.region?.toLowerCase();
+
   const descriptor = router.query.descriptor?.toLowerCase();
   // redux
   const dispatch = useDispatch();
@@ -32,10 +33,30 @@ const InfiniteScrollComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
+  const [minCost, setMinCost] = useState(0);
+  const [maxCost, setMaxCost] = useState(Number.MAX_VALUE);
+
+  const cost = router.query.minCost & maxCost;
+  console.log(cost, "Ali Ghori");
+
   useEffect(() => {
     fetchPosts();
   }, []);
+  useEffect(() => {
+    dispatch(fetchRecommendations());
 
+    // Set the minimum and maximum cost range based on the URL parameters
+    const minParam = parseInt(router.query.min);
+    const maxParam = parseInt(router.query.max);
+
+    if (!isNaN(minParam)) {
+      setMinCost(minParam);
+    }
+
+    if (!isNaN(maxParam)) {
+      setMaxCost(maxParam);
+    }
+  }, [dispatch, router.query.min, router.query.max]);
   const fetchPosts = () => {
     // Replace this with your static data array or import from a separate file
     const staticPosts = [
@@ -80,6 +101,33 @@ const InfiniteScrollComponent = () => {
     fetchRecommendations();
   }, [fetchRecommendations]);
 
+  console.log(minCost, maxCost, "ALi");
+
+  // min and max base cost ueEffect
+  useEffect(() => {
+    const fetchPosts = async () => {
+      // Fetch the posts based on the min and max cost values
+      // Replace this with your API call to fetch the recommendations
+      const response = await fetch(
+        `recommendations?min=${minCost}&max=${maxCost}`
+      );
+      const data = await response.json();
+
+      const newPosts = data.Recommendations;
+
+      if (newPosts.length > 0) {
+        // Append new posts to the existing list
+        setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+        setPage((prevPage) => prevPage + 1);
+      } else {
+        // No more posts available
+        setHasMore(false);
+      }
+    };
+
+    fetchPosts();
+  }, [minCost, maxCost]);
+
   const recommendationData = recommendations.Recommendations || [];
 
   const handleSearch = (e) => {
@@ -104,6 +152,12 @@ const InfiniteScrollComponent = () => {
   const filtereDescriptor = recommendationData.filter(
     (post) => post.descriptor.toLowerCase() === descriptor
   );
+
+  // filterPrice
+  const filterPrice = recommendationData.filter(
+    (post) => post.cost >= minCost && post.cost <= maxCost
+  );
+  console.log(filterPrice, "filter");
 
   useEffect(() => {
     setPosts(filtereDescriptor);
@@ -159,6 +213,8 @@ const InfiniteScrollComponent = () => {
                     ? filteredPosts
                     : searchResults.length > 0
                     ? searchResults
+                    : filterPrice.length > 0
+                    ? filterPrice
                     : recommendationData
                   ).map((item, index) => (
                     <div key={index}>
@@ -203,6 +259,8 @@ const InfiniteScrollComponent = () => {
                     ? filtereDescriptor
                     : searchResults.length > 0
                     ? searchResults
+                    : filterPrice.length > 0
+                    ? filterPrice
                     : recommendationData
                   ).map((item, index) => (
                     <div key={index}>
@@ -244,47 +302,47 @@ const InfiniteScrollComponent = () => {
                     </div>
                   ))}
                 </Masonry>
-              ) : (
+              ) : filterPrice ? (
                 <Masonry columns={3} spacing={2}>
-                  {(searchResults.length > 0 ? searchResults : posts).map(
-                    (item, index) => (
-                      <div key={index}>
-                        <Link
-                          href="/infopage"
+                  {filterPrice.map((item, index) => (
+                    <div key={index}>
+                      <Link
+                        href="/infopage"
+                        style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          opacity: "0.9",
+                        }}
+                      >
+                        <img
+                          layout="fill"
+                          objectFit="cover"
+                          src={`${
+                            itemData[index % itemData.length].img
+                          }?w=162&auto=format`}
+                          srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
+                          alt={item.region}
+                          loading="lazy"
                           style={{
-                            position: "relative",
+                            display: "block",
                             width: "100%",
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            opacity: "0.9",
+                            borderRadius: "15px",
+                            opacity: "0.99990000999",
                           }}
-                        >
-                          <img
-                            layout="fill"
-                            objectFit="cover"
-                            src={`${
-                              itemData[index % itemData.length].img
-                            }?w=162&auto=format`}
-                            srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                            alt={item.region}
-                            loading="lazy"
-                            style={{
-                              display: "block",
-                              width: "100%",
-                              borderRadius: "15px",
-                              opacity: "0.99990000999",
-                            }}
-                          />
-                          <div style={{ position: "absolute", zIndex: 9999 }}>
-                            <h3 className="w-700 text-white"> {item.region}</h3>
-                          </div>
-                        </Link>
-                      </div>
-                    )
-                  )}
+                        />
+                        <div style={{ position: "absolute", zIndex: 9999 }}>
+                          <h3 className="w-700 text-white"> {item.region}</h3>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
                 </Masonry>
+              ) : (
+                ""
               )}
             </Box>
           </InfiniteScroll>
