@@ -1,76 +1,62 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "../../styles/signin.module.css";
 import Captcha from "./Captcha";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 function Signup() {
-  const [formValues, setFormValues] = useState([
-    {
-      label: "Name",
-      type: "text",
-      value: "",
-      placeholder: "First Name",
-      columnClass: "col-lg-6",
-    },
-    {
-      label: "Last Name",
-      type: "text",
-      value: "",
-      placeholder: "Last Name",
-      columnClass: "col-lg-6",
-    },
-    {
-      label: "File",
-      type: "file",
-      value: "",
-      columnClass: "col-lg-12",
-      placeholder: "Image",
-    },
-    // {
-    //   label: "Options",
-    //   type: "radio",
-    //   options: ["Option 1", "Option 2", "Option 3"],
-    //   value: "",
-    // },
-    {
-      label: "email",
-      type: "email",
-      value: "",
-      placeholder: "Email",
-    },
-    {
-      label: "username",
-      type: "text",
-      value: "",
-      placeholder: "Username",
-      columnClass: "col-lg-12",
-    },
-    {
-      label: "Password",
-      type: "password",
-      value: "",
-      placeholder: "Password",
-      columnClass: "col-lg-12",
-    },
-  ]);
+  const router = useRouter();
 
-  const handleChange = (e, index) => {
-    const { value } = e.target;
-    const values = [...formValues];
-    values[index].value = value;
-    setFormValues(values);
+  const fileInputRef = useRef(null);
+
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    console.log(values);
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/users",
+        values
+      );
+
+      console.log(response.data);
+
+      resetForm();
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      setSubmitting(false);
+      router.push("/login");
+    } catch (error) {
+      console.error("Error sending data to backend:", error);
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formValues);
-  };
+  const signupSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .min(2, "Too Short!")
+      .max(10, "Too Long!")
+      .required("Required First Name"),
+    lastName: Yup.string()
+      .min(2, "Too Short!")
+      .max(10, "Too Long!")
+      .required("Required Last Name"),
 
-  // captcha
-  const [captchaValue, setCaptchaValue] = useState("");
+    image: Yup.mixed().required("Please upload a file"),
 
-  const handleCaptchaChange = (value) => {
-    setCaptchaValue(value);
-  };
+    email: Yup.string().email("Invalid email").required("Required"),
+    username: Yup.string()
+      .min(2, "Too Short!")
+      .max(20, "Too Long!")
+      .required("Required Username"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters long")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
+        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"
+      )
+      .required("Required Password"),
+  });
 
   return (
     <>
@@ -79,48 +65,105 @@ function Signup() {
           <div className={styles.signupsignupcontainer}>
             <h1 className={styles.signupheading1}>SIGN UP</h1>
 
-            <form onSubmit={handleSubmit}>
-              <div className="row mt-1 gy-3 d-flex justify-content-center align-center px-5">
-                {formValues.map((field, index) => (
-                  <div key={index} className={field.columnClass}>
-                    {field.type === "radio" ? (
-                      field.options.map((option, optionIndex) => (
-                        <div key={optionIndex}>
-                          <label className="w-100">
-                            <input
-                              style={{ padding: "11px" }}
-                              type="radio"
-                              name={`radio-${index}`}
-                              value={option}
-                              checked={field.value === option}
-                              onChange={(e) => handleChange(e, index)}
-                            />
-                            {option}
-                          </label>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="w-100">
-                        <input
-                          style={{ padding: "10px" }}
-                          className="form-control rounded-2 border-0 w-100"
-                          type={field.type}
-                          value={field.value}
-                          onChange={(e) => handleChange(e, index)}
-                          placeholder={field.placeholder}
-                        />
-                      </div>
-                    )}
+            <Formik
+              initialValues={{
+                firstName: "",
+                lastName: "",
+                image: "",
+                email: "",
+                username: "",
+                password: "",
+              }}
+              validationSchema={signupSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ errors, touched, isValid }) => (
+                <Form>
+                  <div className="d-flex gap-3 mt-4">
+                    <div className="w-100">
+                      <Field
+                        name="firstName"
+                        style={{ padding: "10px" }}
+                        className="form-control rounded-2 border-0 "
+                        placeholder="First Name"
+                      />
+                      {errors.firstName && touched.firstName ? (
+                        <div className="text-danger">{errors.firstName}</div>
+                      ) : null}
+                    </div>
+
+                    <div className="w-100">
+                      <Field
+                        name="lastName"
+                        style={{ padding: "10px" }}
+                        className="form-control rounded-2 border-0 "
+                        placeholder="Last Name"
+                      />
+                      {errors.lastName && touched.lastName ? (
+                        <div className="text-danger ">{errors.lastName}</div>
+                      ) : null}
+                    </div>
                   </div>
-                ))}
-                <div className="w-100 d-flex justify-content-center">
-                  <Captcha onChange={handleCaptchaChange} />
-                </div>
-                <button className="savebtn text-light mt-4" type="submit">
-                  Sign Up
-                </button>
-              </div>
-            </form>
+
+                  <Field
+                    type="file"
+                    name="image"
+                    ref={fileInputRef}
+                    style={{ padding: "10px" }}
+                    className="form-control rounded-2 border-0 mt-2"
+                    placeholder="Email"
+                    accept=".pdf,.doc,.docx,.jpg,.png"
+                  />
+
+                  {errors.image && touched.image ? (
+                    <div className="text-danger">{errors.image}</div>
+                  ) : null}
+
+                  <Field
+                    name="email"
+                    type="email"
+                    style={{ padding: "10px" }}
+                    className="form-control rounded-2 border-0 mt-2"
+                    placeholder="Email"
+                  />
+                  {errors.email && touched.email ? (
+                    <div className="text-danger">{errors.email}</div>
+                  ) : null}
+                  <Field
+                    name="username"
+                    style={{ padding: "10px" }}
+                    className="form-control rounded-2 border-0 mt-2"
+                    placeholder="Username"
+                  />
+                  {errors.username && touched.username ? (
+                    <div className="text-danger ">{errors.username}</div>
+                  ) : null}
+
+                  <Field
+                    type="password"
+                    name="password"
+                    style={{ padding: "10px" }}
+                    className="form-control rounded-2 border-0 mt-2"
+                    placeholder="Password"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-danger"
+                  />
+
+                  <div className="text-center">
+                    <button
+                      type="submit"
+                      className="savebtn text-light mt-4"
+                      disabled={!isValid}
+                    >
+                      Sign Up
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
         </div>
       </div>

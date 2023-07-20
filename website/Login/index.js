@@ -2,43 +2,48 @@ import React, { useState } from "react";
 import styles from "../../styles/signin.module.css";
 import Captcha from "./Captcha";
 import Link from "next/link";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 function Login() {
-  const [formValues, setFormValues] = useState([
-    {
-      label: "Name",
-      type: "text",
-      value: "",
-      placeholder: "Username or Email",
-      columnClass: "col-lg-12",
-    },
-    {
-      label: "Password",
-      type: "Password",
-      value: "",
-      placeholder: "Last Name",
-      columnClass: "col-lg-12",
-    },
-  ]);
+  const router = useRouter();
 
-  const handleChange = (e, index) => {
-    const { value } = e.target;
-    const values = [...formValues];
-    values[index].value = value;
-    setFormValues(values);
+  const handleLogin = async (values, { setSubmitting, resetForm }) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/users/login",
+        values
+      );
+
+      if (response.status === 200) {
+        // Login successful
+        resetForm();
+        setSubmitting(false);
+        router.push("/");
+      } else {
+        // Login failed, handle error (optional)
+        alert("Error ");
+        console.log("Login failed");
+      }
+    } catch (error) {
+      // Handle error if axios call fails
+      alert("Error during login. Please try again later.");
+      console.error("Error during login:", error);
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formValues);
-  };
-
-  // captcha
-  const [captchaValue, setCaptchaValue] = useState("");
-
-  const handleCaptchaChange = (value) => {
-    setCaptchaValue(value);
-  };
+  const loginSchema = Yup.object().shape({
+    email: Yup.string().required("Username or Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters long")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
+        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"
+      )
+      .required("Required Password"),
+  });
 
   return (
     <>
@@ -47,56 +52,63 @@ function Login() {
           <div className={styles.signupsignupcontainer}>
             <h1 className={styles.signupheading1}>Login</h1>
 
-            <form onSubmit={handleSubmit}>
-              <div className="row mt-1 gy-3 d-flex justify-content-center align-center px-5">
-                {formValues.map((field, index) => (
-                  <div key={index} className={field.columnClass}>
-                    {field.type === "radio" ? (
-                      field.options.map((option, optionIndex) => (
-                        <div key={optionIndex}>
-                          <label className="w-100">
-                            <input
-                          style={{padding:"11px"}}
-                              type="radio"
-                              name={`radio-${index}`}
-                              value={option}
-                              checked={field.value === option}
-                              onChange={(e) => handleChange(e, index)}
-                            />
-                            {option}
-                          </label>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="w-100">
-                        <input
-                          style={{padding:"11px"}}
-                          className="form-control rounded-2 border-0 w-100"
-                          type={field.type}
-                          value={field.value}
-                          onChange={(e) => handleChange(e, index)}
-                          placeholder={field.placeholder}
-                        />
-                      </div>
-                    )}
+            <Formik
+              initialValues={{
+                email: "",
+                password: "",
+              }}
+              validationSchema={loginSchema}
+              onSubmit={handleLogin}
+            >
+              {({ isValid }) => (
+                <Form>
+                  <Field
+                    name="email"
+                    style={{ padding: "10px" }}
+                    className="form-control rounded-2 border-0 mt-2"
+                    placeholder="Email"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-danger"
+                  />
+
+                  <Field
+                    name="password"
+                    style={{ padding: "10px" }}
+                    className="form-control rounded-2 border-0 mt-2"
+                    placeholder="Password"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-danger"
+                  />
+
+                  <div className="text-center">
+                    <div className="w-100 d-flex justify-content-center mt-3">
+                      <Captcha />
+                    </div>
+                    <button
+                      className="savebtn text-light mt-4"
+                      type="submit"
+                      disabled={!isValid}
+                    >
+                      Login
+                    </button>
+                    <div className="text-center mt-2">
+                      <Link
+                        href="/forgotpassword"
+                        style={{ color: "#fff", textDecoration: "none" }}
+                      >
+                        Forgot Password?
+                      </Link>
+                    </div>
                   </div>
-                ))}
-                <div className="w-100 d-flex justify-content-center">
-                  <Captcha onChange={handleCaptchaChange} />
-                </div>
-                <button className="savebtn text-light mt-4" type="submit">
-                  Login
-                </button>
-              </div>
-              <div className="text-center mt-2">
-                <Link
-                  href="text-light"
-                  style={{ color: "#fff", textDecoration: "none" }}
-                >
-                  Forgot Password?
-                </Link>
-              </div>
-            </form>
+                </Form>
+              )}
+            </Formik>
           </div>
         </div>
       </div>
