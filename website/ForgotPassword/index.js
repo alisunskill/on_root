@@ -1,30 +1,36 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "../../styles/signin.module.css";
-import Link from "next/link";
+import axios from "axios";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useRouter } from "next/router";
 
 function ForgotPassword() {
-  const [formValues, setFormValues] = useState([
-    {
-      label: "Name",
-      type: "text",
-      value: "",
-      placeholder: "Username or Email",
-      columnClass: "col-lg-12",
-    },
-  ]);
+  const router = useRouter();
 
-  const handleChange = (e, index) => {
-    const { value } = e.target;
-    const values = [...formValues];
-    values[index].value = value;
-    setFormValues(values);
+  const forgotSchema = Yup.object().shape({
+    email: Yup.string().required("email is required"),
+  });
+
+  const handleForgot = async (values) => {
+    console.log("ALi");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/users/forgot-password",
+        values
+      );
+
+      if (response.status === 200) {
+        console.log("Password reset request successful.");
+        router.push("/resetpassword");
+      } else {
+        console.error("Password reset request failed.");
+      }
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formValues);
-  };
-
 
   return (
     <>
@@ -33,29 +39,41 @@ function ForgotPassword() {
           <div className={styles.signupsignupcontainer}>
             <h1 className={styles.signupheading1}>Forgot Password</h1>
 
-            <form onSubmit={handleSubmit}>
-              <div className="row mt-1 gy-3 d-flex justify-content-center align-center px-5">
-                {formValues.map((field, index) => (
-                  <div key={index} className={`p-0 ${field.columnClass}`}>
-                  <div className="w-100">
-                        <input
-                          className="form-control rounded-2 border-0 w-100"
-                          style={{padding:"11px"}}
-                          type={field.type}
-                          value={field.value}
-                          onChange={(e) => handleChange(e, index)}
-                          placeholder={field.placeholder}
-                        />
-                      </div>
-                  </div>
-                ))}
-              
-                <button className="savebtn text-light mt-4" type="submit">
-                RESET PASSWORD
-                </button>
-              </div>
-           
-            </form>
+            <div className="row mt-1 gy-3 d-flex justify-content-center align-center px-5">
+              <Formik
+                initialValues={{
+                  email: "", // Update field name to "email"
+                }}
+                validationSchema={forgotSchema}
+                onSubmit={handleForgot}
+              >
+                {({ isValid }) => (
+                  <Form>
+                    <Field
+                      name="email"
+                      style={{ padding: "10px" }}
+                      className="form-control rounded-2 border-0 mt-2"
+                      placeholder="Email"
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="text-danger"
+                    />
+
+                    <div className="text-center">
+                      <button
+                        className="savebtn text-light mt-4"
+                        type="submit"
+                        disabled={!isValid}
+                      >
+                        FORGOT PASSWORD
+                      </button>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            </div>
           </div>
         </div>
       </div>
