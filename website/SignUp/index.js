@@ -12,6 +12,7 @@ function Signup() {
   const fileInputRef = useRef(null);
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    debugger
     console.log(values);
     try {
       const response = await axios.post(

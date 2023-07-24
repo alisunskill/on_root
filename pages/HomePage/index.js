@@ -20,6 +20,7 @@ import PostCard from "../../website/components/PostCards";
 import RecommendationGrid from "../../website/components/RecommendationGrid";
 import RangeSlider from "./RangeSlider";
 import Sliders from "./Sliders";
+import Global from "../../website/components/Globe";
 // import Navbar from "../../components/Navbar";
 
 const data1 = [
@@ -55,27 +56,6 @@ export default () => {
   useEffect(() => {
     dispatch(fetchRecommendations());
   }, [dispatch]);
-
-  // if (typeof window !== "undefined") {
-  //   const searchTerm = localStorage.getItem("searchTerm");
-  //   console.log(searchTerm);
-  // }
-
-  // useEffect(() => {
-
-  // }, []);
-  //   if (typeof window !== "undefined") {
-  //   const storedValue = localStorage.getItem("searchTerm");
-  //   if (storedValue !== null) {
-  //     setSearchTerm(storedValue);
-  //   }
-  // console.log(storedValue, " sea");
-  //   }
-
-  // if (typeof window !== "undefined") {
-  //   const storedValue = localStorage.getItem("searchTerm");
-  //   setSearchTerm(storedValue)
-  // }
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -335,11 +315,10 @@ export default () => {
           >
             {/* Events Zone */}
             <div className={`col-lg-8 p-0`}>
-              <RecommendationGrid />
+              <RecommendationGrid data={recommendationData} />
             </div>
-            <div className="col-lg-4">
-              <Image className={styles.globe} src={globe} alt="globe" />
-              {/* <GlobeMap /> */}
+            <div className="col-lg-12">
+              <Global data={recommendationsData} />
             </div>
           </div>
 

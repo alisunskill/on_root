@@ -45,8 +45,6 @@ const Searchbar = () => {
     localStorage.setItem("searchTerm", searchTerm);
   }, [searchTerm]);
 
-  console.log(searchTerm, "searchTerm");
-
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -80,6 +78,10 @@ const Searchbar = () => {
   useEffect(() => {
     setRegion(recommendationData);
   }, [regionData]);
+
+  useEffect(() => {
+    setSearchTerm("");
+  }, [router.pathname]);
 
   const handleSearch = async (e) => {
     const value = e.target.value;

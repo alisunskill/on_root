@@ -15,7 +15,9 @@ import PlaceNameCard from "../components/PlaceNameCard";
 import PlaceCardFull from "../components/PlaceCardFull";
 import GoogleLoc from "./components/GoogleLoc";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { fetchRecommendations } from "../../store/actions/recommendationActions";
 
 const highlights = [
   {
@@ -33,12 +35,36 @@ const highlights = [
 ];
 
 function Singularevent() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const recommendationsData = useSelector((state) => state.recommendation);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { recommendations, loading, error } = recommendationsData;
+
+  // const loading = true;
+  useEffect(() => {
+    dispatch(fetchRecommendations());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedValue = localStorage.getItem("searchTerm");
+      setSearchTerm(storedValue);
+    }
+  }, [searchTerm]);
+
+  // api
+  const [regionData, setRegion] = useState([]);
+  const { regions } = router.query;
+  const { descriptor } = router.query;
+  const [filteredData, setFilteredData] = useState([]);
   const searchDataList = useSelector((state) => state.recommendation);
   const { getSearchData } = searchDataList;
 
   console.log(getSearchData, "BOLDED");
 
-  const [regionData, setRegion] = useState([]);
+  // const [regionData, setRegion] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/recommendations?select=title,region")
@@ -54,6 +80,26 @@ function Singularevent() {
   const region = regionData.map((item) => {
     return item.region;
   });
+  useEffect(() => {
+    if (regions) {
+      axios
+        .get(`http://localhost:8000/api/recommendations?regions=${region}`)
+        .then((response) => {
+          const data = response.data;
+          const cregion = data.Recommendations;
+          setFilteredData(cregion);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [region]);
+  const recommendationData =
+    (recommendations && recommendations.Recommendations) || [];
+  useEffect(() => {
+    setRegion(recommendationData);
+  }, [regionData]);
+
   const titleD = regionData.map((item) => {
     return item.title;
   });
@@ -234,7 +280,7 @@ function Singularevent() {
               src={mapimage}
               alt=""
             /> */}
-            <GoogleLoc />
+            <GoogleLoc data={recommendationData} />
           </div>
         </div>
 
