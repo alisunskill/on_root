@@ -4,6 +4,7 @@ import Captcha from "./Captcha";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
+import { setUserID } from "../../store/actions/recommendationActions";
 import axios from "axios";
 
 function Signup() {
@@ -11,8 +12,28 @@ function Signup() {
 
   const fileInputRef = useRef(null);
 
+  // const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  //   // debugger
+  //   console.log(values);
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:8000/api/users",
+  //       values
+  //     );
+  //     const { email, _id } = response.data;
+  //     console.log(email, _id, "ALi hu");
+  //     resetForm();
+  //     if (fileInputRef.current) {
+  //       fileInputRef.current.value = "";
+  //     }
+  //     setSubmitting(false);
+  //     router.push("/login");
+  //   } catch (error) {
+  //     console.error("Error sending data to backend:", error);
+  //   }
+  // };
+
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    debugger
     console.log(values);
     try {
       const response = await axios.post(
@@ -20,7 +41,17 @@ function Signup() {
         values
       );
 
-      console.log(response.data);
+      console.log("Response Data:", response.data);
+
+      // Check if 'user' property exists in the response data
+      if (response.data.user) {
+        const { email, _id } = response.data.user;
+        dispatch(setUserID(_id));
+        console.log("Email:", email);
+        console.log("User ID:", _id);
+      } else {
+        console.error("User data not found in the response.");
+      }
 
       resetForm();
       if (fileInputRef.current) {

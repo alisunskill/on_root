@@ -1,10 +1,14 @@
 import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 export const FETCH_RECOMMENDATIONS_REQUEST = "FETCH_RECOMMENDATIONS_REQUEST";
 export const FETCH_RECOMMENDATIONS_SUCCESS = "FETCH_RECOMMENDATIONS_SUCCESS";
 export const FETCH_RECOMMENDATIONS_FAILURE = "FETCH_RECOMMENDATIONS_FAILURE";
 
 export const DATA_LIST = "DATA_LIST";
+
+export const USER_ID = "USER_ID"
 
 export const fetchRecommendationsRequest = () => ({
   type: FETCH_RECOMMENDATIONS_REQUEST,
@@ -23,6 +27,10 @@ export const fetchRecommendationsFailure = (error) => ({
 export const searchData = (list) => ({
   type: DATA_LIST,
   payload: list,
+});
+export const setUserID = (id) => ({
+  type: USER_ID,
+  payload: id,
 });
 
 // Async action

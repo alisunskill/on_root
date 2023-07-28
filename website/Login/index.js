@@ -6,9 +6,12 @@ import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function Login() {
   const router = useRouter();
+  const userID = useSelector((state) => state.user?.userID);
+  console.log(userID, "ali");
 
   const handleLogin = async (values, { setSubmitting, resetForm }) => {
     try {
@@ -21,7 +24,7 @@ function Login() {
         // Login successful
         resetForm();
         setSubmitting(false);
-        router.push("/");
+        router.push("/createitinerary");
       } else {
         // Login failed, handle error (optional)
         alert("Error ");

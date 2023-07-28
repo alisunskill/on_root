@@ -275,11 +275,6 @@ function Singularevent() {
             </div>
           </div>
           <div className="col-lg-6 text-align-right p-0">
-            {/* <Image
-              className={`h-auto ${styles.eventmapimage}`}
-              src={mapimage}
-              alt=""
-            /> */}
             <GoogleLoc data={recommendationData} />
           </div>
         </div>

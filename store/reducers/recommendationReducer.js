@@ -5,10 +5,11 @@ import {
   FETCH_RECOMMENDATIONS_FAILURE,
 } from "../actions/recommendationActions";
 
-import { DATA_LIST } from "../actions/recommendationActions";
+import { DATA_LIST, USER_ID } from "../actions/recommendationActions";
 
 const initialState = {
   recommendations: [],
+  userID: null,
   data: [],
   loading: false,
   error: null,
@@ -42,7 +43,12 @@ const recommendationReducer = (state = initialState, action) => {
         loading: false,
         getSearchData: action.payload,
       };
-
+      case USER_ID:
+        return {
+          ...state,
+          userID: action.payload,
+        };
+  
     default:
       return state;
   }

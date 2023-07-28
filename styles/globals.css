@@ -132,6 +132,22 @@ input {
   flex-direction: column;
 }
 
+.custom-file-input {
+  height: 100px;
+  width: 100%;
+  position: relative;
+  background-image: url("../public/images/plusimage.svg");
+  color: transparent;
+  background-position: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  background-repeat: no-repeat;
+}
+::-webkit-file-upload-button {
+  display: none;
+}
+
 .flex-center {
   justify-content: center;
 }
@@ -188,6 +204,6 @@ input {
 .w-100 {
   width: 100% !important;
 }
-.w-50{
+.w-50 {
   width: 50%;
 }

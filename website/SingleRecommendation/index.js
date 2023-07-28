@@ -14,50 +14,7 @@ import plane from "../../public/images/aeroplan.svg";
 import Image from "next/image";
 import SliderApp from "./sliderApp";
 
-const data = [
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-];
+
 
 export default () => {
   return (
@@ -98,7 +55,6 @@ export default () => {
             </div>
             <div className="row">
               <div className="col-lg-12 col-md-12 mt-4">
-                {/* <Image className={`h-auto ${styles.scenery}`} src={slide} /> */}
                 <SliderApp />
               </div>
 
@@ -127,7 +83,7 @@ export default () => {
           <div className="col-12 col-lg-1">
             <div className="row">
               <div
-                className={`col-12 col-md-12 col-lg-12 ${styles.eventmidicons}`}
+                className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
               >
                 <div className={styles.eventicons}>
                   <Image
@@ -155,7 +111,7 @@ export default () => {
           </div>
           <div className="col-lg-6 text-align-right p-0">
             <Image
-              className={`h-auto ${styles.eventmapimage}`}
+              className={`h-auto object-fit-cover ${styles.eventmapimage}`}
               src={mapimage}
               alt=""
             />
