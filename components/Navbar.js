@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import logo from "../public/images/logo.svg";
 import men from "../public/Images/men.svg";
 import plusicon from "../public/Images/plusicon.svg";
+import logout from "../public/Images/logout.png";
 import styles from "../styles/home.module.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,9 +14,12 @@ import { useRouter } from "next/navigation";
 const Navbar = () => {
   const router = useRouter();
   const handleReload = () => {
-    router.push("/"); // Reload the page
+    router.push("/");
   };
-
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    alert("logout succesfully");
+  };
   return (
     <>
       <div>
@@ -41,7 +45,7 @@ const Navbar = () => {
               <div
                 className={`icons-right col-xl-3 col-lg-3 col-md-3 col-sm-3 position-absolute d-flex justify-content-end align-items-center ${styles.right_box}`}
               >
-                <Link href="/login">
+                <Link href="/signup">
                   {" "}
                   <Image
                     width={50}
@@ -51,7 +55,7 @@ const Navbar = () => {
                     className={`mx-4 ${styles.plusicon}`}
                   />
                 </Link>
-                <Link href="/signup">
+                <Link href="/login">
                   <Image
                     width={50}
                     height={50}
@@ -60,6 +64,14 @@ const Navbar = () => {
                     className={`mx-3 ${styles.menicon}`}
                   />
                 </Link>
+                <Image
+                  src={logout}
+                  width={50}
+                  height={50}
+                  alt=""
+                  onClick={handleLogout}
+                  className={`mx-3 object-fit-contain cursor-pointer ${styles.menicon}`}
+                />
               </div>
             </div>
             {/* searchbar */}

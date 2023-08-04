@@ -6,19 +6,16 @@ import hearticon21 from "../../public/images/hearticon21.svg";
 import burger from "../../public/images/burger.svg";
 import painticon from "../../public/images/painticon.svg";
 import travelicon from "../../public/images/travelicon.svg";
-import mapimage from "../../public/images/mapimage.svg";
-import plusimage from "../../public/images/plusimage.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import plane from "../../public/images/aeroplan.svg";
 import Image from "next/image";
 import GoogleLoc from "./components/GoogleLoc";
 import axios, { all } from "axios";
 import { useRouter } from "next/router";
 import GoogleMapReact from "google-map-react";
 import { fetchRecommendations } from "../../store/actions/recommendationActions";
-// import getUser  from "../../store/actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
+
+const apiKey = process.env.SECRET_KEY;
 
 const RedMarker = ({ text }) => (
   <div
@@ -36,7 +33,6 @@ const RedMarker = ({ text }) => (
     {text}
   </div>
 );
-// const AnyReactComponent = ({ text }) => <div>{text}</div>;
 const CircleMarker = ({ text }) => (
   <div
     style={{
@@ -55,6 +51,101 @@ const CircleMarker = ({ text }) => (
 );
 
 export default () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const recommendationsData = useSelector((state) => state.recommendation);
+  const userID = useSelector((state) => state.recommendation);
+  const { region } = router.query;
+  const [storedUserID, setStoredUserID] = useState(null);
+  const [storedEmail, setStoredEmail] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [recommendation, setRecommendation] = useState([]);
+  const userExists = userID;
+  const { recommendations, loading, error } = recommendationsData;
+  console.log(recommendations, "recommendations");
+
+  // const loading = true;
+  useEffect(() => {
+    dispatch(fetchRecommendations());
+  }, [dispatch]);
+
+  // api
+  const [regionData, setRegion] = useState([]);
+  const { descriptor } = router.query;
+  const [filteredData, setFilteredData] = useState([]);
+
+  const recommendationData =
+    (recommendations && recommendations.Recommendations) || [];
+  useEffect(() => {
+    setRegion(recommendationData);
+  }, [regionData]);
+
+  const regionp = regionData.map((item) => {
+    return item.region;
+  });
+  const data = [
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
+      city: regionp[0],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1689072503598-638956beee7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=660&q=80",
+      city: regionp[1],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1593593595698-de9e5f682a14?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=834&q=80",
+      city: regionp[2],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1595112729465-942dafaa4e98?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=886&q=80",
+      city: regionp[2],
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      city: regionp[1],
+
+      country: "USA",
+    },
+    {
+      bgImg:
+        "https://images.unsplash.com/photo-1519638399535-1b036603ac77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80",
+      city: regionp[0],
+
+      country: "USA",
+    },
+  ];
+  const regionDescriptor = regionData.map((item) => {
+    return item.descriptor;
+  });
+
+  // discripttors urls
+  useEffect(() => {
+    if (descriptor) {
+      const filteredDescriptorData = regionData.filter(
+        (item) => item.descriptor === descriptor
+      );
+      setFilteredData(filteredDescriptorData);
+    }
+  }, [descriptor, regionData]);
+
+  // check warning
+  useEffect(() => {
+    const userID = localStorage.getItem("userID");
+    const email = localStorage.getItem("email");
+    setStoredUserID(userID);
+    setStoredEmail(email);
+  }, []);
+
   const defaultProps = {
     center: {
       lat: 10.99835602,
@@ -63,26 +154,36 @@ export default () => {
     zoom: 11,
   };
 
-  const [recommendation, setRecommendation] = useState([]);
-
-  const dispatch = useDispatch();
-  const recommendationsData = useSelector((state) => state.recommendation);
-  const userID = useSelector((state) => state.user?.userID);
-  console.log(userID, "ali");
-
-
-  const userExists = userID !== undefined && userInfo !== null;
-
-  const { recommendations, loading, error } = recommendationsData;
   useEffect(() => {
     dispatch(fetchRecommendations());
   }, [dispatch]);
 
-  const allRegion = recommendations.Recommendations?.map((item) => {
-    return <h1 key={item._id}>{item.location}</h1>;
-  });
+  console.log(regionDescriptor, "regionDescriptor");
+  useEffect(() => {
+    if (region) {
+      const filteredRegionData = regionData.filter(
+        (item) => item.region === region
+      );
+      setFilteredData(filteredRegionData);
+    }
+  }, [region, regionData]);
+  useEffect(() => {
+    if (regionData && descriptor) {
+      const filteredDescriptorData = regionData.filter(
+        (item) => item.descriptor === descriptor
+      );
+      setFilteredData(filteredDescriptorData);
+    }
+  }, [descriptor, regionData]);
 
-  const router = useRouter();
+  const allLocations = recommendations?.Recommendations?.map((item) => {
+    return {
+      lat: item.location.coordinates[1],
+      lng: item.location.coordinates[0],
+      title: item.title,
+    };
+  });
+  console.log(allLocations, "allregions");
   const [locationInput, setLocationInput] = useState("");
   const [mapCenter, setMapCenter] = useState({
     lat: 31.5204,
@@ -95,23 +196,52 @@ export default () => {
     cost: "",
     hours: "",
     experience: "",
-    description: "",
     location: { type: "Point", coordinates: [0, 0] },
     region: "",
+    links: "",
   });
+
+  const isFormDataValid = () => {
+    if (
+      !formData.title ||
+      formData.images.length === 0 ||
+      !formData.cost ||
+      !formData.hours ||
+      !formData.experience ||
+      !formData.location ||
+      !formData.region ||
+      !formData.descriptor ||
+      !formData.description
+    ) {
+      return false;
+    }
+    return true;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isFormDataValid()) {
+      alert("Please fill in all required fields.");
+      return;
+    }
     try {
       const locationData = {
         type: "Point",
         coordinates: formData.location.coordinates,
       };
       // user authentication
-      formData.creator = userInfo?._id;
+      formData.creator = storedUserID;
+      const token = localStorage.getItem("token");
 
+      console.log(token, "token is here");
       const response = await axios.post(
         "http://localhost:8000/api/createrecommendation",
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       setRecommendation((prevRecommendation) => [
@@ -119,25 +249,21 @@ export default () => {
         formData,
       ]);
 
-      if (response.status === 201) {
-        if (userExists) {
-          alert("Recommendation created successfully!");
-        } else {
-          alert("User does not exist. Recommendation created successfully!");
-        }
-
+      if (response.status === 201 && storedUserID) {
         alert("Recommendation created successfully!");
+
         setFormData({
           title: "",
           images: [],
           cost: "",
           hours: "",
           experience: "",
-          description: "",
+          descriptor: "",
           location: { type: "Point", coordinates: [0, 0] },
           region: "",
+          description: "",
         });
-        router.push("/createitinerary");
+        router.push("/");
       } else {
         alert("Failed to create recommendation.");
       }
@@ -145,6 +271,7 @@ export default () => {
       console.error("Error:", error);
     }
   };
+
   const handleImageChange = (e) => {
     const selectedImages = Array.from(e.target.files);
     const imageUrls = selectedImages.map((image) => URL.createObjectURL(image));
@@ -155,17 +282,20 @@ export default () => {
   };
 
   const handleApiLoaded = (map, maps) => {
-    // use map and maps objects as needed
-    // For example, you can use them to add markers, draw shapes, etc.
-    const lahoreMarker = new maps.Marker({
-      position: { lat: 31.5204, lng: 74.3587 },
-      map,
-      title: "Lahore",
-    });
-    const islamabadMarker = new maps.Marker({
-      position: { lat: 33.6844, lng: 73.0479 },
-      map,
-      title: "Islamabad",
+    if (loading || !recommendations?.Recommendations) {
+      return;
+    }
+
+    recommendations.Recommendations.forEach((location) => {
+      const marker = new maps.Marker({
+        position: { lat: location.lat, lng: location.lng },
+        map,
+        title: location.title,
+      });
+
+      marker.addListener("click", () => {
+        alert(`Title: ${location.title}`);
+      });
     });
     recommendation.forEach((form) => {
       const formMarker = new maps.Marker({
@@ -177,20 +307,10 @@ export default () => {
         title: form.title,
       });
 
-      // Add event listener to show form data when the marker is clicked
       formMarker.addListener("click", () => {
         alert(`Title: ${form.title}\nCost: ${form.cost}\nHours: ${form.hours}`);
       });
     });
-    // Add marker for the location from formData
-    // const locationMarker = new maps.Marker({
-    //   position: {
-    //     lat: formData.location.coordinates[0],
-    //     lng: formData.location.coordinates[1],
-    //   },
-    //   map,
-    //   title: "Your Location",
-    // });
   };
 
   const handleMapDoubleClick = (event) => {
@@ -214,14 +334,11 @@ export default () => {
     );
   };
   const handleLocationInputBlur = () => {
-    // Use Google Maps Geocoder API to get the coordinates (latitude and longitude) of the input location
     const geocoder = new window.google.maps.Geocoder();
     geocoder.geocode({ address: locationInput }, (results, status) => {
       if (status === "OK" && results[0]) {
         const latitude = results[0].geometry.location.lat();
         const longitude = results[0].geometry.location.lng();
-
-        // Update the form data and map center
         setFormData({
           ...formData,
           location: { type: "Point", coordinates: [longitude, latitude] },
@@ -285,7 +402,6 @@ export default () => {
                   />
                 </div>
               </div>
-
               <div className="row mt-5 align-items-center">
                 <div className="form-group col-lg-6 col-12 text-center">
                   <Image
@@ -333,10 +449,6 @@ export default () => {
                   type="text"
                   name="location"
                   className="form-control py-2"
-                  // value={formData.location}
-                  // onChange={(e) =>
-                  //   setFormData({ ...formData, location: e.target.value })
-                  // }
                   value={locationInput}
                   onChange={(e) => setLocationInput(e.target.value)}
                   onBlur={handleLocationInputBlur}
@@ -394,69 +506,100 @@ export default () => {
                 className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
               >
                 <div className={styles.eventicons}>
-                  <Image
-                    className={`h-auto ${styles.foodIcons}`}
-                    src={burger}
-                    alt=""
-                  />
+                  <label>
+                    <input
+                      type="radio"
+                      value="food"
+                      checked={formData.descriptor === "food"}
+                      onChange={(e) =>
+                        setFormData({ ...formData, descriptor: e.target.value })
+                      }
+                      style={{ display: "none" }}
+                    />
+                    <Image
+                      className={`h-auto cursor-pointer ${styles.foodIcons}`}
+                      src={burger}
+                      alt=""
+                      style={
+                        formData.descriptor === "food"
+                          ? { border: "2px solid green", borderRadius: "50px" }
+                          : formData.descriptor === {}
+                          ? { border: "none" }
+                          : {}
+                      }
+                    />
+                  </label>
                 </div>
                 <div className={` ${styles.eventicons}`}>
-                  <Image
-                    className={`h-auto ${styles.foodIcons}`}
-                    src={painticon}
-                    alt=""
-                  />
+                  <label>
+                    <input
+                      type="radio"
+                      value="Art"
+                      checked={formData.descriptor === "Art"}
+                      onChange={(e) =>
+                        setFormData({ ...formData, descriptor: e.target.value })
+                      }
+                      style={{ display: "none" }}
+                    />
+                    <Image
+                      className={`h-auto cursor-pointer ${styles.foodIcons}`}
+                      src={painticon}
+                      alt=""
+                      style={
+                        formData.descriptor === "Art"
+                          ? { border: "2px solid green", borderRadius: "50px" }
+                          : formData.descriptor === {}
+                          ? { border: "none" }
+                          : {}
+                      }
+                    />
+                  </label>
                 </div>
                 <div className={` ${styles.eventicons}`}>
-                  <Image
-                    className={`h-auto ${styles.foodIcons}`}
-                    src={travelicon}
-                    alt=""
-                  />
+                  <label>
+                    <input
+                      type="radio"
+                      value="Hiking"
+                      checked={formData.descriptor === "Hiking"}
+                      onChange={(e) =>
+                        setFormData({ ...formData, descriptor: e.target.value })
+                      }
+                      style={{ display: "none" }}
+                    />
+                    <Image
+                      className={`h-auto cursor-pointer ${styles.foodIcons}`}
+                      src={travelicon}
+                      alt=""
+                      style={
+                        formData.descriptor === "Hiking"
+                          ? { border: "2px solid green", borderRadius: "50px" }
+                          : formData.descriptor === {}
+                          ? { border: "none" }
+                          : {}
+                      }
+                    />
+                  </label>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="col-lg-6 text-align-right p-0">
-            {/* <GoogleLoc /> */}
-            {/* <div style={{ height: "100vh", width: "100%" }}>
-              <GoogleMapReact
-                bootstrapURLKeys={{
-                  key: "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM",
-                }}
-                defaultCenter={defaultProps.center}
-                defaultZoom={defaultProps.zoom}
-              >
-                <AnyReactComponent
-                  lat={59.955413}
-                  lng={30.337844}
-                  text="My Marker"
-                />
-              </GoogleMapReact>
-            </div> */}
             <div style={{ height: "100vh", width: "100%" }}>
               <GoogleMapReact
                 bootstrapURLKeys={{
-                  key: "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM", // Replace this with your Google Maps API key
-                  libraries: ["places"], // Add the "places" library for Geocoding API
+                  key: "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM",
+                  libraries: ["places"],
                 }}
-                defaultCenter={{ lat: 31.5204, lng: 74.3587 }} // Lahore as defaultCenter
+                defaultCenter={{ lat: 31.5204, lng: 74.3587 }}
                 defaultZoom={7}
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={({ map, maps }) =>
                   handleApiLoaded(map, maps)
                 }
-                onDblClick={handleMapDoubleClick} // Handle double-click events
-                center={mapCenter} // Set the map center based on form data
+                onDblClick={handleMapDoubleClick}
+                center={mapCenter}
               >
-                {/* Add the location marker */}
-                <CircleMarker
-                  lat={formData.location.coordinates[1]}
-                  lng={formData.location.coordinates[0]}
-                  text="Your Location"
-                />
-
                 {recommendation?.map((form, index) => (
                   <RedMarker
                     key={index}
@@ -472,8 +615,8 @@ export default () => {
 
         <div className="text-center mt-lg-5 mt-4">
           <button
-            type="submit"
             form="recommendationForm"
+            type="submit"
             className="savebtn"
             style={{ marginRight: "50px" }}
           >

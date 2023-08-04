@@ -27,10 +27,7 @@ const Searchbar = () => {
     dispatch(fetchRecommendations());
   }, [dispatch]);
 
-  useEffect(() => {
-    setPosts(filteredPosts);
-    setHasMore(false);
-  }, [router.query.region]);
+
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
@@ -40,14 +37,16 @@ const Searchbar = () => {
   const [show, setShow] = useState(true);
   const [showAll, setShowAll] = useState(false);
   const [regionData, setRegion] = useState([]);
-
+  useEffect(() => {
+    setPosts(filteredPosts);
+    setHasMore(false);
+  }, [router.query.region]);
+  
   useEffect(() => {
     localStorage.setItem("searchTerm", searchTerm);
   }, [searchTerm]);
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+
 
   const fetchPosts = () => {
     const startIndex = (page - 1) * 10;
@@ -61,7 +60,9 @@ const Searchbar = () => {
       setHasMore(false);
     }
   };
-
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   useEffect(() => {
     const filteredCards = posts.filter((card) =>
       card.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -75,6 +76,7 @@ const Searchbar = () => {
   }, [fetchRecommendations]);
 
   const recommendationData = recommendations.Recommendations || [];
+  // warning
   useEffect(() => {
     setRegion(recommendationData);
   }, [regionData]);
@@ -91,7 +93,7 @@ const Searchbar = () => {
       item.region.toLowerCase().includes(value.toLowerCase())
     );
 
-    console.log(filteredRecommendations);
+    // console.log(filteredRecommendations);
     dispatch(searchData(filteredRecommendations));
 
     setPosts(filteredRecommendations);
@@ -102,7 +104,6 @@ const Searchbar = () => {
     setShowAll(!showAll);
   };
 
-  // keypress enter for search
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();

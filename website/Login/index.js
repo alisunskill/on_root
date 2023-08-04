@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/signin.module.css";
 import Captcha from "./Captcha";
 import Link from "next/link";
-import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { useSelector } from "react-redux";
 
 function Login() {
   const router = useRouter();
-  const userID = useSelector((state) => state.user?.userID);
-  console.log(userID, "ali");
+  const [storedUserID, setStoredUserID] = useState(null);
+  const [storedEmail, setStoredEmail] = useState(null);
+  useEffect(() => {
+    const userID = localStorage.getItem("userID");
+    const email = localStorage.getItem("email");
+    setStoredUserID(userID);
+    setStoredEmail(email);
+  }, []);
 
   const handleLogin = async (values, { setSubmitting, resetForm }) => {
     try {
@@ -19,19 +24,22 @@ function Login() {
         "http://localhost:8000/api/users/login",
         values
       );
-
       if (response.status === 200) {
-        // Login successful
+        const { token } = response.data;
+        localStorage.setItem("token", token);
         resetForm();
         setSubmitting(false);
-        router.push("/createitinerary");
+      }
+      const storedUserID = localStorage.getItem("userID");
+      const storedEmail = localStorage.getItem("email");
+      console.log(storedUserID, "storedUserID");
+      if (!storedEmail || !storedUserID) {
+        alert("User ID or Email is missing. Please log in again.");
       } else {
-        // Login failed, handle error (optional)
-        alert("Error ");
-        console.log("Login failed");
+        alert("successful");
+        router.push("/createitinerary");
       }
     } catch (error) {
-      // Handle error if axios call fails
       alert("Error during login. Please try again later.");
       console.error("Error during login:", error);
     }

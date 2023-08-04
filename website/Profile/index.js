@@ -1,53 +1,95 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/profile.module.css";
 import globe2 from "../../public/images/globe2.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { faPlus, faHeart } from "@fortawesome/free-solid-svg-icons";
-import imageUrl from "../../public/images/add.svg";
+import {
+  fetchFavPosts,
+  fetchRecommendations,
+} from "../../store/actions/recommendationActions";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { useRouter } from "next/router";
 
-const data = [
+const itemData = [
   {
-    id: 1,
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "Istanbul, Turkey    ",
-    address: "$500",
+    img: "https://images.unsplash.com/photo-1663583784667-4a2a386fec62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
   },
   {
-    id: 2,
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "Thailand, Pattaya",
-    address: "$400",
+    img: "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
   },
   {
-    id: 3,
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    city: "",
-    address: "$400",
+    img: "https://images.unsplash.com/photo-1622397815608-359540676c67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1550850839-8dc894ed385a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=875&q=80",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1587162146766-e06b1189b907?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=956&q=80",
   },
 ];
 
 function Profile() {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [clickedImages, setClickedImages] = useState([]);
+  // fetch recommendation
+  const router = useRouter();
+  const dispatch = useDispatch();
 
-  const handleFavoriteClick = (e) => {
-    const showData = data.filter((items) => {
-      items.id === e;
-    });
-    console.log(e, "alll");
-    setIsFavorite(showData);
-  };
-  const handleImageClick = () => {
-    if (!clickedImages.includes(imageUrl)) {
-      setClickedImages([...clickedImages, imageUrl]);
-      console.log(clickedImages, "ali");
+  const recommendationsData = useSelector((state) => state.recommendation);
+  const { recommendations, loading, error } = recommendationsData;
+
+  const [favList, setFavList] = useState([]);
+  const recData = recommendations.Recommendations;
+  const [fullList, setFullList] = useState([]);
+
+  const handleFavoriteClick = (id) => {
+    const isAlreadyFav = favList.some((favItem) => favItem._id === id);
+    if (isAlreadyFav) {
+      const updatedFavList = favList.filter((item) => item._id !== id);
+      setFavList(updatedFavList);
+
+      alert("This post is removed from your favorites.");
+      return;
+    }
+
+    const clickedItem = fullList.find((item) => item._id === id);
+    if (clickedItem) {
+      const updatedFavList = [...favList, clickedItem];
+      setFavList(updatedFavList);
     }
   };
+  const sendFavListToBackend = async (selectedIds) => {
+    const userID = localStorage.getItem("userID");
+    console.log(userID, "userID");
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/savepost", {
+        postId: selectedIds,
+        userID: userID,
+      });
+      console.log("Updated backend with new favList:", response.data);
+    } catch (error) {
+      console.error("Error updating backend:", error);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(fetchRecommendations());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (recData && Array.isArray(recData)) {
+      setFullList(recData);
+    }
+  }, [recData]);
+
+  useEffect(() => {
+    const selectedIds = favList.map((item) => item._id);
+    // console.log(selectedIds, "selectedIds");
+    sendFavListToBackend(selectedIds);
+  }, [favList]);
+
   return (
     <>
       <div className="container-fluid pb-4">
@@ -61,21 +103,17 @@ function Profile() {
 
         <div className="row py-5">
           <div className="col-12 col-md-4 col-lg-4 text-center justify-content-center d-flex">
-          <Link
-                  href="/upcomingtrips"
-                  className="text-decoration-none text-light"
-                >
-            <button
-              href="#"
-              className={`d-flex align-items-center justify-content-center d-flex  ${styles.profilebutton}`}
+            <Link
+              href="/upcomingtrips"
+              className="text-decoration-none text-light"
             >
-              <h6 className="mb-0">
-                
-                  Upcoming Trips
-
-              </h6>
-              <FontAwesomeIcon className={styles.profileplus} icon={faPlus} />
-            </button>
+              <button
+                href="#"
+                className={`d-flex align-items-center justify-content-center d-flex  ${styles.profilebutton}`}
+              >
+                <h6 className="mb-0">Upcoming Trips</h6>
+                <FontAwesomeIcon className={styles.profileplus} icon={faPlus} />
+              </button>
             </Link>
           </div>
           <div className="col-12 col-md-4 col-lg-4 text-center justify-content-center d-flex">
@@ -129,53 +167,64 @@ function Profile() {
             <div
               className={`row px-4 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
             >
-              {data.map((item, id) => {
+              {fullList.map((item, index) => {
+                const isAlreadyFav = favList.some(
+                  (favItem) => favItem._id === item._id
+                );
+
                 return (
                   <>
                     <div
                       className="col-12 col-md-6 col-lg-4 p-3 position-relative"
-                      key={id}
-                      onClick={handleImageClick}
+                      onClick={() => handleFavoriteClick(item._id)}
+                      key={index}
                     >
-                      <div>
-                        <img className={styles.placeImg} src={item.bgImg} />
+                      <div className="position-relative">
+                        <img
+                          layout="fill"
+                          objectFit="cover"
+                          src={`${
+                            itemData[index % itemData.length].img
+                          }?w=162&auto=format`}
+                          srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
+                          className={styles.placeImg}
+                          loading="lazy"
+                          style={{
+                            display: "block",
+                            width: "100%",
+                            borderRadius: "15px",
+                            opacity: "0.99990000999",
+                          }}
+                        />
                         <h6
                           className={`fw-500 mb-0 mt-3 ${styles.landingeventheading}`}
                         >
-                          {item.city} <br />
+                          {item?.title} <br />
                         </h6>
-                        {item.address ? (
+                        {/* {item.cost ? (
                           <div className="d-flex align-center gap-2 pt-2">
                             <h6>Starting from </h6>{" "}
                             <h6 className={styles.landingeventheading}>
-                              {item.address}
+                              {item.cost}
                             </h6>{" "}
                           </div>
                         ) : (
                           ""
-                        )}
+                        )} */}
                       </div>
                       <div
                         className={`d-flex justify-content-center align-items-center ${styles.fvbtnhero}`}
                       >
-                        <div
-                          onClick={() => handleFavoriteClick(item.id)}
-                          className={styles.fvbtn}
-                        >
-                          {console.log(item.id, id, "llll")}
-                          {isFavorite && item === item.id ? (
-                            <FontAwesomeIcon
-                              icon={faHeart}
-                              style={{ color: "red" }}
-                            />
-                          ) : (
-                            <FontAwesomeIcon
-                              icon={faHeart}
-                              style={{ color: "gray" }}
-                            />
-                          )}
+                        <div className={styles.fvbtn}>
+                          <FontAwesomeIcon
+                            icon={faHeart}
+                            style={{ color: isAlreadyFav ? "red" : "gray" }}
+                          />
                         </div>
                       </div>
+                      <p className="text-center position-relative z-5">
+                        {item._id}
+                      </p>
                     </div>
                   </>
                 );
