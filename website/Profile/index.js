@@ -38,27 +38,36 @@ function Profile() {
 
   const recommendationsData = useSelector((state) => state.recommendation);
   const { recommendations, loading, error } = recommendationsData;
-
+  const [selectedItems, setSelectedItems] = useState({});
   const [favList, setFavList] = useState([]);
   const recData = recommendations.Recommendations;
   const [fullList, setFullList] = useState([]);
 
   const handleFavoriteClick = (id) => {
+    setSelectedItems((prevSelectedItems) => ({
+      ...prevSelectedItems,
+      [id]: !prevSelectedItems[id],
+    }));
+
     const isAlreadyFav = favList.some((favItem) => favItem._id === id);
     if (isAlreadyFav) {
       const updatedFavList = favList.filter((item) => item._id !== id);
       setFavList(updatedFavList);
-
       alert("This post is removed from your favorites.");
       return;
     }
 
     const clickedItem = fullList.find((item) => item._id === id);
     if (clickedItem) {
-      const updatedFavList = [...favList, clickedItem];
+      const updatedFavList = [clickedItem];
       setFavList(updatedFavList);
+      localStorage.setItem(
+        "selectedIds",
+        JSON.stringify(updatedFavList.map((item) => item._id))
+      );
     }
   };
+
   const sendFavListToBackend = async (selectedIds) => {
     const userID = localStorage.getItem("userID");
     console.log(userID, "userID");
@@ -68,6 +77,7 @@ function Profile() {
         postId: selectedIds,
         userID: userID,
       });
+
       console.log("Updated backend with new favList:", response.data);
     } catch (error) {
       console.error("Error updating backend:", error);
@@ -86,7 +96,6 @@ function Profile() {
 
   useEffect(() => {
     const selectedIds = favList.map((item) => item._id);
-    // console.log(selectedIds, "selectedIds");
     sendFavListToBackend(selectedIds);
   }, [favList]);
 
@@ -218,7 +227,11 @@ function Profile() {
                         <div className={styles.fvbtn}>
                           <FontAwesomeIcon
                             icon={faHeart}
-                            style={{ color: isAlreadyFav ? "red" : "gray" }}
+                            // style={{ color: isAlreadyFav ? "red" : "gray" }}
+                            style={{
+                              color: selectedItems[item._id] ? "red" : "gray",
+                              cursor: "pointer",
+                            }}
                           />
                         </div>
                       </div>

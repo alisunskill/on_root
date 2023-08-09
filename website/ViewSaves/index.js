@@ -29,88 +29,59 @@ const itemData = [
     img: "https://images.unsplash.com/photo-1587162146766-e06b1189b907?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=956&q=80",
   },
 ];
-const eventData = [
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-];
-const eventData1 = [
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-];
-const eventData2 = [
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POSTs TITLE HERE",
-    place: "City, Country",
-  },
-  {
-    bgImg:
-      "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    itinerary: "ITINERARY",
-    title: "POST TITLE HERE",
-    place: "City, Country",
-  },
-];
+
 function ViewSaves() {
   const [postIds, setPostIds] = useState([]);
-  console.log(postIds, "postIds");
-  const [showIcon, setShowIcon] = useState(true);
-  const [modalShow, setModalShow] = useState(false);
-  const [userId, setUserId] = useState(null);
+  const [trigger, setTrigger] = useState(new Date());
+  console.log(postIds, " postIds postIds");
 
+  // const [showIcon, setShowIcon] = useState(true);
+  // const [modalShow, setModalShow] = useState(false);
+  // const [userId, setUserId] = useState(null);
+  const fetchPostIds = async () => {
+    const userID = localStorage.getItem("userID");
+    if (!userID) {
+      console.error("User ID not available.");
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/savepost?userID=${userID}`
+      );
+      const data = response.data;
+      const { savePosts } = data;
+
+      setPostIds(savePosts);
+      const postIdList = savePosts.map((post) => post.postId);
+      console.log(postIdList, "postIdListpostIdListpostIdListpostIdList");
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   useEffect(() => {
-    const fetchPostIds = async () => {
-      const userID = localStorage.getItem("userID");
-      if (!userID) {
-        console.error("User ID not available.");
-        return;
-      }
-
-      try {
-        // Pass the user ID as a parameter to the API
-        const response = await axios.get(
-          `http://localhost:8000/api/savepost?userID=${userID}`
-        );
-        const data = response.data;
-        const { savePosts } = data;
-
-        setPostIds(savePosts);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchPostIds();
-  }, []);
+  }, [trigger]);
+
   const handleRemove = async (postId) => {
     const userID = localStorage.getItem("userID");
     if (!userID) {
       console.error("User ID not available.");
       return;
     }
-    try {
-      const response = await axios.delete(
-        `http://localhost:8000/api/savepost/${postId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userID}`,
-          },
-        }
-      );
 
-      console.log(response.data.message);
+    try {
+      await axios.delete(`http://localhost:8000/api/savepost/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${userID}`,
+        },
+      });
+
+      setPostIds((prevPostIds) => prevPostIds.filter((id) => id !== postId));
+
+      setTrigger(new Date());
+      console.log("Post deleted successfully.");
+      // alert("Post deleted successfully.")
     } catch (error) {
       console.error("Error deleting post:", error);
     }
@@ -126,34 +97,21 @@ function ViewSaves() {
             <InfiniteScroll
               className="w-100 overflow-hidden"
               dataLength={postIds.length}
-              // next={recommendationData}
-              // hasMore={hasMore}
               loader={<h4>Loading...</h4>}
             >
               <Box sx={{ minHeight: 829 }}>
                 <Masonry columns={3} spacing={2}>
                   {postIds.map((post, index) => (
-                    <div key={index}>
-                      {/* <Link
-                        href="/"
-                        style={{
-                          position: "relative",
-                          width: "100%",
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          opacity: "0.9",
-                        }}
-                      >
-                       
-                      </Link> */}
-                      <button
-                        className="bg-danger border-0 rounded-2 position-absolute z-3"
-                        onClick={() => handleRemove(post.postId)}
-                      >
-                        Remove Post
-                      </button>
+                    <Link key={index} href={`/${post.postId}`}>
+                      <div className="position-relative">
+                        <button
+                          className="bg-danger border-0 rounded-2 position-absolute z-3 px-3 fw-700"
+                          style={{ right: "0px" }}
+                          onClick={() => handleRemove(post.postId)}
+                        >
+                          x
+                        </button>
+                      </div>
                       <img
                         layout="fill"
                         objectFit="cover"
@@ -176,7 +134,7 @@ function ViewSaves() {
                         <p className="w-700 text-dark"> {post.postId}</p>
                         <p className="w-700 text-dark"> {post.userID}</p>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </Masonry>
               </Box>
