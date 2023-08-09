@@ -52,8 +52,6 @@ app.use("/api/itineraryposts", itineraryPost);
 // saveposts
 app.use("/api/savepost", savePostRoute);
 
-
-
 const start = async () => {
   try {
     await connectDB(process.env.MONGODB_URL);
