@@ -1,0 +1,125 @@
+const Trips = require("../models/trips");
+
+// create itneraryPost
+const createTripsPost = async (req, res) => {
+  try {
+    const { image, title, region, email, sdate, edate } = req.body;
+    console.log(image, title, region, email, sdate, edate, "allfields");
+    if (!image || !title || !region || !email || !sdate || !edate) {
+      return res
+        .status(400)
+        .json({ error: "Missing required fields in the trip request." });
+    }
+
+    const itinerary = await Trips.create({
+      image,
+      title,
+      region,
+      email,
+      sdate,
+      edate,
+    });
+    res.status(201).json(itinerary);
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      const errorMessages = Object.values(err.errors).map(
+        (error) => error.message
+      );
+      res.status(400).json({ error: errorMessages });
+    } else {
+      res.status(500).json({ error: "Unable to create the itinerary" });
+    }
+  }
+};
+// Get Trips
+const getTripsPost = async (req, res) => {
+  const { title, region, email, edate, sdate } = req.query;
+  const query = {};
+
+  if (title) {
+    query.title = title;
+  }
+
+  if (region) {
+    query.region = region;
+  }
+
+  if (email) {
+    query.email = email;
+  }
+
+  if (edate) {
+    query.edate = edate;
+  }
+
+  if (sdate) {
+    query.sdate = sdate;
+  }
+
+  try {
+    const trips = await Trips.find(query);
+    res.status(200).json(trips);
+  } catch (err) {
+    res.status(500).json({ error: "Unable to fetch trips." });
+  }
+};
+
+// delete
+const deleteTripPost = async (req, res) => {
+  const tripId = req.params.tripId;
+  console.log(tripId, "lll");
+  try {
+    const deletedTrip = await Trips.findByIdAndDelete(tripId);
+
+    if (!deletedTrip) {
+      return res.status(404).json({ error: "Trip not found." });
+    }
+
+    res.status(200).json({ message: "Trip deleted successfully." });
+  } catch (err) {
+    res.status(500).json({ error: "Unable to delete the trip." });
+  }
+};
+
+// Update Trip
+const updateTripPost = async (req, res) => {
+  const tripId = req.params.tripId;
+  const { image, title, region, email, sdate, edate } = req.body;
+
+  try {
+    const updatedTrip = await Trips.findByIdAndUpdate(
+      tripId,
+      {
+        image,
+        title,
+        region,
+        email,
+        sdate,
+        edate,
+      },
+      { new: true }
+    );
+
+    if (!updatedTrip) {
+      return res.status(404).json({ error: "Trip not found." });
+    }
+
+    res.status(200).json(updatedTrip);
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      const errorMessages = Object.values(err.errors).map(
+        (error) => error.message
+      );
+      res.status(400).json({ error: errorMessages });
+    } else {
+      res.status(500).json({ error: "Unable to update the trip." });
+    }
+  }
+};
+
+module.exports = {
+  createTripsPost,
+  deleteTripPost,
+  getTripsPost,
+  updateTripPost,
+};

@@ -44,10 +44,6 @@ const getAllRecommendationsTesting = async (req, res) => {
 };
 
 const createRecommendation = async (req, res) => {
-  // if (!req.user || !req.user._id) {
-  //   return res.status(401).json({ error: "User not authenticated" });
-  // }
-  const apiKey = req.headers["x-api-key"];
   const {
     title,
     images,
@@ -65,8 +61,8 @@ const createRecommendation = async (req, res) => {
     console.log("Request Body:", req.body);
     if (
       !title ||
-      !images ||
       !hours ||
+      !images ||
       !cost ||
       !experience ||
       !description ||
@@ -79,10 +75,6 @@ const createRecommendation = async (req, res) => {
         .json({ error: "Missing required fields in the request." });
     }
 
-    // if (apiKey !== process.env.SECRET_KEY) {
-    //   return res.status(403).json({ error: "Unauthorized. Invalid API key." });
-    // }
-
     if (
       !location.type ||
       !location.coordinates ||
@@ -94,6 +86,7 @@ const createRecommendation = async (req, res) => {
           "Invalid location format. Please provide valid location coordinates.",
       });
     }
+
     const newRecommendation = await Recommendation.create({
       title,
       images,
@@ -111,7 +104,78 @@ const createRecommendation = async (req, res) => {
     res.status(201).json(newRecommendation);
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ error: "Failed to create recommendation." });
+    res
+      .status(500)
+      .json({ error: "Failed to create recommendation. " + error.message });
+  }
+};
+
+const deleteRecommendation = async (req, res) => {
+  const recommendationId = req.params.recommendationId;
+  console.log(recommendationId, "1");
+  try {
+    const deletedRecommendation = await Recommendation.findByIdAndDelete(
+      recommendationId
+    );
+
+    if (!deletedRecommendation) {
+      return res.status(404).json({ error: "Recommendation not found." });
+    }
+
+    res.status(200).json({ message: "Recommendation deleted successfully." });
+    console.log("Recommendation deleted successfully.");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({
+      error: "Failed to delete recommendation. " + error.message,
+    });
+  }
+};
+
+const updateRecommendation = async (req, res) => {
+  const recommendationId = req.params.recommendationId;
+  const {
+    title,
+    images,
+    hours,
+    cost,
+    experience,
+    description,
+    location,
+    descriptor,
+    region,
+  } = req.body;
+
+  try {
+    // Check if the recommendation exists
+    const existingRecommendation = await Recommendation.findById(
+      recommendationId
+    );
+
+    if (!existingRecommendation) {
+      return res.status(404).json({ error: "Recommendation not found." });
+    }
+
+    if (title) existingRecommendation.title = title;
+    if (images) existingRecommendation.images = images;
+    if (hours) existingRecommendation.hours = hours;
+    if (cost) existingRecommendation.cost = cost;
+    if (experience) existingRecommendation.experience = experience;
+    if (description) existingRecommendation.description = description;
+    if (location) existingRecommendation.location = location;
+    if (descriptor) existingRecommendation.descriptor = descriptor;
+    if (region) existingRecommendation.region = region;
+
+    // Save the updated recommendation
+    const updatedRecommendation = await existingRecommendation.save();
+
+    res.status(200).json(updatedRecommendation);
+    console.log("Recommendation updated successfully.");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({
+      error: "Failed to update recommendation. " + error.message,
+    });
   }
 };
 
@@ -119,4 +183,6 @@ module.exports = {
   getAllRecommendations,
   getAllRecommendationsTesting,
   createRecommendation,
+  updateRecommendation,
+  deleteRecommendation,
 };

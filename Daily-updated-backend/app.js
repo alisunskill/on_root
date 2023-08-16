@@ -5,7 +5,9 @@ const connectDB = require("./db/connect");
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
+
+// app.use(express.json());
 
 var cors = require("cors");
 
@@ -14,6 +16,8 @@ app.use(cors());
 const PORT = process.env.PORT || 8000;
 
 const recommendations_routes = require("./routes/recommendations");
+
+const trips_routes = require("./routes/tripsRoute");
 
 const savePostRoute = require("./routes/savePostRoute");
 
@@ -39,6 +43,9 @@ app.get("/staticdata", (req, res) => {
 
 //Recommendations
 app.use("/api/recommendations", recommendations_routes);
+
+// Trips
+app.use("/api/trips", trips_routes);
 
 // User routes
 app.use("/api/users", userRoutes);
