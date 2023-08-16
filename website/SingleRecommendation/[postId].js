@@ -71,19 +71,14 @@ export default function ItemDetail() {
 
   // const imageUrls = filteredData?.images;
 
-  const imageUrls = filteredData.images
-    .filter((data) => data instanceof Blob)
-    .map((blobData) => {
-      const reader = new FileReader();
-      return new Promise((resolve, reject) => {
-        reader.onload = () => {
-          resolve(reader.result);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(blobData);
-      });
-    });
-  console.log(imageUrls, "imageUrls");
+  const imageUrls = filteredData?.images.map((item) => {
+    return (
+      <>
+        <img src={item} alt="" />
+      </>
+    );
+  });
+  // console.log(filteredData.images, "imageUrls");
 
   const filterLoc = filteredData?.location;
   console.log(filterLoc?.coordinates, "filterLoc");
@@ -93,7 +88,7 @@ export default function ItemDetail() {
       return;
     }
 
-    filteredData.arrayProperty?.forEach((location) => {
+    filteredData?.arrayProperty?.forEach((location) => {
       const marker = new maps.Marker({
         position: { lat: location.lat, lng: location.lng },
         map,
@@ -104,7 +99,7 @@ export default function ItemDetail() {
         alert(`Title: ${location.title}`);
       });
     });
-    filteredData.arrayProperty?.forEach((form) => {
+    filteredData?.arrayProperty?.forEach((form) => {
       const formMarker = new maps.Marker({
         position: {
           lat: form.location.coordinates[1],
@@ -142,29 +137,20 @@ export default function ItemDetail() {
 
   useEffect(() => {
     if (filterLoc?.coordinates) {
-      console.log("Filter Location Coordinates:", filterLoc.coordinates);
+      console.log("Filter Location Coordinates:", filterLoc?.coordinates);
 
       setStaticMarkerPosition({
-        latitude: filterLoc.coordinates[1],
-        longitude: filterLoc.coordinates[0],
+        latitude: filterLoc?.coordinates[1],
+        longitude: filterLoc?.coordinates[0],
       });
     }
   }, [filterLoc?.coordinates]);
   return (
     <>
-      {postid}
-      {filteredData?.experience}
-      {filteredData?.cost}
-      {imageUrls?.map((imageUrl, index) => (
-        <div key={index} className={styles.blobImageContainer}>
-          <img
-            src={imageUrl}
-            alt={`Image ${index + 1}`}
-            width={400}
-            height={300}
-          />
-        </div>
-      ))}
+      {/* {postid} */}
+      {/* {filteredData?.experience} */}
+      {/* {filteredData?.cost} */}
+      {/* {imageUrls} */}
       <div className="container-fluid pb-5">
         <div className="row">
           <div
@@ -202,7 +188,7 @@ export default function ItemDetail() {
             </div>
             <div className="row">
               <div className="col-lg-12 col-md-12 mt-4">
-                <SliderApp />
+                <SliderApp images={filteredData?.images} />
               </div>
 
               <div className="col-12 col-md-12 col-lg-12 py-3">
@@ -264,29 +250,6 @@ export default function ItemDetail() {
           </div> */}
           <div className="col-lg-6 col-12 text-align-right p-0">
             <div style={{ height: "100vh", width: "100%" }}>
-              {/* <GoogleMapReact
-                bootstrapURLKeys={{
-                  key: "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM",
-                  libraries: ["places"],
-                }}
-                defaultCenter={{ lat: 31.5204, lng: 74.3587 }}
-                defaultZoom={7}
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({ map, maps }) =>
-                  handleApiLoaded(map, maps)
-                }
-                onDblClick={handleMapDoubleClick}
-                center={mapCenter}
-              >
-                {filteredData?.map((form, index) => (
-                  <RedMarker
-                    key={index}
-                    lat={form.location.coordinates[1]}
-                    lng={form.location.coordinates[0]}
-                    text={form.title}
-                  />
-                ))}
-              </GoogleMapReact> */}
               <GoogleMapReact
                 bootstrapURLKeys={{
                   key: "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM",
@@ -319,7 +282,7 @@ export default function ItemDetail() {
                   <RedMarker
                     latitude={staticMarkerPosition.latitude}
                     longitude={staticMarkerPosition.longitude}
-                    text={filteredData.region}
+                    text={filteredData?.region}
                   />
                 )}
               </GoogleMapReact>

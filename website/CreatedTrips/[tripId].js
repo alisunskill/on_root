@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/singular.module.css";
 import burger from "../../public/images/burger.svg";
 import painticon from "../../public/images/painticon.svg";
 import travelicon from "../../public/images/travelicon.svg";
 import mapimage from "../../public/images/mapimage.svg";
 import Image from "next/image";
-import PlaceCardFull from "../components/PlaceCardFull";
+import Geocode from "react-geocode";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import gallery from "../../public/images/gallery.svg";
-
+import GoogleMapReact from "google-map-react";
 import { Button, Collapse } from "react-bootstrap";
+import { useRouter } from "next/router";
+import PlaceCardFull from "../components/PlaceCardFull";
 
 const collapseData = [
   { id: 1, title: "Item 1", content: "Content for Item 1" },
@@ -41,19 +44,117 @@ const eventData = [
     itinerary: "ITINERARY",
     title: "POST TITLE HERE",
     place: "City, Country",
-    time: "9:00 am",
+    time: "10:00 am",
   },
 ];
 
 function UpcomingtripsList() {
-  const [openCollapseId, setOpenCollapseId] = React.useState(null);
+  const RedMarker = ({ regionName, latitude, longitude }) => (
+    <div
+      style={{
+        width: "25px",
+        height: "25px",
+        borderRadius: "50%",
+        background: "red",
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        boxShadow: "0 0 8px rgba(0, 0, 0, 0.5)",
+        cursor: "pointer",
+        position: "absolute",
+        transform: "translate(-50%, -50%)",
+      }}
+      lat={latitude}
+      lng={longitude}
+    >
+      <p className="px-5  py-1 bg-danger rounded-5">{regionName}</p>{" "}
+      {/* Use regionName prop */}
+    </div>
+  );
+  const router = useRouter();
+  const { tripid } = router.query;
+  const [openCollapseId, setOpenCollapseId] = React.useState(1);
 
+  const [trips, setTrips] = useState([]);
+  const [center, setCenter] = useState({ lat: 0, lng: 0 });
+
+  const locationName = trips.map((item) => item.region);
+
+
+  useEffect(() => {
+    // Use the Geocoding API to get coordinates for each location
+    const apiKey = "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM";
+    const fetchCoordinates = async () => {
+      try {
+        const coordinatesPromises = trips.map(async (trip) => {
+          const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+            trip.region
+          )}&key=${apiKey}`;
+          const response = await axios.get(geocodingUrl);
+          const { results } = response.data;
+          if (results.length > 0) {
+            return results[0].geometry.location;
+          }
+          return null;
+        });
+  
+        const coordinatesArray = await Promise.all(coordinatesPromises);
+        setTrips((prevTrips) => {
+          return prevTrips.map((trip, index) => {
+            return { ...trip, coordinates: coordinatesArray[index] };
+          });
+        });
+      } catch (error) {
+        console.error("Error fetching geocoding data:", error);
+      }
+    };
+  
+    fetchCoordinates();
+  }, []);
+  
+  useEffect(() => {
+    // Once coordinates are fetched for all trips, calculate the map center
+    const tripsWithCoordinates = trips.filter((trip) => trip.coordinates);
+  
+    if (tripsWithCoordinates.length > 0) {
+      const latSum = tripsWithCoordinates.reduce(
+        (sum, trip) => sum + trip.coordinates.lat,
+        0
+      );
+      const lngSum = tripsWithCoordinates.reduce(
+        (sum, trip) => sum + trip.coordinates.lng,
+        0
+      );
+      const avgLat = latSum / tripsWithCoordinates.length;
+      const avgLng = lngSum / tripsWithCoordinates.length;
+      setCenter({ lat: avgLat, lng: avgLng });
+    }
+  }, [trips]);
+  
+
+  const fetchTrips = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/trips");
+      setTrips(response.data);
+    } catch (error) {
+      console.error("Error fetching trips:", error);
+    }
+  };
+  useEffect(() => {
+    fetchTrips();
+  }, []);
+  console.log(tripid, "tripId ali");
+  const goBack = () => {
+    router.back(); // Navigate back to the previous page
+  };
   const toggleCollapse = (id) => {
     setOpenCollapseId((prevId) => (prevId === id ? null : id));
   };
 
   return (
     <>
+      {tripid}
       <div className="container-fluid py-5">
         <div className="row">
           <h1 className="dark bold pb-3 text-center mb-4">Single Trip View</h1>
@@ -63,6 +164,7 @@ function UpcomingtripsList() {
             <div className="row justify-content-between align-items-center">
               <div className="col-2">
                 <FontAwesomeIcon
+                  onClick={goBack}
                   icon={faTimes}
                   className="p-2 cursor-pointer"
                   style={{
@@ -90,7 +192,7 @@ function UpcomingtripsList() {
                 className="col-12 mx-0 px-0 rounded-2"
                 style={{ background: "#eeeeee" }}
               >
-                {collapseData.map((item) => (
+                {/* {collapseData.map((item) => (
                   <div key={item.id}>
                     <Button
                       onClick={() => toggleCollapse(item.id)}
@@ -126,7 +228,31 @@ function UpcomingtripsList() {
                       </div>
                     </Collapse>
                   </div>
-                ))}
+                ))} */}
+                <div className="row">
+                  <div className="col-lg-12 col-md-12 pt-0 mt-0">
+                    <div
+                      className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
+                      style={{ background: "white" }}
+                    >
+                      {trips
+                        .filter((item) => item._id === tripid)
+                        .map((item, index) => {
+                          return (
+                            <PlaceCardFull
+                              key={index}
+                              imageUrl={item.image}
+                              itinerary={"ITINERARY"}
+                              title={item.title}
+                              place={item.region ? item.region : item.region}
+                              time={item.sdate}
+                              edate={item.edate}
+                            />
+                          );
+                        })}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -160,15 +286,41 @@ function UpcomingtripsList() {
             </div>
           </div>
           <div className="col-lg-6 text-align-right p-0">
-            <h3 className="dark bold pb-3 text-center fw-600">
+            {trips
+              .filter((item) => item._id === tripid)
+              .map((item, index) => {
+                return (
+                  <h3 className="dark bold pb-3 text-center fw-600">
+                    Date: {item.sdate} to {item.edate}
+                  </h3>
+                );
+              })}
+            {/* <h3 className="dark bold pb-3 text-center fw-600">
               30th June to 30th July
-            </h3>
+            </h3> */}
 
-            <Image
+            {/* <Image
               className={`h-auto ${styles.eventmapimage}`}
               src={mapimage}
               alt=""
-            />
+            /> */}
+            {/* map key */}
+            {/* AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM  */}
+            <div style={{ height: "100vh", width: "100%" }}>
+              <GoogleMapReact defaultCenter={center} defaultZoom={14}>
+                {/* Marker */}
+                <div
+                  lat={center.lat}
+                  lng={center.lng}
+                  style={{
+                    color: "red",
+                    fontSize: "24px",
+                  }}
+                >
+                  📍
+                </div>
+              </GoogleMapReact>
+            </div>
           </div>
         </div>
         <div className="row px-4 mx-1 pt-5">

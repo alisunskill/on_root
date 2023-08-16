@@ -42,7 +42,11 @@ function Profile() {
   const [favList, setFavList] = useState([]);
   const recData = recommendations.Recommendations;
   const [fullList, setFullList] = useState([]);
+  const [showAllImages, setShowAllImages] = useState(false);
 
+  const handleShowAllClick = () => {
+    setShowAllImages(!showAllImages);
+  };
   const handleFavoriteClick = (id) => {
     setSelectedItems((prevSelectedItems) => ({
       ...prevSelectedItems,
@@ -176,7 +180,7 @@ function Profile() {
             <div
               className={`row px-4 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
             >
-              {fullList.map((item, index) => {
+              {fullList.slice(0, 3).map((item, index) => {
                 const isAlreadyFav = favList.some(
                   (favItem) => favItem._id === item._id
                 );
@@ -210,16 +214,6 @@ function Profile() {
                         >
                           {item?.title} <br />
                         </h6>
-                        {/* {item.cost ? (
-                          <div className="d-flex align-center gap-2 pt-2">
-                            <h6>Starting from </h6>{" "}
-                            <h6 className={styles.landingeventheading}>
-                              {item.cost}
-                            </h6>{" "}
-                          </div>
-                        ) : (
-                          ""
-                        )} */}
                       </div>
                       <div
                         className={`d-flex justify-content-center align-items-center ${styles.fvbtnhero}`}
@@ -242,6 +236,76 @@ function Profile() {
                   </>
                 );
               })}
+
+              <div className="text-center">
+                <button className="savebtn" onClick={handleShowAllClick}>
+                  {showAllImages ? "Close All" : "Show All"}
+                </button>
+              </div>
+              {showAllImages && (
+                <div
+                  className={`row px-4 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
+                >
+                  {fullList.slice(3).map((item, index) => {
+                    const isAlreadyFav = favList.some(
+                      (favItem) => favItem._id === item._id
+                    );
+
+                    return (
+                      <>
+                        <div
+                          className="col-12 col-md-6 col-lg-4 p-3 position-relative"
+                          onClick={() => handleFavoriteClick(item._id)}
+                          key={index}
+                        >
+                          <div className="position-relative">
+                            <img
+                              layout="fill"
+                              objectFit="cover"
+                              src={`${
+                                itemData[index % itemData.length].img
+                              }?w=162&auto=format`}
+                              srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
+                              className={styles.placeImg}
+                              loading="lazy"
+                              style={{
+                                display: "block",
+                                width: "100%",
+                                borderRadius: "15px",
+                                opacity: "0.99990000999",
+                              }}
+                            />
+                            <h6
+                              className={`fw-500 mb-0 mt-3 ${styles.landingeventheading}`}
+                            >
+                              {item?.title} <br />
+                            </h6>
+                          </div>
+                          <div
+                            className={`d-flex justify-content-center align-items-center ${styles.fvbtnhero}`}
+                          >
+                            <div className={styles.fvbtn}>
+                              <FontAwesomeIcon
+                                icon={faHeart}
+                                // style={{ color: isAlreadyFav ? "red" : "gray" }}
+                                style={{
+                                  color: selectedItems[item._id]
+                                    ? "red"
+                                    : "gray",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <p className="text-center position-relative z-5">
+                            {item._id}
+                          </p>
+                        </div>
+                      </>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>

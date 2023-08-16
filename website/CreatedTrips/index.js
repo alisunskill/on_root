@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import newsletterimg from "../../public/images/card-two.svg";
 import styles from "../../styles/viewsave.module.css";
-import NewsLetter from "../../website/components/NewsLetter";
-import Trip from "./components/Trip";
+import NewsLetter from "../components/NewsLetter";
+// import Trip from "./components/Trip";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Box } from "@mui/material";
 import { Masonry } from "@mui/lab";
@@ -10,133 +10,136 @@ import axios from "axios";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/router";
 
-const itemData = [
-  {
-    img: "https://images.unsplash.com/photo-1663583784667-4a2a386fec62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1622397815608-359540676c67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1550850839-8dc894ed385a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=875&q=80",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1587162146766-e06b1189b907?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=956&q=80",
-  },
-];
-
-function ViewSaves() {
-  const [postIds, setPostIds] = useState([]);
-  const [trigger, setTrigger] = useState(new Date());
-  console.log(postIds, " postIds postIds");
-
+function ItiniraryDetail() {
+  const router = useRouter();
+  const { id: singletripId } = router.query;
+  console.log(singletripId, "id");
   const [showIcon, setShowIcon] = useState(true);
   const [modalShow, setModalShow] = useState(false);
   // const [userId, setUserId] = useState(null);
-  const fetchPostIds = async () => {
-    const userID = localStorage.getItem("userID");
-    if (!userID) {
-      console.error("User ID not available.");
-      return;
-    }
 
+  // all trips
+  const [trips, setTrips] = useState([]);
+  const [singleTrips, setSingleTrips] = useState([]);
+  console.log(singleTrips, "singleTrips");
+  const [updateTrip, setUpdateTrip] = useState({
+    id: null,
+    image: "",
+    title: "",
+    region: "",
+    sdate: "",
+    edate: "",
+  });
+  useEffect(() => {
+    fetchTrips();
+  }, []);
+
+  const fetchTrips = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/trips");
+      setTrips(response.data);
+    } catch (error) {
+      console.error("Error fetching trips:", error);
+    }
+  };
+  const fetchSingleTrips = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/savepost?userID=${userID}`
+        `http://localhost:8000/api/trips/${singletripId}`
       );
-      const data = response.data;
-      const { savePosts } = data;
-
-      setPostIds(savePosts);
-      const postIdList = savePosts.map((post) => post.postId);
-      console.log(postIdList, "postIdListpostIdListpostIdListpostIdList");
+      setSingleTrips(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching trips:", error);
     }
   };
+
   useEffect(() => {
-    fetchPostIds();
-  }, [trigger]);
-
-  const handleRemove = async (postId) => {
-    const userID = localStorage.getItem("userID");
-    if (!userID) {
-      console.error("User ID not available.");
-      return;
+    if (singletripId) {
+      fetchSingleTrips();
     }
+  }, [singletripId]);
 
+  const handleRemoveTrips = async (tripId) => {
     try {
-      await axios.delete(`http://localhost:8000/api/savepost/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${userID}`,
-        },
-      });
-
-      setPostIds((prevPostIds) => prevPostIds.filter((id) => id !== postId));
-
-      setTrigger(new Date());
-      console.log("Post deleted successfully.");
-      // alert("Post deleted successfully.")
+      const response = await axios.delete(
+        `http://localhost:8000/api/trips/${tripId}`
+      );
+      console.log(response.data);
+      fetchTrips();
     } catch (error) {
-      console.error("Error deleting post:", error);
+      console.error("Error deleting trip:", error);
     }
   };
+  const updateTripEditHandle = (trip) => {
+    setUpdateTrip({
+      id: trip._id,
+      image: trip.image,
+      title: trip.title,
+      region: trip.region,
+      sdate: trip.sdate,
+      edate: trip.edate,
+    });
+  };
 
+  const handleUpdateSubmit = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/api/trips/${updateTrip.id}`,
+        {
+          image: updateTrip.image,
+          title: updateTrip.title,
+          region: updateTrip.region,
+          sdate: updateTrip.sdate,
+          edate: updateTrip.edate,
+        }
+      );
+      console.log(response.data);
+      setUpdateTrip({
+        id: null,
+        image: "",
+        title: "",
+        region: "",
+        sdate: "",
+        edate: "",
+      });
+      fetchTrips();
+    } catch (error) {
+      console.error("Error updating trip:", error);
+    }
+  };
   return (
     <>
       <div className="container-fluid">
         <div className="row px-4">
-          <h1 className="dark bold fw-700 pt-4 text-center mb-4">Your Saves</h1>
+          <h1 className="dark bold fw-700 pt-4 text-center mb-4">
+            Your Itinerary Posts
+          </h1>
 
           <div className="col-lg-12">
             <InfiniteScroll
               className="w-100 overflow-hidden"
-              dataLength={postIds.length}
+              dataLength={trips.length}
               loader={<h4>Loading...</h4>}
             >
               <Box sx={{ minHeight: 829 }}>
                 <Masonry columns={3} spacing={2}>
-                  {postIds.map((post, index) => (
+                  {trips.map((trip, index) => (
                     <div>
-                      <div className="position-relative">
-                        <div className="col-lg-12 ">
-                          <FontAwesomeIcon
-                            onClick={() => setModalShow(true)}
-                            className={`${styles.plusicon} bg-success text-light top-0 border-0 rounded-2 position-absolute z-3 px-3 py-1 fw-700`}
-                            icon={faPlus}
-                            style={{ left: "0px" }}
-                          />
-                          <div className="text-center w-100  d-flex justify-content-center align-items-center">
-                            <Trip
-                              show={modalShow}
-                              onHide={() => setModalShow(false)}
-                              setModalShow={setModalShow}
-                            />
-                          </div>
-                        </div>
-
+                      <div className="position-relative" key={trip._id}>
                         <button
                           className="bg-danger border-0 rounded-2 position-absolute z-3 px-3 fw-700"
                           style={{ right: "0px" }}
-                          onClick={() => handleRemove(post.postId)}
+                          onClick={() => handleRemoveTrips(trip._id)}
                         >
                           x
                         </button>
                       </div>
-                      <Link key={index} href={`/post/${post.postId}`}>
+                      <Link key={index} href={`/trip/${trip._id}`}>
                         <img
-                          layout="fill"
-                          objectFit="cover"
-                          src={`${
-                            itemData[index % itemData.length].img
-                          }?w=162&auto=format`}
-                          srcSet={`${
-                            itemData[index % itemData.length].img
-                          }?w=162&auto=format&dpr=2 2x`}
+                          src={trip.image}
+                          alt="tripImg"
                           className={styles.placeImg}
                           loading="lazy"
                           style={{
@@ -148,10 +151,84 @@ function ViewSaves() {
                         />
                       </Link>
 
-                      <div>
-                        <p className="w-700 text-dark"> {post.postId}</p>
-                        <p className="w-700 text-dark"> {post.userID}</p>
+                      <div className="d-flex justify-content-between mt-2">
+                        <h4 className="w-700 mb-0 text-dark">
+                          Title: {trip.title}
+                        </h4>
+                        <button
+                          className="bg-success text-light border-0 rounded-2 px-2 mx-2"
+                          onClick={() => updateTripEditHandle(trip)}
+                        >
+                          Edit Trip
+                        </button>
                       </div>
+                      <div className="d-flex justify-content-between mt-2">
+                        <h4 className="w-700 mb-0 text-dark">
+                          region: {trip.region}
+                        </h4>{" "}
+                        <br />
+                        <h4 className="w-700 mb-0 text-dark">
+                          Start Date: {trip.sdate}
+                        </h4>
+                        <h4 className="w-700 mb-0 text-dark">
+                          End Date: {trip.edate}
+                        </h4>
+                      </div>
+
+                      {updateTrip.id === trip._id && (
+                        <div>
+                          <input
+                            type="text"
+                            value={updateTrip.title}
+                            onChange={(e) =>
+                              setUpdateTrip({
+                                ...updateTrip,
+                                title: e.target.value,
+                              })
+                            }
+                            placeholder="Title"
+                          />
+                          <input
+                            type="text"
+                            value={updateTrip.region}
+                            onChange={(e) =>
+                              setUpdateTrip({
+                                ...updateTrip,
+                                region: e.target.value,
+                              })
+                            }
+                            placeholder="region"
+                          />
+                          <input
+                            type="text"
+                            value={updateTrip.sdate}
+                            onChange={(e) =>
+                              setUpdateTrip({
+                                ...updateTrip,
+                                sdate: e.target.value,
+                              })
+                            }
+                            placeholder="Start Date"
+                          />
+                          <input
+                            type="text"
+                            value={updateTrip.edate}
+                            onChange={(e) =>
+                              setUpdateTrip({
+                                ...updateTrip,
+                                edate: e.target.value,
+                              })
+                            }
+                            placeholder="End Date"
+                          />
+                          <button
+                            onClick={handleUpdateSubmit}
+                            className="bg-success rounded-2 border-0"
+                          >
+                            Update
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </Masonry>
@@ -295,4 +372,4 @@ function ViewSaves() {
   );
 }
 
-export default ViewSaves;
+export default ItiniraryDetail;

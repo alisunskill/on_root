@@ -8,46 +8,45 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
-const slideImg = [
-  {
-    id: "1",
-    img: "https://swiperjs.com/demos/images/nature-1.jpg",
-  },
-  {
-    id: "2",
-    img: "https://swiperjs.com/demos/images/nature-2.jpg",
-  },
-  {
-    id: "3",
-    img: "https://swiperjs.com/demos/images/nature-3.jpg",
-  },
-  {
-    id: "4",
-    img: "https://swiperjs.com/demos/images/nature-4.jpg",
-  },
-  {
-    id: "5",
-    img: "https://swiperjs.com/demos/images/nature-5.jpg",
-  },
-  {
-    id: "6",
-    img: "https://swiperjs.com/demos/images/nature-6.jpg",
-  },
-  {
-    id: "7",
-    img: "https://swiperjs.com/demos/images/nature-7.jpg",
-  },
-  {
-    id: "8",
-    img: "https://swiperjs.com/demos/images/nature-8.jpg",
-  },
-  {
-    id: "9",
-    img: "https://swiperjs.com/demos/images/nature-9.jpg",
-  },
-];
-
-export default function SliderApp() {
+export default function SliderApp({ images }) {
+  const slideImg = [
+    {
+      id: "1",
+      img: images[1],
+    },
+    {
+      id: "2",
+      img: images[0],
+    },
+    {
+      id: "3",
+      img: "https://swiperjs.com/demos/images/nature-3.jpg",
+    },
+    {
+      id: "4",
+      img: images[2],
+    },
+    {
+      id: "5",
+      img: "https://swiperjs.com/demos/images/nature-5.jpg",
+    },
+    {
+      id: "6",
+      img: "https://swiperjs.com/demos/images/nature-6.jpg",
+    },
+    {
+      id: "7",
+      img: "https://swiperjs.com/demos/images/nature-7.jpg",
+    },
+    {
+      id: "8",
+      img: "https://swiperjs.com/demos/images/nature-8.jpg",
+    },
+    {
+      id: "9",
+      img: "https://swiperjs.com/demos/images/nature-9.jpg",
+    },
+  ];
   const [selectedData, setSelectedData] = useState(null);
 
   const handleClick = (itemId) => {
@@ -71,7 +70,10 @@ export default function SliderApp() {
           slidesPerView={1}
         >
           <SwiperSlide>
-            <img className={` ${styles.scenery}`} src={selectedData.img} />
+            <img
+              className={` ${styles.scenery}`}
+              src={`data:image/jpeg;base64,${selectedData.img}`}
+            />
           </SwiperSlide>
         </Swiper>
       ) : (

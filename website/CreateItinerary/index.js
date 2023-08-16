@@ -14,6 +14,7 @@ import GoogleMapReact from "google-map-react";
 import { fetchRecommendations } from "../../store/actions/recommendationActions";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import FileBase64 from "react-file-base64";
 
 const apiKey = process.env.SECRET_KEY;
 
@@ -201,6 +202,7 @@ export default () => {
     links: "",
   });
 
+  console.log(formData, "formData formDataformDataformData");
   const isFormDataValid = () => {
     if (
       !formData.title ||
@@ -224,10 +226,13 @@ export default () => {
       return;
     }
     try {
+      const formDataToSend = new FormData();
+
       const locationData = {
         type: "Point",
         coordinates: formData.location.coordinates,
       };
+
       // user authentication
       formData.creator = storedUserID;
       const token = localStorage.getItem("token");
@@ -270,15 +275,6 @@ export default () => {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
-
-  const handleImageChange = (e) => {
-    const selectedImages = Array.from(e.target.files);
-    const imageUrls = selectedImages.map((image) => URL.createObjectURL(image));
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      images: [...prevFormData.images, ...imageUrls],
-    }));
   };
 
   const handleApiLoaded = (map, maps) => {
@@ -348,6 +344,27 @@ export default () => {
     });
   };
 
+  const onSelectImages = (files, component) => {
+    const imagesArray = files.map((file) => file.base64.toString());
+
+    if (component === "component1") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        images: [...prevFormData.images, ...imagesArray],
+      }));
+    } else if (component === "component2") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        images: [...prevFormData.images, ...imagesArray],
+      }));
+    } else if (component === "component3") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        images: [...prevFormData.images, ...imagesArray],
+      }));
+    }
+  };
+
   return (
     <>
       <div className="container-fluid pb-5">
@@ -355,7 +372,11 @@ export default () => {
           <div
             className={`col-lg-5 col-12 col-md-12 mt-3  ${styles.scenerypara}`}
           >
-            <form id="recommendationForm" onSubmit={handleSubmit}>
+            <form
+              id="recommendationForm"
+              onSubmit={handleSubmit}
+              encType="multipart/form-data"
+            >
               <div className="form-group mb-3">
                 <input
                   type="text"
@@ -370,38 +391,27 @@ export default () => {
                 />
               </div>
 
-              <div className="row justify-between pt-3">
-                <div className="form-group col-lg-4">
-                  <input
-                    type="file"
-                    className="form-control-file p-0 custom-file-input"
-                    accept="image/*,video/*"
+              <div className="row justify-content-between gap-3">
+                <div className="col-lg-3  form-control-file custom-file-input">
+                  <FileBase64
                     multiple
-                    required
-                    onChange={handleImageChange}
+                    onDone={(files) => onSelectImages(files, "component1")}
                   />
                 </div>
-                <div className="form-group col-lg-4 px-3">
-                  <input
-                    type="file"
-                    className="form-control-file p-0 custom-file-input"
-                    accept="image/*,video/*"
+                <div className="col-lg-3  form-control-file p-0 custom-file-input">
+                  <FileBase64
                     multiple
-                    required
-                    onChange={handleImageChange}
+                    onDone={(files) => onSelectImages(files, "component2")}
                   />
                 </div>
-                <div className="form-group col-lg-4">
-                  <input
-                    type="file"
-                    className="form-control-file p-0 custom-file-input"
-                    accept="image/*,video/*"
+                <div className="col-lg-3  form-control-file p-0 custom-file-input">
+                  <FileBase64
                     multiple
-                    required
-                    onChange={handleImageChange}
+                    onDone={(files) => onSelectImages(files, "component3")}
                   />
                 </div>
               </div>
+
               <div className="row mt-5 align-items-center">
                 <div className="form-group col-lg-6 col-12 text-center">
                   <Image
