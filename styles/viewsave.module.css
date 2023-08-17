@@ -260,3 +260,22 @@
     height: 20px;
   }
 }
+
+
+
+/* autocomplete places */
+.autocomplete-dropdown-container {
+  position: absolute;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 1000;
+}
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
+.suggestion-item:hover {
+  background-color: #41b6e6;
+  color: white;
+}

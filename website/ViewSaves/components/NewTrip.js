@@ -5,6 +5,10 @@ import Form from "react-bootstrap/Form";
 import axios from "axios";
 import FileBase64 from "react-file-base64";
 import { useRouter } from "next/router";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-places-autocomplete";
 
 export default function NewTrip(props) {
   const router = useRouter();
@@ -15,7 +19,7 @@ export default function NewTrip(props) {
     sdate: "",
     edate: "",
   });
-  console.log(formData, formData.region,'formData');
+  console.log(formData, formData.region, "formData");
   const onSelectImage = (file) => {
     const imageBase64 = file.base64.toString();
     setFormData((prevData) => ({
@@ -26,7 +30,7 @@ export default function NewTrip(props) {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
-  }
+  };
   const handleCreate = async () => {
     try {
       const response = await axios.post(
@@ -79,7 +83,7 @@ export default function NewTrip(props) {
                 className="py-lg-3 py-md-2 mt-3"
                 placeholder="Enter the Title of the Trip"
               />
-
+              {/* 
               <Form.Control
                 type="text"
                 name="region"
@@ -87,7 +91,60 @@ export default function NewTrip(props) {
                 onChange={handleChange}
                 className="py-lg-3 py-md-2 mt-3"
                 placeholder="Enter the Region "
-              />
+              /> */}
+              <PlacesAutocomplete
+                value={formData.region}
+                onChange={(value) => {
+                  setFormData((prevData) => ({ ...prevData, region: value }));
+                }}
+                onSelect={async (value) => {
+                  try {
+                    const results = await geocodeByAddress(value);
+                    const latLng = await getLatLng(results[0]);
+                    console.log("Selected Location:", value);
+                    console.log("Coordinates:", latLng);
+                    setFormData((prevData) => ({ ...prevData, region: value }));
+                  } catch (error) {
+                    console.error("Error:", error);
+                  }
+                }}
+              >
+                {({
+                  getInputProps,
+                  suggestions,
+                  getSuggestionItemProps,
+                  loading,
+                }) => (
+                  <div>
+                    <Form.Control
+                      {...getInputProps({
+                        placeholder: "Enter the Region",
+                        className: "py-lg-3 py-md-2 mt-3",
+                      })}
+                    />
+                    <div className="autocomplete-dropdown-container">
+                      {loading && <div>Loading...</div>}
+                      {suggestions.map((suggestion) => {
+                        const style = {
+                          backgroundColor: suggestion.active
+                            ? "#41b6e6"
+                            : "#fff",
+                        };
+                        return (
+                          <div
+                            {...getSuggestionItemProps(suggestion, {
+                              style,
+                              className: "suggestion-item",
+                            })}
+                          >
+                            {suggestion.description}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </PlacesAutocomplete>
 
               <Form.Control
                 type="email"

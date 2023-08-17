@@ -32,13 +32,13 @@ export default function NewTrip(props) {
                 placeholder="Choose a File"
               />
               <Form.Control
-                type="email"
+                type="text"
                 className="py-lg-3 py-md-2 mt-3"
                 placeholder="Enter the Title of the trip"
               />
 
               <Form.Control
-                type="email"
+                type="text"
                 className="py-lg-3 py-md-2 mt-3"
                 placeholder="Enter Address or Select a Location"
               />
@@ -50,13 +50,13 @@ export default function NewTrip(props) {
               />
 
               <Form.Control
-                type="email"
+                type="text"
                 className="py-lg-3 py-md-2 mt-3"
                 placeholder="Start Date"
               />
 
               <Form.Control
-                type="email"
+                type="text"
                 className="py-lg-3 py-md-2 mt-3"
                 placeholder="Start Date"
               />

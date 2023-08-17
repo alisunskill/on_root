@@ -49,6 +49,8 @@ const eventData = [
 ];
 
 function UpcomingtripsList() {
+  const router = useRouter();
+
   const RedMarker = ({ regionName, latitude, longitude }) => (
     <div
       style={{
@@ -68,55 +70,73 @@ function UpcomingtripsList() {
       lat={latitude}
       lng={longitude}
     >
-      <p className="px-5  py-1 bg-danger rounded-5">{regionName}</p>{" "}
-      {/* Use regionName prop */}
+      <p className="px-5  py-1 bg-danger rounded-5">{regionName}</p>
     </div>
   );
-  const router = useRouter();
+
   const { tripid } = router.query;
   const [openCollapseId, setOpenCollapseId] = React.useState(1);
-
+  const [tripCoordinates, setTripCoordinates] = useState([]);
   const [trips, setTrips] = useState([]);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
 
   const locationName = trips.map((item) => item.region);
 
-
+  // const apiKey = "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM";
   useEffect(() => {
-    // Use the Geocoding API to get coordinates for each location
     const apiKey = "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM";
     const fetchCoordinates = async () => {
       try {
-        const coordinatesPromises = trips.map(async (trip) => {
-          const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-            trip.region
-          )}&key=${apiKey}`;
-          const response = await axios.get(geocodingUrl);
-          const { results } = response.data;
-          if (results.length > 0) {
-            return results[0].geometry.location;
-          }
-          return null;
-        });
-  
-        const coordinatesArray = await Promise.all(coordinatesPromises);
-        setTrips((prevTrips) => {
-          return prevTrips.map((trip, index) => {
-            return { ...trip, coordinates: coordinatesArray[index] };
-          });
-        });
+        const response = await axios.get("http://localhost:8000/api/trips");
+        const tripsWithCoordinates = await Promise.all(
+          response.data.map(async (trip) => {
+            const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+              trip.region
+            )}&key=${apiKey}`;
+            const geocodingResponse = await axios.get(geocodingUrl);
+            const { results } = geocodingResponse.data;
+            if (results.length > 0) {
+              const { lat, lng } = results[0].geometry.location;
+              return { ...trip, coordinates: { lat, lng } };
+            }
+            return trip;
+          })
+        );
+        setTrips(tripsWithCoordinates);
+        setTripCoordinates(tripsWithCoordinates);
+
+        const tripsWithValidCoordinates = tripsWithCoordinates.filter(
+          (trip) => trip.coordinates
+        );
+
+        if (tripsWithValidCoordinates.length > 0) {
+          const latSum = tripsWithValidCoordinates.reduce(
+            (sum, trip) => sum + trip.coordinates.lat,
+            0
+          );
+          const lngSum = tripsWithValidCoordinates.reduce(
+            (sum, trip) => sum + trip.coordinates.lng,
+            0
+          );
+          console.log(
+            "Trips with coordinates:",
+            tripsWithCoordinates.map((itm) => itm.coordinates)
+          );
+          const avgLat = latSum / tripsWithValidCoordinates.length;
+          const avgLng = lngSum / tripsWithValidCoordinates.length;
+          setCenter({ lat: avgLat, lng: avgLng });
+        }
       } catch (error) {
         console.error("Error fetching geocoding data:", error);
       }
     };
-  
+
     fetchCoordinates();
   }, []);
-  
+
   useEffect(() => {
-    // Once coordinates are fetched for all trips, calculate the map center
     const tripsWithCoordinates = trips.filter((trip) => trip.coordinates);
-  
+
     if (tripsWithCoordinates.length > 0) {
       const latSum = tripsWithCoordinates.reduce(
         (sum, trip) => sum + trip.coordinates.lat,
@@ -130,8 +150,11 @@ function UpcomingtripsList() {
       const avgLng = lngSum / tripsWithCoordinates.length;
       setCenter({ lat: avgLat, lng: avgLng });
     }
-  }, [trips]);
-  
+    const selectedTrip = trips.find((trip) => trip._id === tripid);
+    if (selectedTrip && selectedTrip.coordinates) {
+      setCenter(selectedTrip.coordinates);
+    }
+  }, [trips, tripid]);
 
   const fetchTrips = async () => {
     try {
@@ -146,7 +169,7 @@ function UpcomingtripsList() {
   }, []);
   console.log(tripid, "tripId ali");
   const goBack = () => {
-    router.back(); // Navigate back to the previous page
+    router.back();
   };
   const toggleCollapse = (id) => {
     setOpenCollapseId((prevId) => (prevId === id ? null : id));
@@ -154,7 +177,7 @@ function UpcomingtripsList() {
 
   return (
     <>
-      {tripid}
+      {/* {tripid} */}
       <div className="container-fluid py-5">
         <div className="row">
           <h1 className="dark bold pb-3 text-center mb-4">Single Trip View</h1>
@@ -303,12 +326,34 @@ function UpcomingtripsList() {
               className={`h-auto ${styles.eventmapimage}`}
               src={mapimage}
               alt=""
+              l
             /> */}
             {/* map key */}
             {/* AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM  */}
+
             <div style={{ height: "100vh", width: "100%" }}>
-              <GoogleMapReact defaultCenter={center} defaultZoom={14}>
+              <GoogleMapReact
+                bootstrapURLKeys={{
+                  key: "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM",
+                }}
+                center={
+                  center.lat !== 0 && center.lng !== 0
+                    ? {
+                        lat: center.lat,
+                        lng: center.lng,
+                      }
+                    : { lat: 0, lng: 0 }
+                }
+                zoom={7}
+              >
                 {/* Marker */}
+
+                {/* Dynamic Markers */}
+                {/* <RedMarker
+                  regionName="Center"
+                  latitude={center.lat}
+                  longitude={center.lng}
+                /> */}
                 <div
                   lat={center.lat}
                   lng={center.lng}
@@ -319,6 +364,19 @@ function UpcomingtripsList() {
                 >
                   📍
                 </div>
+                {tripCoordinates.map((trip) => {
+                  console.log("Marker Coordinates:", trip.coordinates);
+                  return (
+                    trip.coordinates && (
+                      <RedMarker
+                        key={trip._id}
+                        regionName={trip.region}
+                        latitude={trip.coordinates.lat}
+                        longitude={trip.coordinates.lng}
+                      />
+                    )
+                  );
+                })}
               </GoogleMapReact>
             </div>
           </div>
