@@ -11,6 +11,14 @@ const jwtKey = process.env.JWT_SECRET;
 exports.createUser = async (req, res) => {
   try {
     const { firstName, lastName, image, email, username, password } = req.body;
+
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return res
+        .status(409)
+        .json({ message: "Email or username already exists" });
+    }
+
     console.log(req.body);
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
