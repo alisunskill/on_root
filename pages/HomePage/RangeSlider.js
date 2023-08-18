@@ -39,7 +39,7 @@ export default function RangeSlider() {
       ? recommendations.Recommendations
       : [];
 
-  const [value, setValue] = useState([0, 1550]);
+  const [value, setValue] = useState([0, 1000]);
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(1550);
 
@@ -79,7 +79,8 @@ export default function RangeSlider() {
   };
 
   return (
-    <Box sx={{ width: 300 }}>
+   <div className="d-flex justify-content-center">
+     <Box sx={{ width: 275 }}>
       <Slider
         getAriaLabel={() => "Price range"}
         value={value}
@@ -87,19 +88,20 @@ export default function RangeSlider() {
         valueLabelDisplay="auto"
         getAriaValueText={valuetext}
         min={minValue}
-        max={maxValue}
+        max={1000}
       />
       <div>
-        Min: {value[0]} Max: {value[1]}
+        Min: ${value[0]} &#160; &#160; Max: ${value[1]}
       </div>
 
       <button
         type="button"
-        className="btn btn-primary mt-2"
+        className="btn btn-primary mt-2 w-100"
         onClick={handleApply}
       >
         Apply
       </button>
     </Box>
+   </div>
   );
 }

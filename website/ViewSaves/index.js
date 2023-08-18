@@ -10,6 +10,7 @@ import axios from "axios";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 
 const itemData = [
   {
@@ -32,7 +33,18 @@ const itemData = [
 function ViewSaves() {
   const [postIds, setPostIds] = useState([]);
   const [trigger, setTrigger] = useState(new Date());
-  console.log(postIds, " postIds postIds");
+  const recommendationsData = useSelector((state) => state.recommendation);
+  const { recommendations, loading, error } = recommendationsData;
+  const recommendationData = recommendations.Recommendations || [];
+  // const filteredRegion = recommendationData.filter(
+  //   (item) => item.id === postIds.map((item) => item.id)
+  // );
+  // console.log(filteredRegion, "filteredRegion");
+
+  const filteredRegion = recommendationData.filter((item) =>
+    postIds.some((post) => post.id === item.id)
+  );
+  console.log(filteredRegion, "filteredRegion");
 
   const [showIcon, setShowIcon] = useState(true);
   const [modalShow, setModalShow] = useState(false);
@@ -52,12 +64,13 @@ function ViewSaves() {
       const { savePosts } = data;
 
       setPostIds(savePosts);
-      const postIdList = savePosts.map((post) => post.postId);
-      console.log(postIdList, "postIdListpostIdListpostIdListpostIdList");
+      // const postIdList = savePosts.map((post) => post.postId);
+      // console.log(postIdList, "postIdListpostIdListpostIdListpostIdList");
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
   useEffect(() => {
     fetchPostIds();
   }, [trigger]);
@@ -76,7 +89,9 @@ function ViewSaves() {
         },
       });
 
-      setPostIds((prevPostIds) => prevPostIds.filter((id) => id !== postId));
+      setPostIds((prevPostIds) =>
+        prevPostIds.filter((post) => post !== postId)
+      );
 
       setTrigger(new Date());
       console.log("Post deleted successfully.");
@@ -99,61 +114,102 @@ function ViewSaves() {
               loader={<h4>Loading...</h4>}
             >
               <Box sx={{ minHeight: 829 }}>
-                <Masonry columns={3} spacing={2}>
-                  {postIds.map((post, index) => (
-                    <div>
-                      <div className="position-relative">
-                        <div className="col-lg-12 ">
-                          <FontAwesomeIcon
-                            onClick={() => setModalShow(true)}
-                            className={`${styles.plusicon} bg-success text-light top-0 border-0 rounded-2 position-absolute z-3 px-3 py-1 fw-700`}
-                            icon={faPlus}
-                            style={{ left: "0px" }}
-                          />
-                          <div className="text-center w-100  d-flex justify-content-center align-items-center">
-                            <Trip
-                              show={modalShow}
-                              onHide={() => setModalShow(false)}
-                              setModalShow={setModalShow}
-                            />
+                <Masonry
+                  columns={3}
+                  spacing={2}
+                  style={{ display: "-webkit-inline-box" }}
+                >
+                  {/* {postIds.map((post, index) => { */}
+                  {filteredRegion.map((post, index) => {
+                    const matchingPostId = postIds.find(
+                      (item) => item.postId === post._id
+                    );
+                    if (matchingPostId) {
+                      return (
+                        <div key={index}>
+                          <div className="position-relative">
+                            <div className="col-lg-12 ">
+                              <FontAwesomeIcon
+                                onClick={() => setModalShow(true)}
+                                className={`${styles.plusicon} bg-success text-light top-0 border-0 rounded-2 position-absolute z-3 px-3 py-1 fw-700`}
+                                icon={faPlus}
+                                style={{ left: "0px" }}
+                              />
+                            </div>
+
+                            <button
+                              className="bg-danger border-0 rounded-2 position-absolute z-3 px-3 fw-700"
+                              style={{ right: "0px" }}
+                              onClick={() =>
+                                handleRemove(matchingPostId.postId)
+                              }
+                            >
+                              x
+                            </button>
                           </div>
+                          <Link
+                            key={index}
+                            href={`/post/${matchingPostId.postId}`}
+                            style={{
+                              position: "relative",
+                              width: "100%",
+                              height: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <img
+                              layout="fill"
+                              objectFit="cover"
+                              src={`${
+                                itemData[index % itemData.length].img
+                              }?w=162&auto=format`}
+                              srcSet={`${
+                                itemData[index % itemData.length].img
+                              }?w=162&auto=format&dpr=2 2x`}
+                              className={styles.placeImg}
+                              loading="lazy"
+                              style={{
+                                display: "block",
+                                width: "100%",
+                                borderRadius: "15px",
+                                opacity: "0.99990000999",
+                              }}
+                            />
+
+                            <div
+                              style={{ position: "absolute ", zIndex: 11 }}
+                              className="text-center"
+                            >
+                              <p className={`mb-0 letterspac text-white`}>
+                                Event
+                              </p>
+                              <h3 className="w-700 text-white">
+                                {" "}
+                                {post.title}
+                              </h3>
+                              <p className={`mb-0 m1 text-white`}>
+                                {post.region}
+                              </p>
+                            </div>
+                          </Link>
+
+                          {/* <div>
+                            <p className="w-700 text-dark"> {post.postId}</p>
+                            <p className="w-700 text-dark"> {post.userID}</p>
+                          </div> */}
                         </div>
-
-                        <button
-                          className="bg-danger border-0 rounded-2 position-absolute z-3 px-3 fw-700"
-                          style={{ right: "0px" }}
-                          onClick={() => handleRemove(post.postId)}
-                        >
-                          x
-                        </button>
-                      </div>
-                      <Link key={index} href={`/post/${post.postId}`}>
-                        <img
-                          layout="fill"
-                          objectFit="cover"
-                          src={`${
-                            itemData[index % itemData.length].img
-                          }?w=162&auto=format`}
-                          srcSet={`${
-                            itemData[index % itemData.length].img
-                          }?w=162&auto=format&dpr=2 2x`}
-                          className={styles.placeImg}
-                          loading="lazy"
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            borderRadius: "15px",
-                            opacity: "0.99990000999",
-                          }}
-                        />
-                      </Link>
-
-                      <div>
-                        <p className="w-700 text-dark"> {post.postId}</p>
-                        <p className="w-700 text-dark"> {post.userID}</p>
-                      </div>
-                    </div>
-                  ))}
+                      );
+                    }
+                  })}
+                  <div className="text-center w-100  d-flex justify-content-center align-items-center">
+                    <Trip
+                      show={modalShow}
+                      onHide={() => setModalShow(false)}
+                      setModalShow={setModalShow}
+                    />
+                  </div>
                 </Masonry>
               </Box>
             </InfiniteScroll>
@@ -165,15 +221,13 @@ function ViewSaves() {
             >
               <div className="col-lg-12 yoursave_text">
                 <FontAwesomeIcon
-                  onClick={() => setModalShow(true)}
                   className={styles.plusicon}
                   icon={faPlus}
                 />
                 <div className="text-center w-100  d-flex justify-content-center align-items-center">
                   <Trip
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                    setModalShow={setModalShow}
+                    
+                   
                   />
                 </div>{" "}
                 <p className="letterspac">ITINERARY</p>
@@ -187,11 +241,7 @@ function ViewSaves() {
                   className={`row  d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
                   style={{ background: "white" }}
                 >
-                  <Trip
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                    setModalShow={setModalShow}
-                  />
+             
                   {eventData1.map((item, index) => {
                     return (
                       <PlaceFullSubCard
@@ -243,11 +293,10 @@ function ViewSaves() {
                     className={`col-lg-12 position-relative d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_text}`}
                   >
                     <FontAwesomeIcon
-                      onClick={() => setModalShow(true)}
                       className={styles.plusicon2}
                       icon={faPlus}
                     />
-                    <Trip show={modalShow} onHide={() => setModalShow(false)} />
+                  
                     <p className="fw-500 ltr-shrt-spec">ITINERARY</p>
                     <h3 className="landingeventheading"> Saved Activity 1 </h3>
                     <p className="mb-0 fw-500">Paris, France</p>

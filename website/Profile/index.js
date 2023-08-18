@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Globe from "./Globe";
 
 const itemData = [
   {
@@ -38,6 +39,7 @@ function Profile() {
 
   const recommendationsData = useSelector((state) => state.recommendation);
   const { recommendations, loading, error } = recommendationsData;
+  console.log(recommendations, "recommendations");
   const [selectedItems, setSelectedItems] = useState({});
   const [favList, setFavList] = useState([]);
   const recData = recommendations.Recommendations;
@@ -108,13 +110,14 @@ function Profile() {
       <div className="container-fluid pb-4">
         <div className="row">
           <div className="col-lg-12">
-            <div className="text-center">
-              <Image className={styles.profile_globe3d} src={globe2} alt="" />
+            <div className="text-center mt-5">
+              {/* <Image className={styles.profile_globe3d} src={globe2} alt="" /> */}
+              <Globe data={recData} />
             </div>
           </div>
         </div>
 
-        <div className="row py-5">
+        <div className="row py-5 mt-4">
           <div className="col-12 col-md-4 col-lg-4 text-center justify-content-center d-flex">
             <Link
               href="/upcomingtrips"

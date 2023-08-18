@@ -4,8 +4,9 @@ import styles from "../../../styles/viewsave.module.css";
 import NewTrip from "./NewTrip";
 import axios from "axios";
 
-export default function Trip(props, setModalShow) {
-  const [modalTrip, setModalTrip] = React.useState(false);
+export default function Trip(props) {
+  const { setModalShow } = props;
+  const [modalTrip, setModalTrip] = useState(false);
   const [trips, setTrips] = useState([]);
   useEffect(() => {
     fetchTrips();
@@ -13,6 +14,7 @@ export default function Trip(props, setModalShow) {
   const handleClick = () => {
     setModalTrip(true);
     // setModalShow(false)
+    setModalShow(false);
   };
   const fetchTrips = async () => {
     try {
@@ -74,10 +76,10 @@ export default function Trip(props, setModalShow) {
                         value="option1"
                       />
                       <label
-                        className="form-check-label fw-500 h4 text-dark"
+                        className={`form-check-label fw-500 h4 text-dark ${styles.titleheader}`}
                         for="exampleRadios1"
                       >
-                        Trip to {item.title}
+                        {item.title}
                       </label>
                     </div>
                     <div>

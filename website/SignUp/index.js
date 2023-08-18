@@ -1,14 +1,17 @@
 import React, { useRef, useState } from "react";
+import Swal from "sweetalert2";
 import styles from "../../styles/signin.module.css";
 import Captcha from "./Captcha";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import axios from "axios";
-
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function Signup() {
   const router = useRouter();
   const fileInputRef = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     console.log(values);
@@ -38,11 +41,24 @@ function Signup() {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+
       setSubmitting(false);
-      router.push("/login");
+      router.push("/confirmsignup");
     } catch (error) {
-      console.error("Error sending data to backend:", error);
+      if (error.response && error.response.status === 409) {
+        showAccountExistsAlert();
+      } else {
+        console.error("Error sending data to backend:", error);
+      }
     }
+  };
+
+  const showAccountExistsAlert = () => {
+    Swal.fire({
+      title: "Account Exists",
+      text: "Provided username or email already exists.",
+      icon: "warning",
+    });
   };
 
   const signupSchema = Yup.object().shape({
@@ -101,7 +117,7 @@ function Signup() {
                         placeholder="First Name"
                       />
                       {errors.firstName && touched.firstName ? (
-                        <div className="text-danger">{errors.firstName}</div>
+                        <div className="text-light">{errors.firstName}</div>
                       ) : null}
                     </div>
 
@@ -113,7 +129,7 @@ function Signup() {
                         placeholder="Last Name"
                       />
                       {errors.lastName && touched.lastName ? (
-                        <div className="text-danger ">{errors.lastName}</div>
+                        <div className="text-light ">{errors.lastName}</div>
                       ) : null}
                     </div>
                   </div>
@@ -129,7 +145,7 @@ function Signup() {
                   />
 
                   {errors.image && touched.image ? (
-                    <div className="text-danger">{errors.image}</div>
+                    <div className="text-light">{errors.image}</div>
                   ) : null}
 
                   <Field
@@ -140,7 +156,7 @@ function Signup() {
                     placeholder="Email"
                   />
                   {errors.email && touched.email ? (
-                    <div className="text-danger">{errors.email}</div>
+                    <div className="text-light">{errors.email}</div>
                   ) : null}
                   <Field
                     name="username"
@@ -149,20 +165,43 @@ function Signup() {
                     placeholder="Username"
                   />
                   {errors.username && touched.username ? (
-                    <div className="text-danger ">{errors.username}</div>
+                    <div className="text-light ">{errors.username}</div>
                   ) : null}
 
-                  <Field
-                    type="password"
-                    name="password"
-                    style={{ padding: "10px" }}
-                    className="form-control rounded-2 border-0 mt-2"
-                    placeholder="Password"
-                  />
+                  <div className="position-relative">
+                    <Field
+                      // type="password"
+                      name="password"
+                      style={{ padding: "10px" }}
+                      className="form-control rounded-2 border-0 mt-2"
+                      placeholder="Password"
+                      type={showPassword ? "text" : "password"}
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle-button position-absolute"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        padding: "0",
+                        margin: "0",
+                        cursor: "pointer",
+                        right: "12px",
+                        top: "13px",
+                        color: "black",
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={showPassword ? faEyeSlash : faEye}
+                      />
+                    </button>
+                  </div>
+
                   <ErrorMessage
                     name="password"
                     component="div"
-                    className="text-danger"
+                    className="text-light"
                   />
 
                   <div className="text-center">

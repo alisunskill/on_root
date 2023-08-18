@@ -206,11 +206,17 @@
 .thumbnail {
   color: #767676;
 }
+.datepicke_wrapper {
+  width: 100% !important;
+}
+.titleheader {
+  font-size: 14px;
+}
 .herosaves {
-  border: 1px solid #767676;
-  border-radius: 20px;
-  padding: 20px 50px;
-  margin-top: 20px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 3px 40px;
+  margin-top: 10px;
 }
 .radiobtn:checked {
   color: black;
@@ -219,8 +225,8 @@
 }
 
 .herobtn {
-  border-radius: 20px;
-  padding: 20px 50px;
+  border-radius: 7px;
+  padding: 10px 20px;
   background-color: #7cc5e5;
   font-size: 22px;
   color: #fff;
@@ -260,8 +266,6 @@
     height: 20px;
   }
 }
-
-
 
 /* autocomplete places */
 .autocomplete-dropdown-container {

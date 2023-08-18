@@ -268,7 +268,7 @@ export default () => {
           region: "",
           description: "",
         });
-        router.push("/");
+        router.push("/confirmsignup");
       } else {
         alert("Failed to create recommendation.");
       }
@@ -277,58 +277,116 @@ export default () => {
     }
   };
 
-  const handleApiLoaded = (map, maps) => {
-    if (loading || !recommendations?.Recommendations) {
-      return;
-    }
+  // const handleApiLoaded = (map, maps) => {
+  //   if (loading || !recommendations?.Recommendations) {
+  //     return;
+  //   }
 
-    recommendations.Recommendations.forEach((location) => {
-      const marker = new maps.Marker({
-        position: { lat: location.lat, lng: location.lng },
-        map,
-        title: location.title,
-      });
+  //   recommendations.Recommendations.forEach((location) => {
+  //     const marker = new maps.Marker({
+  //       position: { lat: location.lat, lng: location.lng },
+  //       map,
+  //       title: location.title,
+  //     });
 
-      marker.addListener("click", () => {
-        alert(`Title: ${location.title}`);
-      });
-    });
-    recommendation.forEach((form) => {
-      const formMarker = new maps.Marker({
-        position: {
-          lat: form.location.coordinates[1],
-          lng: form.location.coordinates[0],
-        },
-        map,
-        title: form.title,
-      });
+  //     marker.addListener("click", () => {
+  //       alert(`Title: ${location.title}`);
+  //     });
+  //   });
+  //   recommendation.forEach((form) => {
+  //     const formMarker = new maps.Marker({
+  //       position: {
+  //         lat: form.location.coordinates[1],
+  //         lng: form.location.coordinates[0],
+  //       },
+  //       map,
+  //       title: form.title,
+  //     });
 
-      formMarker.addListener("click", () => {
-        alert(`Title: ${form.title}\nCost: ${form.cost}\nHours: ${form.hours}`);
-      });
-    });
-  };
+  //     formMarker.addListener("click", () => {
+  //       alert(`Title: ${form.title}\nCost: ${form.cost}\nHours: ${form.hours}`);
+  //     });
+  //   });
+  // };
 
+  // const handleMapDoubleClick = (event) => {
+  //   const latitude = event.lat;
+  //   const longitude = event.lng;
+
+  //   const geocoder = new window.google.maps.Geocoder();
+  //   geocoder.geocode(
+  //     { location: { lat: latitude, lng: longitude } },
+  //     (results, status) => {
+  //       if (status === "OK" && results[0]) {
+  //         const locationName = results[0].formatted_address;
+
+  //         setLocationInput(locationName);
+  //         setFormData({
+  //           ...formData,
+  //           location: { type: "Point", coordinates: [longitude, latitude] },
+  //         });
+  //       }
+  //     }
+  //   );
+  // };
   const handleMapDoubleClick = (event) => {
-    const latitude = event.lat;
-    const longitude = event.lng;
+    if (typeof window !== "undefined") {
+      const latitude = event.lat;
+      const longitude = event.lng;
 
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode(
-      { location: { lat: latitude, lng: longitude } },
-      (results, status) => {
-        if (status === "OK" && results[0]) {
-          const locationName = results[0].formatted_address;
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode(
+        { location: { lat: latitude, lng: longitude } },
+        (results, status) => {
+          if (status === "OK" && results[0]) {
+            const locationName = results[0].formatted_address;
 
-          setLocationInput(locationName);
-          setFormData({
-            ...formData,
-            location: { type: "Point", coordinates: [longitude, latitude] },
-          });
+            setLocationInput(locationName);
+            setFormData({
+              ...formData,
+              location: { type: "Point", coordinates: [longitude, latitude] },
+            });
+          }
         }
-      }
-    );
+      );
+    }
   };
+  const handleApiLoaded = (map, maps) => {
+    if (
+      typeof window !== "undefined" &&
+      loading &&
+      recommendations?.Recommendations
+    ) {
+      recommendations.Recommendations.forEach((location) => {
+        const marker = new maps.Marker({
+          position: { lat: location.lat, lng: location.lng },
+          map,
+          title: location.title,
+        });
+
+        marker.addListener("click", () => {
+          alert(`Title: ${location.title}`);
+        });
+      });
+      recommendation.forEach((form) => {
+        const formMarker = new maps.Marker({
+          position: {
+            lat: form.location.coordinates[1],
+            lng: form.location.coordinates[0],
+          },
+          map,
+          title: form.title,
+        });
+
+        formMarker.addListener("click", () => {
+          alert(
+            `Title: ${form.title}\nCost: ${form.cost}\nHours: ${form.hours}`
+          );
+        });
+      });
+    }
+  };
+
   const handleLocationInputBlur = () => {
     const geocoder = new window.google.maps.Geocoder();
     geocoder.geocode({ address: locationInput }, (results, status) => {

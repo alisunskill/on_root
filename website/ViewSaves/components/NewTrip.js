@@ -9,6 +9,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
+import DatePicker from "react-datepicker"; // Import DatePicker component
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function NewTrip(props) {
   const router = useRouter();
@@ -70,11 +72,38 @@ export default function NewTrip(props) {
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <h5>Choose an Image</h5>
-              <FileBase64
+              {/* <FileBase64
                 name="image"
                 value={formData.image}
                 onDone={onSelectImage}
-              />
+                style={{border:"0.5px solid grey,", borderRadius:"4px"}}
+              /> */}
+              <div
+                style={{
+                  border: "0.5px solid #dee2e6",
+                  borderRadius: "4px",
+                  padding: "10px",
+                  height: "50px",
+                }}
+              >
+                <div className="placeholder-text">Choose an image</div>
+
+                <div
+                  style={{
+                    fontSize: "20px",
+                    height: "42px",
+                    position: "relative",
+                    top: "-25px",
+                    color: "transparent",
+                  }}
+                >
+                  <FileBase64
+                    name="image"
+                    value={formData.image}
+                    onDone={onSelectImage}
+                  />
+                </div>
+              </div>
               <Form.Control
                 type="text"
                 name="title"
@@ -155,8 +184,8 @@ export default function NewTrip(props) {
                 placeholder="Add Collaborators (Email)"
               />
 
-              <Form.Control
-                type="text"
+              {/* <Form.Control
+                type="date"
                 name="sdate"
                 value={formData.sdate}
                 onChange={handleChange}
@@ -165,13 +194,32 @@ export default function NewTrip(props) {
               />
 
               <Form.Control
-                type="edate"
+                type="date"
                 name="edate"
                 value={formData.edate}
                 onChange={handleChange}
                 className="py-lg-3 py-md-2 mt-3"
                 placeholder="Start Date"
+              /> */}
+
+              <DatePicker
+                selected={formData.sdate}
+                onChange={(date) =>
+                  setFormData((prevData) => ({ ...prevData, sdate: date }))
+                }
+                className={`py-lg-3 py-md-2 mt-3 form-control ${styles.datepicke_wrapper}`}
+                placeholderText="Start Date"
               />
+              <br />
+              <DatePicker
+                selected={formData.edate}
+                onChange={(date) =>
+                  setFormData((prevData) => ({ ...prevData, edate: date }))
+                }
+                className={`py-lg-3 py-md-2 mt-3 form-control ${styles.datepicke_wrapper}`}
+                placeholderText="End Date"
+              />
+
               <button
                 className={`text-center fw-500 ${styles.herobtn}`}
                 onClick={handleCreate}

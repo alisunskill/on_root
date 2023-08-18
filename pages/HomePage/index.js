@@ -189,13 +189,13 @@ export default () => {
                 className={`btn btn-secondary btn-lg bg-light d-flex align-center border-0 rounded-5 mb-0 fw-bold ${styles.landingbtncolor}`}
                 type="button"
               >
-                <Link
-                  passHref
-                  href="/infinitescroll"
-                  className={`text-decoration-none text-dark bg-light m-0 py-1 ${styles.filterbtn}`}
+                <div
+                  // passHref
+                  // href="/infinitescroll"
+                  className={`text-decoration-none cursor-arrow text-dark bg-light m-0 py-1 ${styles.filterbtn}`}
                 >
                   Filter by
-                </Link>
+                </div>
               </button>
             </div>
             {/* 2 */}
@@ -209,7 +209,7 @@ export default () => {
                   Region
                 </Dropdown.Toggle>
 
-                <Dropdown.Menu>
+                <Dropdown.Menu className={styles.menuhero}>
                   {regionData.map((item, index) => {
                     return (
                       <React.Fragment key={index}>
@@ -259,7 +259,7 @@ export default () => {
 
                 <Dropdown.Menu>
                   <Link
-                    className="text-decoration-none text-dark  px-3 py-2"
+                    className={`text-decoration-none text-dark  px-3 py-2 ${styles.descripthero}`}
                     href={{
                       pathname: "/infinitescroll",
                       query: { descriptor: regionDescriptor[0] },
@@ -274,7 +274,7 @@ export default () => {
                     />
                   </Link>
                   <Link
-                    className="text-decoration-none text-dark  px-3 py-2"
+                    className={`text-decoration-none text-dark  px-3 py-2 ${styles.descripthero}`}
                     href={{
                       pathname: "/infinitescroll",
                       query: { descriptor: regionDescriptor[1] },
@@ -292,9 +292,9 @@ export default () => {
                   <Link
                     href={{
                       pathname: "/infinitescroll",
-                      query: { descriptor: regionDescriptor[3] },
+                      query: { descriptor: regionDescriptor[2] },
                     }}
-                    className="text-decoration-none text-dark px-3 py-2"
+                    className={`text-decoration-none text-dark  px-3 py-2 ${styles.descripthero}`}
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
                     {" "}

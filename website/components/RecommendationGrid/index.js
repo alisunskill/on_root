@@ -24,6 +24,7 @@ const RecommendationGrid = ({
   }
 
   const recommendationData = recommendations.Recommendations || [];
+  const recentRecommendations = recommendationData.slice(-6);
 
   return (
     <>
@@ -43,15 +44,15 @@ const RecommendationGrid = ({
                           <p
                             className={`mb-0 letter-spac ${styles.letterspac}`}
                           >
-                            Event
+                            ITINERARY
                           </p>
                           <p
                             className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                           >
-                            {recommendationData[0].title}
+                            {recentRecommendations[0].title}
                           </p>
                           <p className={`mb-0 m1`}>
-                            {recommendationData[1].region}
+                            {recentRecommendations[0].region}
                           </p>
                         </div>
                       </div>
@@ -76,10 +77,10 @@ const RecommendationGrid = ({
                               <p
                                 className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                               >
-                                {recommendationData[2].title}
+                                {recentRecommendations[1].title}
                               </p>
                               <p className={`mb-0`}>
-                                {recommendationData[2].region}
+                                {recentRecommendations[1].region}
                               </p>
                             </div>
                           </div>
@@ -100,10 +101,10 @@ const RecommendationGrid = ({
                               <p
                                 className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                               >
-                                {recommendationData[3].title}
+                                {recentRecommendations[2].title}
                               </p>
                               <p className={`mb-0 m1`}>
-                                {recommendationData[1].region}
+                                {recentRecommendations[2].region}
                               </p>
                             </div>
                           </div>
@@ -124,10 +125,10 @@ const RecommendationGrid = ({
                               <p
                                 className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                               >
-                                {recommendationData[4].title}
+                                {recentRecommendations[3].title}
                               </p>
                               <p className={`mb-0 m1`}>
-                                {recommendationData[4].region}
+                                {recentRecommendations[3].region}
                               </p>
                             </div>
                           </div>
@@ -154,15 +155,15 @@ const RecommendationGrid = ({
                               <p
                                 className={`mb-0 letter-spac ${styles.letterspac}`}
                               >
-                                EVENT
+                                ITINERARY
                               </p>
                               <p
                                 className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                               >
-                                {recommendationData[5].title}
+                                {recentRecommendations[4].title}
                               </p>
                               <p className={`mb-0 m1`}>
-                                {recommendationData[5].region}
+                                {recentRecommendations[4].region}
                               </p>
                             </div>
                           </div>
@@ -185,9 +186,11 @@ const RecommendationGrid = ({
                             <p
                               className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                             >
-                              Tokyo Night Run
+                              {recommendationData[5].title}
                             </p>
-                            <p className={`mb-0 m1`}>Paris, France</p>
+                            <p className={`mb-0 m1`}>
+                              {recommendationData[5].region}
+                            </p>
                           </div>
                         </div>
                       </Link>
@@ -209,7 +212,7 @@ const RecommendationGrid = ({
                       <div
                         className={`col-lg-12  ${styles.luxuryrow} d-flex align-items-center`}
                       >
-                        {recommendationData.map((recommendation) => (
+                        {recentRecommendations.map((recommendation) => (
                           <Link
                             key={recommendation.id}
                             href="/infopage"
@@ -224,7 +227,7 @@ const RecommendationGrid = ({
                                 <p
                                   className={`mb-0 letter-spac ${styles.letterspac}`}
                                 >
-                                  EVENT
+                                  ITINERARY
                                 </p>
                                 <p
                                   className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}

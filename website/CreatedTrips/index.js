@@ -114,7 +114,7 @@ function ItiniraryDetail() {
       <div className="container-fluid">
         <div className="row px-4">
           <h1 className="dark bold fw-700 pt-4 text-center mb-4">
-            Your Itinerary Posts
+            Your Trips Posts
           </h1>
 
           <div className="col-lg-12">

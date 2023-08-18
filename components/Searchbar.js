@@ -27,8 +27,6 @@ const Searchbar = () => {
     dispatch(fetchRecommendations());
   }, [dispatch]);
 
-
-
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -41,12 +39,10 @@ const Searchbar = () => {
     setPosts(filteredPosts);
     setHasMore(false);
   }, [router.query.region]);
-  
+
   useEffect(() => {
     localStorage.setItem("searchTerm", searchTerm);
   }, [searchTerm]);
-
-
 
   const fetchPosts = () => {
     const startIndex = (page - 1) * 10;
@@ -97,7 +93,8 @@ const Searchbar = () => {
     dispatch(searchData(filteredRecommendations));
 
     setPosts(filteredRecommendations);
-    setShowAll(false);
+    setShowAll(true);
+    // setShowAll(false);
   };
 
   const toggleShowAll = () => {
@@ -226,96 +223,102 @@ const Searchbar = () => {
         </Form>
       </div>
       {show && (
-        <div>
+        <div className={styles.boxed}>
           {searchTerm && (
-            <div>
-              <div className="container-fluid px-5 pt-3 pb-5">
-                <div
-                  className="row d-flex w-100 btn scroll-hidden border-0"
-                  data-toggle="collapse"
-                  href="#multiCollapseExample1"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="multiCollapseExample1"
+            <div className={`container-fluid pt-3 pb-2 ${styles.boldedhero}`}>
+              <div
+                className="row d-flex btn scroll-hidden border-0"
+                data-toggle="collapse"
+                href="#multiCollapseExample1"
+                role="button"
+                aria-expanded="false"
+                aria-controls="multiCollapseExample1"
+              >
+                <InfiniteScroll
+                  className="w-100 overflow-hidden"
+                  dataLength={searchResults.length || posts.length}
+                  next={recommendationData}
+                  hasMore={hasMore}
+                  loader={<h4>Loading...</h4>}
                 >
-                  <InfiniteScroll
-                    className="w-100 overflow-hidden"
-                    dataLength={searchResults.length || posts.length}
-                    next={recommendationData}
-                    hasMore={hasMore}
-                    loader={<h4>Loading...</h4>}
-                  >
-                    <Box>
-                      <Masonry columns={3} spacing={2}>
-                        <div
-                          className={`w-100 border-0 ${styles.masonery_data}`}
-                          data-toggle="collapse"
-                          href="#multiCollapseExample1"
-                          role="button"
-                          aria-expanded="false"
-                          aria-controls="multiCollapseExample1"
-                        >
-                          {(showAll
-                            ? filteredPosts.length > 0
-                              ? filteredPosts
-                              : searchResults.length > 0
-                              ? searchResults
-                              : posts
-                            : filteredPosts.length > 0
-                            ? filteredPosts.slice(0, 2)
-                            : searchResults.length > 0
-                            ? searchResults.slice(0, 2)
-                            : posts.slice(0, 2)
-                          ).map((item, index) => (
-                            <div key={index}>
-                              <Link
-                                className="d-flex align-items-bottom text-decoration-none justify-content-between gap-3 w-100 mt-2"
-                                style={{ boxShadow: "0 8px 6px -6px black" }}
-                                href={{
-                                  pathname: "/infinitescroll",
-                                  query: { region: item.region },
-                                }}
-                              >
-                                <img
-                                  layout="fill"
-                                  objectFit="cover"
-                                  src={`${
-                                    itemData[index % itemData.length].img
-                                  }?w=162&auto=format`}
-                                  srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                                  alt={item.region}
-                                  loading="lazy"
-                                  style={{
-                                    display: "block",
-                                    width: "10%",
-                                    borderRadius: "5px",
-                                  }}
-                                />
-                                <h5
-                                  className="text-dark text-end mb-0 d-flex align-items-end"
-                                  style={{ width: "15%" }}
-                                >
-                                  {item.region}
-                                </h5>
-                              </Link>
-                            </div>
-                          ))}
+                  <Masonry columns={4} spacing={2}>
+                    <div
+                      className={`w-100 border-0 ${styles.masonery_data}`}
+                      data-toggle="collapse"
+                      href="#multiCollapseExample1"
+                      role="button"
+                      aria-expanded="false"
+                      aria-controls="multiCollapseExample1"
+                    >
+                      {(showAll
+                        ? filteredPosts.length > 0
+                          ? filteredPosts
+                          : searchResults.length > 0
+                          ? searchResults
+                          : posts
+                        : filteredPosts.length > 0
+                        ? filteredPosts.slice(0, 2)
+                        : searchResults.length > 0
+                        ? searchResults.slice(0, 2)
+                        : posts.slice(0, 2)
+                      ).map((item, index) => (
+                        <div key={index}>
+                          <Link
+                            className="d-flex align-items-bottom text-decoration-none justify-content-flex-start gap-5  mt-2"
+                            style={{
+                              borderBottom: "1px solid gray",
+                              width: "500px",
+                            }}
+                            href={{
+                              pathname: "/infinitescroll",
+                              query: { region: item.region },
+                            }}
+                          >
+                            <img
+                              layout="fill"
+                              objectFit="cover"
+                              src={`${
+                                itemData[index % itemData.length].img
+                              }?w=162&auto=format`}
+                              srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
+                              alt={item.region}
+                              loading="lazy"
+                              style={{
+                                display: "block",
+                                width: "10%",
+                                borderRadius: "5px",
+                              }}
+                            />
+                            <h6
+                              className="text-dark text-end mb-0 d-flex align-items-end"
+                              // style={{ width: "15%" }}
+                            >
+                              {item.region}
+                            </h6>
+                          </Link>
                         </div>
-                      </Masonry>
-                    </Box>
-                  </InfiniteScroll>
-                  {!showAll && (
-                    <div className="text-center mt-3">
-                      <button
-                        onClick={toggleShowAll}
-                        className="btn text-light bold"
-                        style={{ background: "#7CC5E5" }}
-                      >
-                        Show All
-                      </button>
+                      ))}
                     </div>
-                  )}
-                </div>
+                    <Link
+                      href="/infinitescroll"
+                      className="btn text-light bold w-100"
+                      style={{ background: "#7CC5E5" }}
+                    >
+                      Show All
+                    </Link>
+                  </Masonry>
+                </InfiniteScroll>
+                {!showAll && (
+                  <div className="text-center mt-3">
+                    {/* <button
+                    onClick={toggleShowAll}
+                    className="btn text-light bold"
+                    style={{ background: "#7CC5E5" }}
+                  >
+                    Show All
+                  </button> */}
+                  </div>
+                )}
               </div>
             </div>
           )}

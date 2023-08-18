@@ -5,18 +5,28 @@ import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 
 function Login() {
   const router = useRouter();
   const [storedUserID, setStoredUserID] = useState(null);
   const [storedEmail, setStoredEmail] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   useEffect(() => {
     const userID = localStorage.getItem("userID");
     const email = localStorage.getItem("email");
     setStoredUserID(userID);
     setStoredEmail(email);
+    if (userID && email) {
+      router.push("/profile");
+    } else {
+      router.push("/login");
+    }
   }, []);
+
+  // eye password
 
   const handleLogin = async (values, { setSubmitting, resetForm }) => {
     try {
@@ -36,7 +46,7 @@ function Login() {
       if (!storedEmail || !storedUserID) {
         alert("User ID or Email is missing. Please log in again.");
       } else {
-        alert("successful");
+        // alert("successful");
         router.push("/createitinerary");
       }
     } catch (error) {
@@ -82,19 +92,48 @@ function Login() {
                   <ErrorMessage
                     name="email"
                     component="div"
-                    className="text-danger"
+                    className="text-light"
                   />
 
-                  <Field
-                    name="password"
-                    style={{ padding: "10px" }}
-                    className="form-control rounded-2 border-0 mt-2"
-                    placeholder="Password"
-                  />
+                  <div className="position-relative">
+                    <Field
+                      name="password"
+                      style={{ padding: "10px" }}
+                      className="form-control rounded-2 border-0 mt-2"
+                      placeholder="Password"
+                      // type="password"
+                      type={showPassword ? "text" : "password"}
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle-button position-absolute"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        padding: "0",
+                        margin: "0",
+                        cursor: "pointer",
+                        right: "12px",
+                        top: "13px",
+                        color: "black",
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={showPassword ? faEyeSlash : faEye}
+                      />
+                    </button>
+                  </div>
                   <ErrorMessage
                     name="password"
                     component="div"
-                    className="text-danger"
+                    className="text-light"
+                  />
+
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-light"
                   />
 
                   <div className="text-center">
@@ -114,6 +153,13 @@ function Login() {
                         style={{ color: "#fff", textDecoration: "none" }}
                       >
                         Forgot Password?
+                      </Link>{" "}
+                      <br />
+                      <Link
+                        href="/signup"
+                        style={{ color: "#fff", textDecoration: "none" }}
+                      >
+                        New member? Register here.
                       </Link>
                     </div>
                   </div>

@@ -7,7 +7,7 @@ function Captcha({ onChange }) {
 
   return (
     <ReCAPTCHA
-      sitekey="YOUR_RECAPTCHA_SITE_KEY"
+      sitekey="6LdNryEnAAAAAHvI4ty3RvMc2dnX0fR9aF1dXq7r"
       onChange={handleCaptchaChange}
     />
   );

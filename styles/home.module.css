@@ -371,8 +371,16 @@
   padding: 49px 78px;
   text-align: center;
 }
+.boldedhero {
+  background-color: #f3f3f3;
+  border-radius: 8px;
+  z-index: 9999 !important;
+}
 .masonery_data {
-  max-width: 700px;
+  /* width: 100%; */
+  /* max-width: 500px; */
+  padding: 10px 0px;
+  /* background-color: #f3f3f3; */
 }
 
 .input1 {
@@ -406,6 +414,17 @@
   color: white;
 }
 
+.menuhero {
+  height: 400px;
+  overflow-y: scroll;
+}
+.menuhero::-webkit-scrollbar {
+  display: none;
+}
+.boxed {
+  position: absolute;
+  z-index: 999;
+}
 @media only screen and (max-width: 1440px) {
   .landingcentral1 {
     padding: 15px 20px;
@@ -462,6 +481,10 @@
 }
 .filterbtn {
   font-size: 15px !important;
+  cursor: auto;
+}
+.descripthero:hover {
+  background-color: #f3f3f3;
 }
 .landing_btn_width {
   width: 40px;

@@ -347,7 +347,6 @@ function UpcomingtripsList() {
                 zoom={7}
               >
                 {/* Marker */}
-
                 {/* Dynamic Markers */}
                 {/* <RedMarker
                   regionName="Center"

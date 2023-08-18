@@ -13,7 +13,7 @@ import {
 export default function Footer() {
   return (
     <div>
-      <div className={`row justify-content-around ${styles.footer_main}`}>
+      <div className={`row justify-content-around m-0 ${styles.footer_main}`}>
         <div className={`col-md-12 col-lg-4 ${styles.footer_col}`}>
           <Image className={styles.footer_1_logo} src={logo} alt="logo" />
           <p className="fw-400">

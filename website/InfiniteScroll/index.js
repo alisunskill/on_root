@@ -194,7 +194,10 @@ const InfiniteScrollComponent = () => {
       <div></div>
       <div className="container-fluid px-5 pt-3 pb-5">
         <div className="row d-flex w-100">
-          <h1 className="dark bold text-center fw-600">New York</h1>
+          <h1 className="dark bold text-center fw-600">
+            {/* {filteredPosts.map((item) => item[0].region)} */}
+            {filteredPosts.length > 0 && filteredPosts[0].region}
+          </h1>
           <p className="text-center mb-3 fw-500 pb-3 px-lg-5">
             Discover the world's top destinations and plan your next adventure
             with ease using <br /> Onroot's curated posts and itineraries
@@ -217,8 +220,9 @@ const InfiniteScrollComponent = () => {
                     ? filterPrice
                     : recommendationData
                   ).map((item, index) => (
-                    <div key={index}>
+                    <div key={index} className="">
                       <Link
+                        className="text-decoration-none d-flex justify-content-center flex-column"
                         href="/infopage"
                         style={{
                           position: "relative",
@@ -227,7 +231,7 @@ const InfiniteScrollComponent = () => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          opacity: "0.9",
+                          // opacity: "0.9",
                         }}
                       >
                         <img
@@ -246,8 +250,18 @@ const InfiniteScrollComponent = () => {
                             opacity: "0.99990000999",
                           }}
                         />
-                        <div style={{ position: "absolute", zIndex: 9999 }}>
-                          <h3 className="w-700 text-white"> {item.region}</h3>
+
+                        <div style={{ position: "absolute ", zIndex: 9999 }}>
+                          <div className="text-center">
+                            <p className={`mb-0 letterspac text-white`}>
+                              Event
+                            </p>
+                            <h3 className="w-700 text-white"> {item.title}</h3>
+                            <p className={`mb-0 m1 text-white`}>
+                              {" "}
+                              {item.region}
+                            </p>
+                          </div>
                         </div>
                       </Link>
                     </div>
