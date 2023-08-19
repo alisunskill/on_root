@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/signin.module.css";
 import Link from "next/link";
 import axios from "axios";
@@ -8,11 +8,21 @@ import { useRouter } from "next/router";
 
 function ResetPassword() {
   const router = useRouter();
+  const [resetToken, setResetToken] = useState("");
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenFromURL = urlParams.get("token");
+    if (tokenFromURL) {
+      setResetToken(tokenFromURL);
+    }
+  }, []);
+
   const forgotSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
-    resetToken: Yup.string().required("Reset Token is required"),
+    // resetToken: Yup.string().required("Reset Token is required"),
     password: Yup.string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters long")
@@ -25,8 +35,12 @@ function ResetPassword() {
   const handleReset = async (values) => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/users/reset-password",
-        values
+        "http://localhost:8000/api/users/resetpassword",
+        // values
+        {
+          ...values,
+          resetToken: resetToken,
+        }
       );
 
       if (response.status === 200) {
@@ -70,17 +84,20 @@ function ResetPassword() {
                       component="div"
                       className="text-danger"
                     />
-                    <Field
-                      name="resetToken"
-                      style={{ padding: "10px" }}
-                      className="form-control rounded-2 border-0 mt-2"
-                      placeholder="Reset Token"
-                    />
-                    <ErrorMessage
-                      name="resetToken"
-                      component="div"
-                      className="text-danger"
-                    />
+                    {resetToken ? (
+                      <p className="text-success">
+                        Reset token received successfully!
+                      </p>
+                    ) : (
+                      <div>
+                        <Field
+                          name="resetToken"
+                          style={{ padding: "10px" }}
+                          className="form-control rounded-2 border-0 mt-2"
+                          placeholder="Reset Token"
+                        />
+                      </div>
+                    )}
 
                     <Field
                       name="password"
@@ -94,7 +111,6 @@ function ResetPassword() {
                       component="div"
                       className="text-danger"
                     />
-
                     <div className="text-center">
                       <button
                         // disabled={!isValid}

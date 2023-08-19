@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import Swal from "sweetalert2";
 import logo from "../public/images/logo.svg";
 import men from "../public/Images/men.svg";
 import plusicon from "../public/Images/plusicon.svg";
@@ -9,6 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Searchbar from "./Searchbar";
 import axios from "axios";
+import { handleLogout } from "../website/Login/authUtils";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { fetchRecommendations } from "../store/actions/recommendationActions";
 import { useRouter } from "next/navigation";
@@ -21,37 +23,29 @@ const Navbar = () => {
   const handleReload = () => {
     router.push("/");
   };
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    alert("logout succesfully");
+  const handleLogout1 = () => {
+    handleLogout();
   };
 
-
-// globe
-const dispatch = useDispatch();
+  // globe
+  const dispatch = useDispatch();
   const recommendationsData = useSelector((state) => state.recommendation);
   const [searchTerm, setSearchTerm] = useState("");
   const { recommendations, loading, error } = recommendationsData;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  const userID =
+    typeof window !== "undefined" ? localStorage.getItem("userID") : null;
+  const email =
+    typeof window !== "undefined" ? localStorage.getItem("email") : null;
+  const handleCreateItinerary = () => {
+    if (!userID) {
+      Swal.fire({
+        text: "Please login to create an itinerary.",
+        icon: "warning",
+      });
+    } else {
+      router.push("/createitinerary");
+    }
+  };
   return (
     <>
       <div>
@@ -92,19 +86,40 @@ const dispatch = useDispatch();
                   />
                 </Button>
                 {modalShow && (
-                  <Globe show={modalShow} onHide={() => setModalShow(false)} data={recommendationsData} />
+                  <Globe
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                    data={recommendationsData}
+                  />
                 )}
 
-                <Link href="/createitinerary">
-                  {" "}
-                  <Image
-                    width={50}
-                    height={50}
-                    src={plusicon}
-                    alt="plusicon"
-                    className={`mx-4 ${styles.plusicon}`}
-                  />
-                </Link>
+                {userID ? (
+                  <Link href="/createitinerary">
+                    <Image
+                      width={50}
+                      height={50}
+                      src={plusicon}
+                      alt="plusicon"
+                      className={`mx-4 ${styles.plusicon}`}
+                      style={{ cursor: !userID ? "not-allowed" : "pointer" }}
+                    />
+                  </Link>
+                ) : (
+                  <div
+                    onClick={handleCreateItinerary}
+                    className="cursor-pointer"
+                  >
+                    {" "}
+                    <Image
+                      width={50}
+                      height={50}
+                      src={plusicon}
+                      alt="plusicon"
+                      className={`mx-4 ${styles.plusicon}`}
+                    />
+                  </div>
+                )}
+
                 <Link href="/login">
                   <Image
                     width={50}
@@ -119,7 +134,7 @@ const dispatch = useDispatch();
                   width={50}
                   height={50}
                   alt=""
-                  onClick={handleLogout}
+                  onClick={handleLogout1}
                   className={`mx-3 object-fit-contain cursor-pointer ${styles.menicon}`}
                 />
               </div>

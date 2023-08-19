@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import styles from "../../styles/signin.module.css";
-import Captcha from "./Captcha";
+import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -8,12 +9,13 @@ import { useRouter } from "next/router";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-
+import { handleLogout } from "./authUtils";
 function Login() {
   const router = useRouter();
   const [storedUserID, setStoredUserID] = useState(null);
   const [storedEmail, setStoredEmail] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [recaptchaResponse, setRecaptchaResponse] = useState("");
   useEffect(() => {
     const userID = localStorage.getItem("userID");
     const email = localStorage.getItem("email");
@@ -22,36 +24,88 @@ function Login() {
     if (userID && email) {
       router.push("/profile");
     } else {
+      handleLogout();
       router.push("/login");
     }
   }, []);
 
+  const handleCaptchaChange = (response) => {
+    setRecaptchaResponse(response);
+  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token");
+  //   router.push("/login");
+  // };
   // eye password
 
-  const handleLogin = async (values, { setSubmitting, resetForm }) => {
+  // const handleLogin = async (values, { setSubmitting, resetForm }) => {
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:8000/api/users/login",
+  //       values
+  //     );
+  //     if (response.status === 200) {
+  //       const { token } = response.data;
+  //       localStorage.setItem("token", token);
+  //       resetForm();
+  //       setSubmitting(false);
+  //     }
+  //     const storedUserID = localStorage.getItem("userID");
+  //     const storedEmail = localStorage.getItem("email");
+
+  //     if (!storedEmail || !storedUserID) {
+  //       Swal.fire({
+  //         text: "Email or Password is missing. Please log in again.",
+  //         icon: "error",
+  //       });
+  //     } else {
+  //       // alert("successful");
+  //       router.push("/createitinerary");
+  //     }
+  //   } catch (error) {
+  //     Swal.fire({
+  //       text: "Error during Login.",
+  //       icon: "error",
+  //     });
+  //     console.error("Error during login:", error);
+  //   }
+  // };
+
+  const handleLogin = async (values, { setSubmitting }) => {
     try {
+      if (!recaptchaResponse) {
+        Swal.fire({
+          text: "Please complete the reCAPTCHA challenge.",
+          icon: "error",
+        });
+        return;
+      }
+
       const response = await axios.post(
         "http://localhost:8000/api/users/login",
-        values
+        // values
+        { ...values, recaptchaResponse }
       );
       if (response.status === 200) {
-        const { token } = response.data;
+        const { token, userID, email } = response.data;
         localStorage.setItem("token", token);
-        resetForm();
+        localStorage.setItem("userID", userID);
+        localStorage.setItem("email", email);
         setSubmitting(false);
-      }
-      const storedUserID = localStorage.getItem("userID");
-      const storedEmail = localStorage.getItem("email");
-      console.log(storedUserID, "storedUserID");
-      if (!storedEmail || !storedUserID) {
-        alert("User ID or Email is missing. Please log in again.");
-      } else {
-        // alert("successful");
         router.push("/createitinerary");
       }
     } catch (error) {
-      alert("Error during login. Please try again later.");
-      console.error("Error during login:", error);
+      if (error.response && error.response.status === 401) {
+        Swal.fire({
+          text: "Invalid email or password.",
+          icon: "error",
+        });
+      } else {
+        Swal.fire({
+          text: "Error during Login.",
+          icon: "error",
+        });
+      }
     }
   };
 
@@ -130,18 +184,15 @@ function Login() {
                     className="text-light"
                   />
 
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="text-light"
-                  />
-
                   <div className="text-center">
                     <div className="w-100 d-flex justify-content-center mt-3">
-                      <Captcha />
+                      <ReCAPTCHA
+                        sitekey="6LdNryEnAAAAAHvI4ty3RvMc2dnX0fR9aF1dXq7r"
+                        onChange={handleCaptchaChange}
+                      />
                     </div>
                     <button
-                      className="savebtn text-light mt-4"
+                      className="savebtn text-light mt-4 cursor-pointer"
                       type="submit"
                       disabled={!isValid}
                     >
