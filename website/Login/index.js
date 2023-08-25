@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import {
+  fetchLoginUser,
+  setUserID,
+} from "../../store/actions/recommendationActions";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "../../styles/signin.module.css";
 import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
@@ -10,24 +15,36 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { handleLogout } from "./authUtils";
+
+// import setUserID
+
 function Login() {
+  const dispatch = useDispatch();
   const router = useRouter();
-  const [storedUserID, setStoredUserID] = useState(null);
-  const [storedEmail, setStoredEmail] = useState(null);
+  const [storedUserID, setStoredUserID] = useState("");
+  const [storedEmail, setStoredEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [recaptchaResponse, setRecaptchaResponse] = useState("");
+  if (storedUserID && storedEmail) {
+    dispatch(setUserID(storedUserID, storedEmail));
+  }
+
   useEffect(() => {
-    const userID = localStorage.getItem("userID");
-    const email = localStorage.getItem("email");
-    setStoredUserID(userID);
-    setStoredEmail(email);
-    if (userID && email) {
-      router.push("/profile");
-    } else {
-      handleLogout();
-      router.push("/login");
-    }
-  }, []);
+    const userID = storedUserID;
+    const email = storedEmail;
+    console.log(email, userID, "ali");
+
+    // Set storedUserID and storedEmail with retrieved values
+    // setStoredUserID(userID);
+    // setStoredEmail(email);
+
+    // if (userID && email) {
+    //   router.push("/profile");
+    // } else {
+    //   handleLogout();
+    //   router.push("/login");
+    // }
+  }, [dispatch]);
 
   const handleCaptchaChange = (response) => {
     setRecaptchaResponse(response);
@@ -71,6 +88,48 @@ function Login() {
   //   }
   // };
 
+  // const handleLogin = async (values, { setSubmitting }) => {
+  //   try {
+  //     if (!recaptchaResponse) {
+  //       Swal.fire({
+  //         text: "Please complete the reCAPTCHA challenge.",
+  //         icon: "error",
+  //       });
+  //       return;
+  //     }
+
+  //     const response = await axios.post(
+  //       "http://localhost:8000/api/users/login",
+  //       // values
+  //       { ...values, recaptchaResponse }
+  //     );
+  //     // console.log("Response from server:", response.data);
+
+  //     if (response.status === 200) {
+  //       const { token, userID, email } = response.data;
+  //       setStoredUserID(userID);
+  //       setStoredEmail(email);
+  //       console.log(userID, email, "jkjkjk");
+  //       localStorage.setItem("token", token);
+  //       localStorage.setItem("userID", userID);
+  //       localStorage.setItem("email", email);
+  //       setSubmitting(false);
+  //       // router.push("/createitinerary");
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 401) {
+  //       Swal.fire({
+  //         text: "Invalid email or password.",
+  //         icon: "error",
+  //       });
+  //     } else {
+  //       Swal.fire({
+  //         text: "Error during Login.",
+  //         icon: "error",
+  //       });
+  //     }
+  //   }
+  // };
   const handleLogin = async (values, { setSubmitting }) => {
     try {
       if (!recaptchaResponse) {
@@ -81,19 +140,10 @@ function Login() {
         return;
       }
 
-      const response = await axios.post(
-        "http://localhost:8000/api/users/login",
-        // values
-        { ...values, recaptchaResponse }
-      );
-      if (response.status === 200) {
-        const { token, userID, email } = response.data;
-        localStorage.setItem("token", token);
-        localStorage.setItem("userID", userID);
-        localStorage.setItem("email", email);
-        setSubmitting(false);
-        router.push("/createitinerary");
-      }
+      dispatch(fetchLoginUser({ ...values, recaptchaResponse }));
+
+      setSubmitting(true);
+      router.push("/profile");
     } catch (error) {
       if (error.response && error.response.status === 401) {
         Swal.fire({
@@ -106,6 +156,7 @@ function Login() {
           icon: "error",
         });
       }
+      setSubmitting(false);
     }
   };
 

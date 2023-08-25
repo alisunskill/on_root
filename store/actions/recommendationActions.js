@@ -10,6 +10,10 @@ export const FETCH_POSTS_REQUEST = "FETCH_POSTS_REQUEST";
 export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
 export const FETCH_POSTS_FAILURE = "FETCH_POSTS_FAILURE";
 
+export const LOGIN_REQUEST = "LOGIN_REQUEST";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_FAILURE = "LOGIN_FAILURE";
+
 export const DATA_LIST = "DATA_LIST";
 
 export const USER_ID = "USER_ID";
@@ -46,13 +50,56 @@ export const searchData = (list) => ({
   type: DATA_LIST,
   payload: list,
 });
-export const setUserID = (email, userID) => {
-  console.log("Email:", email);
-  console.log("User ID:", userID);
+
+// User Login
+export const loginRequest = () => ({
+  type: LOGIN_REQUEST,
+});
+
+// Define the action creator for successful login
+export const loginSuccess = (token, userID, email) => ({
+  type: LOGIN_SUCCESS,
+  token: token,
+  userID: userID,
+  email: email,
+});
+
+// Define the action creator for login failure
+export const loginFailure = (error) => ({
+  type: LOGIN_FAILURE,
+  payload: error,
+});
+
+export const fetchLoginUser = (credentials) => {
+  console.log(credentials, "credentials");
+  return async (dispatch) => {
+    try {
+      dispatch(loginRequest());
+      const response = await axios.post(
+        "http://localhost:8000/api/users/login",
+        credentials
+      );
+      const { token, userID, email } = response.data;
+      localStorage.setItem("userID", userID);
+      localStorage.setItem("email", email);
+      console.log(response.data, token, "bnbnb");
+      dispatch({
+        payload: loginSuccess(token, userID, email),
+        type: LOGIN_SUCCESS,
+      });
+    } catch (error) {
+      dispatch(loginFailure(error.message));
+    }
+  };
+};
+
+export const setUserID = (userID, email) => {
+  console.log("Email:", userID, email);
+  // console.log("User ID:", userID);
 
   return {
     type: USER_ID,
-    payload: { email, userID },
+    payload: { userID, email },
   };
 };
 // Async action
@@ -70,15 +117,12 @@ export const fetchRecommendations = () => {
     }
   };
 };
-
 // fav posts
 export const fetchFavPosts = () => {
   return async (dispatch) => {
     try {
       dispatch(fetchPostsRequest());
-      const response = await axios.post(
-        "http://localhost:8000/api/savepost"
-      );
+      const response = await axios.post("http://localhost:8000/api/savepost");
       dispatch(fetchPostsSuccess(response.data));
     } catch (error) {
       dispatch(fetchPostsFailure(error.message));

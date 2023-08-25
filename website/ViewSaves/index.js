@@ -11,6 +11,8 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const itemData = [
   {
@@ -31,6 +33,7 @@ const itemData = [
 ];
 
 function ViewSaves() {
+  const router = useRouter();
   const [postIds, setPostIds] = useState([]);
   const [trigger, setTrigger] = useState(new Date());
   const recommendationsData = useSelector((state) => state.recommendation);
@@ -44,15 +47,16 @@ function ViewSaves() {
   const filteredRegion = recommendationData.filter((item) =>
     postIds.some((post) => post.id === item.id)
   );
-  console.log(filteredRegion, "filteredRegion");
 
   const [showIcon, setShowIcon] = useState(true);
   const [modalShow, setModalShow] = useState(false);
   // const [userId, setUserId] = useState(null);
   const fetchPostIds = async () => {
     const userID = localStorage.getItem("userID");
+    console.log(userID, "userID");
     if (!userID) {
       console.error("User ID not available.");
+      alert("User ID not available")
       return;
     }
 
@@ -92,7 +96,6 @@ function ViewSaves() {
       setPostIds((prevPostIds) =>
         prevPostIds.filter((post) => post !== postId)
       );
-
       setTrigger(new Date());
       console.log("Post deleted successfully.");
       // alert("Post deleted successfully.")
@@ -101,6 +104,10 @@ function ViewSaves() {
     }
   };
 
+  const handleLinkClick = (postId) => {
+    Cookies.set("postIdCookie", postId);
+    // router.push(`/region/${encodeURIComponent(post.title)}`);
+  };
   return (
     <>
       <div className="container-fluid">
@@ -149,7 +156,10 @@ function ViewSaves() {
                           </div>
                           <Link
                             key={index}
-                            href={`/post/${matchingPostId.postId}`}
+                            onClick={() => handleLinkClick(post._id)}
+                            href={`/region/${encodeURIComponent(
+                              post.title.replace(/ /g, "-")
+                            )}`}
                             style={{
                               position: "relative",
                               width: "100%",

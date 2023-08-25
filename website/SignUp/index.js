@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Cookies from "js-cookie";
 function Signup() {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -34,6 +35,7 @@ function Signup() {
       if (response.data.user) {
         const { email, _id } = response.data.user;
         localStorage.setItem("userID", _id);
+        Cookies.set("userID", _id);
         localStorage.setItem("email", email);
       }
 

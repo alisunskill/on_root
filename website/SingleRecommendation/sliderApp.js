@@ -9,6 +9,7 @@ import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
 export default function SliderApp({ images }) {
+
   const slideImg = [
     {
       id: "1",

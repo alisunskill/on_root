@@ -64,7 +64,12 @@ export default () => {
       );
       const data = response.data;
 
-      const savePosts = data.Recommendations;
+      // const savePosts = data.Recommendations;
+      const savePosts = data.Recommendations.map((post) => ({
+        ...post,
+        slug: post.title.toLowerCase().replace(/\s+/g, "-"),
+      }));
+
       console.log(savePosts, "savePosts bbbb");
 
       setPostIds(savePosts);

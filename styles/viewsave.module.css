@@ -11,6 +11,9 @@
 .yoursave_font1 {
   font-size: medium;
 }
+.favorite {
+  background-color: #1264fa !important;
+}
 @media (max-width: 321px) {
   .yoursave_button1 {
     width: 310px;

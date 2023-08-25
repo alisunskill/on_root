@@ -36,10 +36,12 @@ function Profile() {
   // fetch recommendation
   const router = useRouter();
   const dispatch = useDispatch();
+  // login Data id, email
+  const { userID, email } = useSelector((state) => state.recommendation);
+  console.log(userID, email, "userData");
 
   const recommendationsData = useSelector((state) => state.recommendation);
   const { recommendations, loading, error } = recommendationsData;
-  console.log(recommendations, "recommendations");
   const [selectedItems, setSelectedItems] = useState({});
   const [favList, setFavList] = useState([]);
   const recData = recommendations.Recommendations;
@@ -76,15 +78,12 @@ function Profile() {
 
   const sendFavListToBackend = async (selectedIds) => {
     const userID = localStorage.getItem("userID");
-    console.log(userID, "userID");
 
     try {
       const response = await axios.post("http://localhost:8000/api/savepost", {
         postId: selectedIds,
         userID: userID,
       });
-
-      console.log("Updated backend with new favList:", response.data);
     } catch (error) {
       console.error("Error updating backend:", error);
     }

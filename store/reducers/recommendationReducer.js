@@ -7,15 +7,26 @@ import {
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_FAILURE,
 } from "../actions/recommendationActions";
+import * as actionTypes from "../../store/actions/recommendationActions";
+
+import {
+  SET_USER_ID,
+  LOGIN_SUCCESS,
+  LOGIN_REQUEST,
+  LOGIN_FAILURE,
+} from "../actions/recommendationActions";
 
 import { DATA_LIST, USER_ID } from "../actions/recommendationActions";
 
 const initialState = {
   recommendations: [],
   favPosts: [],
-  userID: "",
+  userID: null,
+  email: "",
+  token: "",
   email: "",
   data: [],
+  userData: null,
   loading: false,
   error: null,
 };
@@ -49,7 +60,6 @@ const recommendationReducer = (state = initialState, action) => {
         getSearchData: action.payload,
       };
     case USER_ID:
-      console.log(action.payload, "payload is here");
       return {
         ...state,
         userID: action.payload.userID,
@@ -72,6 +82,26 @@ const recommendationReducer = (state = initialState, action) => {
       return {
         ...state,
         favPosts: [],
+        loading: false,
+        error: action.payload,
+      };
+    case LOGIN_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        token: action.payload.token,
+        userID: action.payload.userID,
+        email: action.payload.email,
+      };
+    case LOGIN_FAILURE:
+      return {
+        ...state,
         loading: false,
         error: action.payload,
       };

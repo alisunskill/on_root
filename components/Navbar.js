@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import logo from "../public/images/logo.svg";
 import men from "../public/Images/men.svg";
@@ -32,10 +32,23 @@ const Navbar = () => {
   const recommendationsData = useSelector((state) => state.recommendation);
   const [searchTerm, setSearchTerm] = useState("");
   const { recommendations, loading, error } = recommendationsData;
-  const userID =
-    typeof window !== "undefined" ? localStorage.getItem("userID") : null;
-  const email =
-    typeof window !== "undefined" ? localStorage.getItem("email") : null;
+  const [userID, setUserID] = useState(null);
+  const [email, setEmail] = useState(null);
+
+  // const userID =
+  //   typeof window !== "undefined" ? localStorage.getItem("userID") : null;
+  // const email =
+  //   typeof window !== "undefined" ? localStorage.getItem("email") : null;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUserID = localStorage.getItem("userID");
+      const storedEmail = localStorage.getItem("email");
+      setUserID(storedUserID);
+      setEmail(storedEmail);
+    }
+  }, []);
+
   const handleCreateItinerary = () => {
     if (!userID) {
       Swal.fire({
