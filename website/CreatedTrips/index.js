@@ -8,21 +8,44 @@ import { Box } from "@mui/material";
 import { Masonry } from "@mui/lab";
 import axios from "axios";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  fetchGetTrips,
+  fetchSavedTrips,
+} from "../../store/actions/tripsAction";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function ItiniraryDetail() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { id: singletripId } = router.query;
   console.log(singletripId, "id");
-  const [showIcon, setShowIcon] = useState(true);
-  const [modalShow, setModalShow] = useState(false);
   const [tripIds, setTripIds] = useState(new Set());
-  console.log(tripIds, "hjhhjjhj");
+
+  const saveTripsData = useSelector((state) => state.tripIdSave.savetrips);
+  const tripIdData = useSelector((state) => state?.tripIdSave.savedTripsId);
+  const savedTripIds = tripIdData?.tripsPosts?.map((trip) => trip.tripId) || [];
+  const savedTripsData = useSelector((state) => state.tripIdSave.savetrips);
+
+  console.log(savedTripIds, "saveTripsData");
+
+  useEffect(() => {
+    dispatch(fetchGetTrips());
+    dispatch(fetchSavedTrips());
+  }, [dispatch]);
+
+  useEffect(() => {
+    fetchTripsIds();
+  }, []);
+
+  const fetchTripsIds = async () => {
+    setTripIds(tripIdData);
+  };
   // all trips
   const [trips, setTrips] = useState([]);
+  useEffect(() => {
+    setTrips(savedTripsData);
+  }, [savedTripsData]);
   const [singleTrips, setSingleTrips] = useState([]);
   console.log(singleTrips, "singleTrips");
   const [updateTrip, setUpdateTrip] = useState({
@@ -38,13 +61,9 @@ function ItiniraryDetail() {
   }, []);
 
   const fetchTrips = async () => {
-    try {
-      const response = await axios.get("http://localhost:8000/api/trips");
-      setTrips(response.data);
-    } catch (error) {
-      console.error("Error fetching trips:", error);
-    }
+    setTrips(saveTripsData);
   };
+
   const fetchSingleTrips = async () => {
     try {
       const response = await axios.get(
@@ -60,16 +79,6 @@ function ItiniraryDetail() {
     fetchTripsIds();
   }, []);
 
-  const fetchTripsIds = async () => {
-    try {
-      const response = await axios.get("http://localhost:8000/api/savetrip");
-      const tripIdData = response.data.tripsPosts.map((trip) => trip.tripId);
-      // setTripIds(tripIdData);
-      setTripIds(new Set(tripIdData));
-    } catch (error) {
-      console.error("Error fetching trip IDs:", error);
-    }
-  };
 
   useEffect(() => {
     if (singletripId) {
@@ -264,7 +273,7 @@ function ItiniraryDetail() {
               <Box>
                 <Masonry columns={3} spacing={2}>
                   {trips
-                    .filter((trip) => tripIds.has(trip._id))
+                    .filter((trip) => savedTripIds.includes(trip._id))
                     .map((trip, index) => (
                       <div>
                         <div className="position-relative" key={trip._id}>

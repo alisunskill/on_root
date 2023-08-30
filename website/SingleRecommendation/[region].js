@@ -114,7 +114,7 @@ export default function ItemDetail() {
 
   useEffect(() => {
     const selectedIdsFromLocalStorage =
-      JSON.parse(localStorage.getItem("selectedIds")) || [];
+      JSON.parse(localStorage.getItem("postId")) || [];
     setSelectedIds(selectedIdsFromLocalStorage);
   }, []);
 
