@@ -6,6 +6,13 @@ export const FETCH_RECOMMENDATIONS_REQUEST = "FETCH_RECOMMENDATIONS_REQUEST";
 export const FETCH_RECOMMENDATIONS_SUCCESS = "FETCH_RECOMMENDATIONS_SUCCESS";
 export const FETCH_RECOMMENDATIONS_FAILURE = "FETCH_RECOMMENDATIONS_FAILURE";
 
+export const FETCH_CREATERECOMMENDATIONS_REQUEST =
+  "FETCH_CREATERECOMMENDATIONS_REQUEST";
+export const FETCH_CREATERECOMMENDATIONS_SUCCESS =
+  "FETCH_CREATERECOMMENDATIONS_SUCCESS";
+export const FETCH_CREATERECOMMENDATIONS_FAILURE =
+  "FETCH_CREATERECOMMENDATIONS_FAILURE";
+
 export const FETCH_POSTS_REQUEST = "FETCH_POSTS_REQUEST";
 export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
 export const FETCH_POSTS_FAILURE = "FETCH_POSTS_FAILURE";
@@ -18,6 +25,7 @@ export const DATA_LIST = "DATA_LIST";
 
 export const USER_ID = "USER_ID";
 
+// RECOMMENDATION
 export const fetchRecommendationsRequest = () => ({
   type: FETCH_RECOMMENDATIONS_REQUEST,
 });
@@ -29,6 +37,21 @@ export const fetchRecommendationsSuccess = (recommendations) => ({
 
 export const fetchRecommendationsFailure = (error) => ({
   type: FETCH_RECOMMENDATIONS_FAILURE,
+  payload: error,
+});
+
+// CREATE RECOMMENDATION
+export const fetchCreateRecommendationsRequest = () => ({
+  type: FETCH_CREATERECOMMENDATIONS_REQUEST,
+});
+
+export const fetchCreateRecommendationsSuccess = (recommendations) => ({
+  type: FETCH_CREATERECOMMENDATIONS_SUCCESS,
+  payload: recommendations,
+});
+
+export const fetchCreateRecommendationsFailure = (error) => ({
+  type: FETCH_CREATERECOMMENDATIONS_FAILURE,
   payload: error,
 });
 
@@ -81,8 +104,11 @@ export const fetchLoginUser = (credentials) => {
       );
       const { token, userID, email } = response.data;
       localStorage.setItem("userID", userID);
+      localStorage.setItem("token", token);
       localStorage.setItem("email", email);
-      console.log(response.data, token, "bnbnb");
+      console.log(response.data, token, "bolded token");
+      console.log(token, "token bbb"); // Log the token
+
       dispatch({
         payload: loginSuccess(token, userID, email),
         type: LOGIN_SUCCESS,
@@ -117,6 +143,31 @@ export const fetchRecommendations = () => {
     }
   };
 };
+
+// createrecommendation
+export const fetchCreateRecommendations = (formData, token) => {
+  return async (dispatch) => {
+    try {
+      dispatch(fetchCreateRecommendationsRequest());
+
+      const response = await axios.post(
+        "http://localhost:8000/api/createrecommendation",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      dispatch(fetchCreateRecommendationsSuccess(response.data));
+    } catch (error) {
+      dispatch(fetchCreateRecommendationsFailure(error.message));
+    }
+  };
+};
+
 // fav posts
 export const fetchFavPosts = () => {
   return async (dispatch) => {

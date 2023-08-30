@@ -10,9 +10,13 @@ import axios from "axios";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import {
+  fetchSavePosts,
+  deleteSavePost,
+} from "../../store/actions/savePostAction";
 
 const itemData = [
   {
@@ -34,7 +38,20 @@ const itemData = [
 
 function ViewSaves() {
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const savePostsData = useSelector(
+    (state) => state.saveposts.savepost?.savePosts
+  );
+  const delPostData = useSelector((state) => state.saveposts);
+  useEffect(() => {
+    dispatch(fetchSavePosts());
+  }, [dispatch]);
+
+  console.log(delPostData, "saveposts he ye");
+
   const [postIds, setPostIds] = useState([]);
+  console.log(postIds, "post id is here");
   const [trigger, setTrigger] = useState(new Date());
   const recommendationsData = useSelector((state) => state.recommendation);
   const { recommendations, loading, error } = recommendationsData;
@@ -45,63 +62,75 @@ function ViewSaves() {
   // console.log(filteredRegion, "filteredRegion");
 
   const filteredRegion = recommendationData.filter((item) =>
-    postIds.some((post) => post.id === item.id)
+    postIds?.some((post) => post.id === item.id)
   );
 
   const [showIcon, setShowIcon] = useState(true);
   const [modalShow, setModalShow] = useState(false);
   // const [userId, setUserId] = useState(null);
-  const fetchPostIds = async () => {
-    const userID = localStorage.getItem("userID");
-    console.log(userID, "userID");
-    if (!userID) {
-      console.error("User ID not available.");
-      alert("User ID not available")
-      return;
-    }
+  // const fetchPostIds = async () => {
+  //   const userID = localStorage.getItem("userID");
+  //   // console.log(userID, "userID");
+  //   // if (!userID) {
+  //   //   console.error("User ID not available.");
+  //   //   alert("User ID not available");
+  //   //   return;
+  //   // }
 
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/savepost?userID=${userID}`
-      );
-      const data = response.data;
-      const { savePosts } = data;
+  //   // try {
+  //   //   const response = await axios.get(
+  //   //     `http://localhost:8000/api/savepost?userID=${userID}`
+  //   //   );
+  //   //   const data = response.data;
+  //   //   const { savePosts } = data;
 
-      setPostIds(savePosts);
-      // const postIdList = savePosts.map((post) => post.postId);
-      // console.log(postIdList, "postIdListpostIdListpostIdListpostIdList");
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  //   //   setPostIds(savePosts);
+  //   //   // const postIdList = savePosts.map((post) => post.postId);
+  //   //   // console.log(postIdList, "postIdListpostIdListpostIdListpostIdList");
+  //   // } catch (error) {
+  //   //   console.error("Error fetching data:", error);
+  //   // }
+  //   setPostIds(savePostsData)
+  // };
 
   useEffect(() => {
-    fetchPostIds();
-  }, [trigger]);
+    if (savePostsData) {
+      setPostIds(savePostsData);
+    }
+  }, [savePostsData, trigger]);
 
+  // useEffect(() => {
+  //   fetchPostIds();
+  // }, [trigger]);
+
+  // const handleRemove = async (postId) => {
+  //   const userID = localStorage.getItem("userID");
+  //   if (!userID) {
+  //     console.error("User ID not available.");
+  //     return;
+  //   }
+
+  //   try {
+  //     await axios.delete(`http://localhost:8000/api/savepost/${postId}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${userID}`,
+  //       },
+  //     });
+
+  //     setPostIds((prevPostIds) =>
+  //       prevPostIds.filter((post) => post !== postId)
+  //     );
+  //     setTrigger(new Date());
+  //     // console.log("Post deleted successfully.");
+  //     // alert("Post deleted successfully.")
+  //   } catch (error) {
+  //     console.error("Error deleting post:", error);
+  //   }
+  // };
   const handleRemove = async (postId) => {
-    const userID = localStorage.getItem("userID");
-    if (!userID) {
-      console.error("User ID not available.");
-      return;
-    }
-
-    try {
-      await axios.delete(`http://localhost:8000/api/savepost/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${userID}`,
-        },
-      });
-
-      setPostIds((prevPostIds) =>
-        prevPostIds.filter((post) => post !== postId)
-      );
-      setTrigger(new Date());
-      console.log("Post deleted successfully.");
-      // alert("Post deleted successfully.")
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    }
+    dispatch(deleteSavePost(postId));
+    setPostIds((prevPostIds) => prevPostIds.filter((post) => post !== postId));
+    setTrigger(new Date());
   };
 
   const handleLinkClick = (postId) => {
@@ -117,7 +146,7 @@ function ViewSaves() {
           <div className="col-lg-12">
             <InfiniteScroll
               className="w-100 overflow-hidden"
-              dataLength={postIds.length}
+              dataLength={postIds?.length}
               loader={<h4>Loading...</h4>}
             >
               <Box sx={{ minHeight: 829 }}>

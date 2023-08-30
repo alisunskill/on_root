@@ -51,7 +51,7 @@ export default ({ data }) => {
   const { region } = router.query;
 
   if (region) {
-    router.push(`http://localhost:3000/infinitescroll?region=${region}`);
+    router.push(`/infinitescroll?region=${region}`);
   }
 
   let cityData = [];

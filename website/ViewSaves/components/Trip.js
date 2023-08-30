@@ -3,18 +3,18 @@ import Modal from "react-bootstrap/Modal";
 import styles from "../../../styles/viewsave.module.css";
 import NewTrip from "./NewTrip";
 import axios from "axios";
-import Cookies from "js-cookie"; // Import the js-cookie library
+import { setTripId } from "../../../store/actions/tripsAction";
+import { useDispatch } from "react-redux";
 
 export default function Trip(props) {
   const { setModalShow } = props;
+  const dispatch = useDispatch();
   const [modalTrip, setModalTrip] = useState(false);
   const [trips, setTrips] = useState([]);
   const [selectedItems, setSelectedItems] = useState({});
   const [favList, setFavList] = useState([]);
   const [fullList, setFullList] = useState([]);
   const [showAllImages, setShowAllImages] = useState(false);
-
-  console.log(trips, "trips");
 
   useEffect(() => {
     fetchTrips();
@@ -65,6 +65,7 @@ export default function Trip(props) {
     const clickedItem = fullList.find((item) => item._id === id);
     if (clickedItem) {
       const updatedFavList = [...favList, clickedItem];
+      console.log(updatedFavList, "jkjk");
       setFavList(updatedFavList);
     }
   };
@@ -77,7 +78,8 @@ export default function Trip(props) {
         tripId: selectedIds,
         userID: userIDPerson,
       });
-
+      dispatch(setTripId(selectedIds));
+      localStorage.setItem("selectedIds", selectedIds);
       console.log("Updated backend with new favList:", response.data);
     } catch (error) {
       console.error("Error updating backend:", error);

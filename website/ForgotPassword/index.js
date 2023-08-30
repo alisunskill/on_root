@@ -42,7 +42,7 @@
               <div className="row mt-1 gy-3 d-flex justify-content-center align-center px-5">
                 <Formik
                   initialValues={{
-                    email: "", // Update field name to "email"
+                    email: "", 
                   }}
                   validationSchema={forgotSchema}
                   onSubmit={handleForgot}

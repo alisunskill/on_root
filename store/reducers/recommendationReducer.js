@@ -3,6 +3,9 @@ import {
   FETCH_RECOMMENDATIONS_REQUEST,
   FETCH_RECOMMENDATIONS_SUCCESS,
   FETCH_RECOMMENDATIONS_FAILURE,
+  FETCH_CREATERECOMMENDATIONS_REQUEST,
+  FETCH_CREATERECOMMENDATIONS_SUCCESS,
+  FETCH_CREATERECOMMENDATIONS_FAILURE,
   FETCH_POSTS_REQUEST,
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_FAILURE,
@@ -20,6 +23,7 @@ import { DATA_LIST, USER_ID } from "../actions/recommendationActions";
 
 const initialState = {
   recommendations: [],
+  createRecommendation: [],
   favPosts: [],
   userID: null,
   email: "",
@@ -53,6 +57,28 @@ const recommendationReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+
+    case FETCH_CREATERECOMMENDATIONS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_CREATERECOMMENDATIONS_SUCCESS:
+      return {
+        ...state,
+        createRecommendation: action.payload,
+        loading: false,
+        error: null,
+      };
+    case FETCH_CREATERECOMMENDATIONS_FAILURE:
+      return {
+        ...state,
+        createRecommendation: [],
+        loading: false,
+        error: action.payload,
+      };
+
     case DATA_LIST:
       return {
         ...state,

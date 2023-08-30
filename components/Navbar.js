@@ -17,6 +17,8 @@ import { useRouter } from "next/navigation";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Globe from "./Globe";
+import { fetchLoginUser } from "../store/actions/recommendationActions";
+
 const Navbar = () => {
   const router = useRouter();
   const [modalShow, setModalShow] = React.useState(false);
@@ -32,8 +34,11 @@ const Navbar = () => {
   const recommendationsData = useSelector((state) => state.recommendation);
   const [searchTerm, setSearchTerm] = useState("");
   const { recommendations, loading, error } = recommendationsData;
-  const [userID, setUserID] = useState(null);
-  const [email, setEmail] = useState(null);
+  const [userIDs, setUserID] = useState(null);
+  const [emails, setEmail] = useState(null);
+
+  const { userID, email } = useSelector((state) => state.recommendation);
+  console.log(userID, email, "authr");
 
   // const userID =
   //   typeof window !== "undefined" ? localStorage.getItem("userID") : null;
@@ -133,7 +138,7 @@ const Navbar = () => {
                   </div>
                 )}
 
-                <Link href="/login">
+                {/* <Link href="/login">
                   <Image
                     width={50}
                     height={50}
@@ -141,7 +146,28 @@ const Navbar = () => {
                     alt=""
                     className={`mx-3 ${styles.menicon}`}
                   />
-                </Link>
+                </Link> */}
+                {userID ? (
+                  <Link href="/profile">
+                    <Image
+                      width={50}
+                      height={50}
+                      src={men}
+                      alt=""
+                      className={`mx-3 ${styles.menicon}`}
+                    />
+                  </Link>
+                ) : (
+                  <Link href="/login">
+                    <Image
+                      width={50}
+                      height={50}
+                      src={men}
+                      alt=""
+                      className={`mx-3 ${styles.menicon}`}
+                    />
+                  </Link>
+                )}
                 <Image
                   src={logout}
                   width={50}

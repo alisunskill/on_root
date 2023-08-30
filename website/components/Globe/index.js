@@ -50,9 +50,16 @@ const Globes = ({ data }) => {
 
   const { region } = router.query;
 
-  if (region) {
-    router.push(`http://localhost:3000/infinitescroll?region=${region}`);
-  }
+  // if (region) {
+  //   router.push(`http://localhost:3000/infinitescroll?region=${region}`);
+  // }
+  useEffect(() => {
+    setIsClient(true);
+
+    if (region) {
+      router.push(`/infinitescroll?region=${region}`);
+    }
+  }, [region]);
 
   let cityData = [];
   if (recommendations && recommendations.length > 0) {

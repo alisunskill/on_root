@@ -11,7 +11,10 @@ import GoogleLoc from "./components/GoogleLoc";
 import axios, { all } from "axios";
 import { useRouter } from "next/router";
 import GoogleMapReact from "google-map-react";
-import { fetchRecommendations } from "../../store/actions/recommendationActions";
+import {
+  fetchRecommendations,
+  fetchCreateRecommendations,
+} from "../../store/actions/recommendationActions";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import FileBase64 from "react-file-base64";
@@ -55,6 +58,12 @@ export default () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const recommendationsData = useSelector((state) => state.recommendation);
+  const createRecommendationsData = useSelector(
+    (state) => state.recommendation.createRecommendation
+  );
+
+  console.log(createRecommendationsData, "createRecommendationsData");
+
   const userID = useSelector((state) => state.recommendation);
   const { region } = router.query;
   const [storedUserID, setStoredUserID] = useState(null);
@@ -64,7 +73,7 @@ export default () => {
   const [recommendation, setRecommendation] = useState([]);
   const userExists = userID;
   const { recommendations, loading, error } = recommendationsData;
-  console.log(recommendations, "recommendations");
+  // console.log(recommendations, "recommendations");
 
   // const loading = true;
   useEffect(() => {
@@ -159,7 +168,7 @@ export default () => {
     dispatch(fetchRecommendations());
   }, [dispatch]);
 
-  console.log(regionDescriptor, "regionDescriptor");
+  // console.log(regionDescriptor, "regionDescriptor");
   useEffect(() => {
     if (region) {
       const filteredRegionData = regionData.filter(
@@ -184,7 +193,7 @@ export default () => {
       title: item.title,
     };
   });
-  console.log(allLocations, "allregions");
+  // console.log(allLocations, "allregions");
   const [locationInput, setLocationInput] = useState("");
   const [mapCenter, setMapCenter] = useState({
     lat: 31.5204,
@@ -226,54 +235,43 @@ export default () => {
       return;
     }
     try {
-      const formDataToSend = new FormData();
-
-      const locationData = {
-        type: "Point",
-        coordinates: formData.location.coordinates,
-      };
-
-      // user authentication
-      formData.creator = storedUserID;
       const token = localStorage.getItem("token");
+      const userID = localStorage.getItem("userID");
+      console.log(token, userID, "alihuyar");
+      if (!token || !userID) {
+        alert("User not authenticated. Please log in.");
+        return;
+      }
 
-      console.log(token, "token is here");
-      const response = await axios.post(
-        "http://localhost:8000/api/createrecommendation",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      formData.creator = userID;
+
+      // Dispatch the action to create recommendation
+      dispatch(fetchCreateRecommendations(formData, token));
+
+      alert("Recommendation creation requested. Please wait...");
 
       setRecommendation((prevRecommendation) => [
         ...prevRecommendation,
         formData,
       ]);
 
-      if (response.status === 201 && storedUserID) {
-        alert("Recommendation created successfully!");
+      // Clear the form data (if needed)
+      setFormData({
+        title: "",
+        images: [],
+        cost: "",
+        hours: "",
+        experience: "",
+        descriptor: "",
+        location: { type: "Point", coordinates: [0, 0] },
+        region: "",
+        description: "",
+      });
 
-        setFormData({
-          title: "",
-          images: [],
-          cost: "",
-          hours: "",
-          experience: "",
-          descriptor: "",
-          location: { type: "Point", coordinates: [0, 0] },
-          region: "",
-          description: "",
-        });
-        router.push("/confirmsignup");
-      } else {
-        alert("Failed to create recommendation.");
-      }
+      router.push("/confirmsignup");
     } catch (error) {
       console.error("Error:", error);
+      alert("Failed to create recommendation. Please try again.");
     }
   };
 

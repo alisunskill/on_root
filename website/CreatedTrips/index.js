@@ -11,6 +11,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 function ItiniraryDetail() {
   const router = useRouter();
@@ -18,8 +19,8 @@ function ItiniraryDetail() {
   console.log(singletripId, "id");
   const [showIcon, setShowIcon] = useState(true);
   const [modalShow, setModalShow] = useState(false);
-  // const [userId, setUserId] = useState(null);
-
+  const [tripIds, setTripIds] = useState(new Set());
+  console.log(tripIds, "hjhhjjhj");
   // all trips
   const [trips, setTrips] = useState([]);
   const [singleTrips, setSingleTrips] = useState([]);
@@ -52,6 +53,21 @@ function ItiniraryDetail() {
       setSingleTrips(response.data);
     } catch (error) {
       console.error("Error fetching trips:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTripsIds();
+  }, []);
+
+  const fetchTripsIds = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/savetrip");
+      const tripIdData = response.data.tripsPosts.map((trip) => trip.tripId);
+      // setTripIds(tripIdData);
+      setTripIds(new Set(tripIdData));
+    } catch (error) {
+      console.error("Error fetching trip IDs:", error);
     }
   };
 
@@ -114,7 +130,7 @@ function ItiniraryDetail() {
       <div className="container-fluid">
         <div className="row px-4">
           <h1 className="dark bold fw-700 pt-4 text-center mb-4">
-            Your Trips Posts
+            Your Created Trips
           </h1>
 
           <div className="col-lg-12">
@@ -123,7 +139,7 @@ function ItiniraryDetail() {
               dataLength={trips.length}
               loader={<h4>Loading...</h4>}
             >
-              <Box sx={{ minHeight: 829 }}>
+              <Box>
                 <Masonry columns={3} spacing={2}>
                   {trips.map((trip, index) => (
                     <div>
@@ -231,6 +247,130 @@ function ItiniraryDetail() {
                       )}
                     </div>
                   ))}
+                </Masonry>
+              </Box>
+            </InfiniteScroll>
+          </div>
+
+          <div className="col-lg-12">
+            <h1 className="dark bold fw-700 pt-4 text-center mb-4">
+              Your Save Trips
+            </h1>
+            <InfiniteScroll
+              className="w-100 overflow-hidden"
+              dataLength={trips.length}
+              loader={<h4>Loading...</h4>}
+            >
+              <Box>
+                <Masonry columns={3} spacing={2}>
+                  {trips
+                    .filter((trip) => tripIds.has(trip._id))
+                    .map((trip, index) => (
+                      <div>
+                        <div className="position-relative" key={trip._id}>
+                          <button
+                            className="bg-danger border-0 rounded-2 position-absolute z-3 px-3 fw-700"
+                            style={{ right: "0px" }}
+                            onClick={() => handleRemoveTrips(trip._id)}
+                          >
+                            x
+                          </button>
+                        </div>
+                        <Link key={index} href={`/trip/${trip._id}`}>
+                          <img
+                            src={trip.image}
+                            alt="tripImg"
+                            className={styles.placeImg}
+                            loading="lazy"
+                            style={{
+                              display: "block",
+                              width: "100%",
+                              borderRadius: "15px",
+                              opacity: "0.99990000999",
+                            }}
+                          />
+                        </Link>
+
+                        <div className="d-flex justify-content-between mt-2">
+                          <h4 className="w-700 mb-0 text-dark">
+                            Title: {trip.title}
+                          </h4>
+                          <button
+                            className="bg-success text-light border-0 rounded-2 px-2 mx-2"
+                            onClick={() => updateTripEditHandle(trip)}
+                          >
+                            Edit Trip
+                          </button>
+                        </div>
+                        <div className="d-flex justify-content-between mt-2">
+                          <h4 className="w-700 mb-0 text-dark">
+                            region: {trip.region}
+                          </h4>{" "}
+                          <br />
+                          <h4 className="w-700 mb-0 text-dark">
+                            Start Date: {trip.sdate}
+                          </h4>
+                          <h4 className="w-700 mb-0 text-dark">
+                            End Date: {trip.edate}
+                          </h4>
+                        </div>
+
+                        {updateTrip.id === trip._id && (
+                          <div>
+                            <input
+                              type="text"
+                              value={updateTrip.title}
+                              onChange={(e) =>
+                                setUpdateTrip({
+                                  ...updateTrip,
+                                  title: e.target.value,
+                                })
+                              }
+                              placeholder="Title"
+                            />
+                            <input
+                              type="text"
+                              value={updateTrip.region}
+                              onChange={(e) =>
+                                setUpdateTrip({
+                                  ...updateTrip,
+                                  region: e.target.value,
+                                })
+                              }
+                              placeholder="region"
+                            />
+                            <input
+                              type="text"
+                              value={updateTrip.sdate}
+                              onChange={(e) =>
+                                setUpdateTrip({
+                                  ...updateTrip,
+                                  sdate: e.target.value,
+                                })
+                              }
+                              placeholder="Start Date"
+                            />
+                            <input
+                              type="text"
+                              value={updateTrip.edate}
+                              onChange={(e) =>
+                                setUpdateTrip({
+                                  ...updateTrip,
+                                  edate: e.target.value,
+                                })
+                              }
+                              placeholder="End Date"
+                            />
+                            <button
+                              onClick={handleUpdateSubmit}
+                              className="bg-success rounded-2 border-0"
+                            >
+                              Update
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
                 </Masonry>
               </Box>
             </InfiniteScroll>

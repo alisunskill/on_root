@@ -33,17 +33,6 @@ function Login() {
     const userID = storedUserID;
     const email = storedEmail;
     console.log(email, userID, "ali");
-
-    // Set storedUserID and storedEmail with retrieved values
-    // setStoredUserID(userID);
-    // setStoredEmail(email);
-
-    // if (userID && email) {
-    //   router.push("/profile");
-    // } else {
-    //   handleLogout();
-    //   router.push("/login");
-    // }
   }, [dispatch]);
 
   const handleCaptchaChange = (response) => {
@@ -143,7 +132,7 @@ function Login() {
       dispatch(fetchLoginUser({ ...values, recaptchaResponse }));
 
       setSubmitting(true);
-      router.push("/profile");
+      router.push("/createitinerary");
     } catch (error) {
       if (error.response && error.response.status === 401) {
         Swal.fire({
