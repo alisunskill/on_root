@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { fetchRecommendations } from "../../../store/actions/recommendationActions";
 import styles from "../../../styles/home.module.css";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const RecommendationGrid = ({
   recommendations,
@@ -26,6 +27,10 @@ const RecommendationGrid = ({
   const recommendationData = recommendations.Recommendations || [];
   const recentRecommendations = recommendationData.slice(-6);
 
+  const handleLinkClick = (postId) => {
+    Cookies.set("postIdCookie", postId);
+    router.push(`/eventdetail/${encodeURIComponent(postId)}`);
+  };
   return (
     <>
       {recommendationData.length > 0 ? (
@@ -38,13 +43,21 @@ const RecommendationGrid = ({
                   {/* football match */}
 
                   <div className={`col-lg-4 ${styles.landingfirstcard}`}>
-                    <Link href="/infopage" className="text-decoration-none">
+                    <Link
+                      onClick={() =>
+                        handleLinkClick(recentRecommendations[0]._id)
+                      }
+                      href={`/eventdetail/${encodeURIComponent(
+                        recentRecommendations[0].title.replace(/ /g, "-")
+                      )}`}
+                      className="text-decoration-none"
+                    >
                       <div className={styles.landingimage1}>
                         <div className={`col-lg-12 ${styles.landingtext}`}>
                           <p
                             className={`mb-0 letter-spac ${styles.letterspac}`}
                           >
-                            ITINERARY
+                            EVENT
                           </p>
                           <p
                             className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
@@ -62,7 +75,15 @@ const RecommendationGrid = ({
                   <div className={`col-lg-5`}>
                     <div className={`row`}>
                       <div className={`col-lg-12  ${styles.luxuryrow}`}>
-                        <Link href="/infopage" className="text-decoration-none">
+                        <Link
+                          onClick={() =>
+                            handleLinkClick(recentRecommendations[1]._id)
+                          }
+                          href={`/eventdetail/${encodeURIComponent(
+                            recentRecommendations[1]?.title.replace(/ /g, "-")
+                          )}`}
+                          className="text-decoration-none"
+                        >
                           <div
                             className={`${styles.landingimage2} d-flex align-center light-dark`}
                           >
@@ -72,7 +93,7 @@ const RecommendationGrid = ({
                               <p
                                 className={`mb-0 letter-spac ${styles.letterspac}`}
                               >
-                                ITINERARY
+                                EVENT
                               </p>
                               <p
                                 className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
@@ -86,7 +107,15 @@ const RecommendationGrid = ({
                           </div>
                         </Link>
 
-                        <Link href="/infopage" className="text-decoration-none">
+                        <Link
+                          onClick={() =>
+                            handleLinkClick(recentRecommendations[2]._id)
+                          }
+                          href={`/eventdetail/${encodeURIComponent(
+                            recentRecommendations[2]?.title.replace(/ /g, "-")
+                          )}`}
+                          className="text-decoration-none"
+                        >
                           <div
                             className={`${styles.landingimage3} d-flex align-center my-4 light-dark`}
                           >
@@ -96,7 +125,7 @@ const RecommendationGrid = ({
                               <p
                                 className={`mb-0 letter-spac ${styles.letterspac}`}
                               >
-                                ITINERARY
+                                EVENT
                               </p>
                               <p
                                 className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
@@ -110,7 +139,15 @@ const RecommendationGrid = ({
                           </div>
                         </Link>
 
-                        <Link href="/infopage" className="text-decoration-none">
+                        <Link
+                          onClick={() =>
+                            handleLinkClick(recentRecommendations[3]._id)
+                          }
+                          href={`/eventdetail/${encodeURIComponent(
+                            recentRecommendations[3]?.title.replace(/ /g, "-")
+                          )}`}
+                          className="text-decoration-none"
+                        >
                           <div
                             className={`${styles.landingimage4} d-flex align-center light-dark`}
                           >
@@ -120,7 +157,7 @@ const RecommendationGrid = ({
                               <p
                                 className={`mb-0 letter-spac ${styles.letterspac}`}
                               >
-                                ITINERARY
+                                EVENT
                               </p>
                               <p
                                 className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
@@ -141,7 +178,12 @@ const RecommendationGrid = ({
                   <div className={`col-lg-3`}>
                     <div className={`row`}>
                       <Link
-                        href="/infopage"
+                        onClick={() =>
+                          handleLinkClick(recentRecommendations[4]._id)
+                        }
+                        href={`/eventdetail/${encodeURIComponent(
+                          recentRecommendations[4]?.title.replace(/ /g, "-")
+                        )}`}
                         className="text-decoration-none m-0 p-0"
                       >
                         <div className={`col-lg-12 p-0`}>
@@ -155,7 +197,7 @@ const RecommendationGrid = ({
                               <p
                                 className={`mb-0 letter-spac ${styles.letterspac}`}
                               >
-                                ITINERARY
+                                EVENT
                               </p>
                               <p
                                 className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
@@ -171,7 +213,12 @@ const RecommendationGrid = ({
                       </Link>
 
                       <Link
-                        href="/infopage"
+                        onClick={() =>
+                          handleLinkClick(recentRecommendations[5]._id)
+                        }
+                        href={`/eventdetail/${encodeURIComponent(
+                          recentRecommendations[5]?.title.replace(/ /g, "-")
+                        )}`}
                         className="text-decoration-none m-0 p-0"
                       >
                         <div className={`${styles.landingimage6} my-4`}>
@@ -181,7 +228,7 @@ const RecommendationGrid = ({
                             <p
                               className={`mb-0 letter-spac ${styles.letterspac}`}
                             >
-                              ITINERARY
+                              EVENT
                             </p>
                             <p
                               className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
@@ -215,7 +262,12 @@ const RecommendationGrid = ({
                         {recentRecommendations.map((recommendation) => (
                           <Link
                             key={recommendation.id}
-                            href="/infopage"
+                            onClick={() =>
+                              handleLinkClick(recentRecommendations[6]._id)
+                            }
+                            href={`/eventdetail/${encodeURIComponent(
+                              recentRecommendations[6]?.title.replace(/ /g, "-")
+                            )}`}
                             className="text-decoration-none"
                           >
                             <div
@@ -227,7 +279,7 @@ const RecommendationGrid = ({
                                 <p
                                   className={`mb-0 letter-spac ${styles.letterspac}`}
                                 >
-                                  ITINERARY
+                                  EVENT
                                 </p>
                                 <p
                                   className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}

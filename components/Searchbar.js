@@ -36,6 +36,7 @@ const Searchbar = () => {
   const [showAll, setShowAll] = useState(false);
   const [regionData, setRegion] = useState([]);
   useEffect(() => {
+    console.count('search useeffect')
     setPosts(filteredPosts);
     setHasMore(false);
   }, [router.query.region]);

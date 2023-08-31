@@ -15,6 +15,8 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { handleLogout } from "./authUtils";
+import wlogo from "../../public/images/rootwhite.png";
+import Image from "next/image";
 
 // import setUserID
 
@@ -119,7 +121,76 @@ function Login() {
   //     }
   //   }
   // };
-  const handleLogin = async (values, { setSubmitting }) => {
+  // const handleLogin = async (values, { setSubmitting }) => {
+  //   try {
+  //     if (!recaptchaResponse) {
+  //       Swal.fire({
+  //         text: "Please complete the reCAPTCHA challenge.",
+  //         icon: "error",
+  //       });
+  //       return;
+  //     }
+
+  //     dispatch(fetchLoginUser({ ...values, recaptchaResponse }));
+
+  //     setSubmitting(true);
+  //     router.push("/createitinerary");
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 401) {
+  //       Swal.fire({
+  //         text: "Invalid email or password.",
+  //         icon: "error",
+  //       });
+  //     } else {
+  //       Swal.fire({
+  //         text: "Error during Login.",
+  //         icon: "error",
+  //       });
+  //     }
+  //     setSubmitting(false);
+  //   }
+  // };
+
+  // const handleLogin = async (values, { setSubmitting }) => {
+  //   try {
+  //     if (!recaptchaResponse) {
+  //       Swal.fire({
+  //         text: "Please complete the reCAPTCHA challenge.",
+  //         icon: "error",
+  //       });
+  //       return;
+  //     }
+
+  //     const response = await dispatch(
+  //       fetchLoginUser({ ...values, recaptchaResponse })
+  //     );
+
+  //     if (response.error) {
+  //       // Handle errors, including invalid credentials
+  //       if (response.payload.response.status === 401) {
+  //         Swal.fire({
+  //           text: "Invalid email or password.",
+  //           icon: "error",
+  //         });
+  //       } else {
+  //         // Handle other errors
+  //         Swal.fire({
+  //           text: "An error occurred during login.",
+  //           icon: "error",
+  //         });
+  //       }
+  //     } else {
+  //       // Redirect to a new page after successful login
+  //       router.push("/recommendation");
+  //     }
+  //   } catch (error) {
+  //     // Handle other errors
+  //   } finally {
+  //     setSubmitting(false);
+  //   }
+  // };
+
+  const handleLogin = async (values, { setSubmitting, getState }) => {
     try {
       if (!recaptchaResponse) {
         Swal.fire({
@@ -129,22 +200,26 @@ function Login() {
         return;
       }
 
-      dispatch(fetchLoginUser({ ...values, recaptchaResponse }));
+      await dispatch(fetchLoginUser({ ...values, recaptchaResponse }));
 
-      setSubmitting(true);
-      router.push("/createitinerary");
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        Swal.fire({
-          text: "Invalid email or password.",
-          icon: "error",
-        });
+      // Check if token is present in the state to determine login status
+      const token = localStorage.getItem("token");
+      console.log(token, "kkk");
+      if (token) {
+        router.push("/recommendation");
       } else {
         Swal.fire({
-          text: "Error during Login.",
+          text: "An error occurred during login.",
           icon: "error",
         });
       }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        text: "An error occurred during login.",
+        icon: "error",
+      });
+    } finally {
       setSubmitting(false);
     }
   };
@@ -165,8 +240,13 @@ function Login() {
       <div className={`row ${styles.confirmme}`}>
         <div className="col-lg-12 d-flex justify-content-center">
           <div className={styles.signupsignupcontainer}>
-            <h1 className={styles.signupheading1}>Login</h1>
-
+            <h1 className={`text-align-left ${styles.signupheading1}`}>
+              Welcome to
+            </h1>
+            <Image width={160} src={wlogo} alt="wlogo" />
+            <p className="text-light pt-lg-4 pt-3">
+              Share your experiences and get inspired to plan your next trip.
+            </p>
             <Formik
               initialValues={{
                 email: "",
@@ -180,7 +260,7 @@ function Login() {
                   <Field
                     name="email"
                     style={{ padding: "10px" }}
-                    className="form-control rounded-2 border-0 mt-2"
+                    className="form-control rounded-3 border-0 mt-2"
                     placeholder="Email"
                   />
                   <ErrorMessage
@@ -188,12 +268,11 @@ function Login() {
                     component="div"
                     className="text-light"
                   />
-
-                  <div className="position-relative">
+                  <div className="position-relative ">
                     <Field
                       name="password"
                       style={{ padding: "10px" }}
-                      className="form-control rounded-2 border-0 mt-2"
+                      className="form-control rounded-3 border-0 mt-2"
                       placeholder="Password"
                       // type="password"
                       type={showPassword ? "text" : "password"}
@@ -232,13 +311,13 @@ function Login() {
                       />
                     </div>
                     <button
-                      className="savebtn text-light mt-4 cursor-pointer"
+                      className="savebtn1 text-light mt-4 cursor-pointer"
                       type="submit"
                       disabled={!isValid}
                     >
                       Login
                     </button>
-                    <div className="text-center mt-2">
+                    <div className="text-center mt-3">
                       <Link
                         href="/forgotpassword"
                         style={{ color: "#fff", textDecoration: "none" }}
@@ -246,6 +325,7 @@ function Login() {
                         Forgot Password?
                       </Link>{" "}
                       <br />
+                      
                       <Link
                         href="/signup"
                         style={{ color: "#fff", textDecoration: "none" }}

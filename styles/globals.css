@@ -164,6 +164,22 @@ input {
   border: none;
   font-size: 20px;
 }
+
+.savebtn1{
+  background-color: #4562B2;
+  padding: 8px 45px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: none;
+  font-size: 20px;
+}
+.savebtn2{
+  background-color: #4562B2;
+  padding: 8px 25px;
+  font-weight: 600;
+  border-radius: 7px;
+  border: none;
+}
 .react-calendar {
   width: 100% !important;
 }

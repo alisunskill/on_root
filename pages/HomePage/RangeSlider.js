@@ -79,29 +79,29 @@ export default function RangeSlider() {
   };
 
   return (
-   <div className="d-flex justify-content-center">
-     <Box sx={{ width: 275 }}>
-      <Slider
-        getAriaLabel={() => "Price range"}
-        value={value}
-        onChange={handleChange}
-        valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
-        min={minValue}
-        max={1000}
-      />
-      <div>
-        Min: ${value[0]} &#160; &#160; Max: ${value[1]}
-      </div>
+    <div className="d-flex justify-content-center">
+      <Box sx={{ width: 275 }}>
+        <Slider
+          getAriaLabel={() => "Price range"}
+          value={value}
+          onChange={handleChange}
+          valueLabelDisplay="auto"
+          getAriaValueText={valuetext}
+          min={minValue}
+          max={1000}
+        />
+        <div>
+          Min: ${value[0]} &#160; &#160; Max: ${value[1]}
+        </div>
 
-      <button
-        type="button"
-        className="btn btn-primary mt-2 w-100"
-        onClick={handleApply}
-      >
-        Apply
-      </button>
-    </Box>
-   </div>
+        <button
+          type="button"
+          className="btn btn-primary mt-2 w-100"
+          onClick={handleApply}
+        >
+          Apply
+        </button>
+      </Box>
+    </div>
   );
 }

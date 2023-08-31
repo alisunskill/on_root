@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import Swal from "sweetalert2";
 import styles from "../../styles/signin.module.css";
 import Captcha from "./Captcha";
+import wlogo from "../../public/images/rootwhite.png";
+import Image from "next/image";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
@@ -94,8 +96,11 @@ function Signup() {
       <div className={`row ${styles.confirmme}`}>
         <div className="col-lg-12 d-flex justify-content-center">
           <div className={styles.signupsignupcontainer}>
-            <h1 className={styles.signupheading1}>SIGN UP</h1>
-
+            <h1 className={styles.signupheading1}>Welcome to</h1>
+            <Image width={160} src={wlogo} alt="wlogo" />
+            <p className="text-light pt-lg-4 pt-3">
+              Share your experiences and get inspired to plan your next trip.
+            </p>
             <Formik
               initialValues={{
                 firstName: "",
@@ -115,7 +120,7 @@ function Signup() {
                       <Field
                         name="firstName"
                         style={{ padding: "10px" }}
-                        className="form-control rounded-2 border-0 "
+                        className="form-control rounded-3 border-0 "
                         placeholder="First Name"
                       />
                       {errors.firstName && touched.firstName ? (
@@ -127,7 +132,7 @@ function Signup() {
                       <Field
                         name="lastName"
                         style={{ padding: "10px" }}
-                        className="form-control rounded-2 border-0 "
+                        className="form-control rounded-3 border-0 "
                         placeholder="Last Name"
                       />
                       {errors.lastName && touched.lastName ? (
@@ -141,7 +146,7 @@ function Signup() {
                     name="image"
                     ref={fileInputRef}
                     style={{ padding: "10px" }}
-                    className="form-control rounded-2 border-0 mt-2"
+                    className="form-control rounded-3 border-0 mt-2"
                     placeholder="Email"
                     accept=".pdf,.doc,.docx,.jpg,.png"
                   />
@@ -154,7 +159,7 @@ function Signup() {
                     name="email"
                     type="email"
                     style={{ padding: "10px" }}
-                    className="form-control rounded-2 border-0 mt-2"
+                    className="form-control rounded-3 border-0 mt-2"
                     placeholder="Email"
                   />
                   {errors.email && touched.email ? (
@@ -163,7 +168,7 @@ function Signup() {
                   <Field
                     name="username"
                     style={{ padding: "10px" }}
-                    className="form-control rounded-2 border-0 mt-2"
+                    className="form-control rounded-3 border-0 mt-2"
                     placeholder="Username"
                   />
                   {errors.username && touched.username ? (
@@ -175,7 +180,7 @@ function Signup() {
                       // type="password"
                       name="password"
                       style={{ padding: "10px" }}
-                      className="form-control rounded-2 border-0 mt-2"
+                      className="form-control rounded-3 border-0 mt-2"
                       placeholder="Password"
                       type={showPassword ? "text" : "password"}
                     />
@@ -209,7 +214,7 @@ function Signup() {
                   <div className="text-center">
                     <button
                       type="submit"
-                      className="savebtn text-light mt-4"
+                      className="savebtn1 text-light mt-4"
                       disabled={!isValid}
                     >
                       Sign Up

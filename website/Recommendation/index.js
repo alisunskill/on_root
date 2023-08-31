@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/home.module.css";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Box } from "@mui/material";
 import { Masonry } from "@mui/lab";
 import axios from "axios";
-import Link from "next/link";
 
 const itemData = [
   {
@@ -24,6 +24,7 @@ const itemData = [
 ];
 export default () => {
   const [postIds, setPostIds] = useState([]);
+  console.log(postIds, "postIds");
   const [trigger, setTrigger] = useState(new Date());
   const [editData, setEditData] = useState({});
   const [ediData, setEdiData] = useState({

@@ -93,32 +93,6 @@ export const loginFailure = (error) => ({
   payload: error,
 });
 
-export const fetchLoginUser = (credentials) => {
-  console.log(credentials, "credentials");
-  return async (dispatch) => {
-    try {
-      dispatch(loginRequest());
-      const response = await axios.post(
-        "http://localhost:8000/api/users/login",
-        credentials
-      );
-      const { token, userID, email } = response.data;
-      localStorage.setItem("userID", userID);
-      localStorage.setItem("token", token);
-      localStorage.setItem("email", email);
-      console.log(response.data, token, "bolded token");
-      console.log(token, "token bbb"); // Log the token
-
-      dispatch({
-        payload: loginSuccess(token, userID, email),
-        type: LOGIN_SUCCESS,
-      });
-    } catch (error) {
-      dispatch(loginFailure(error.message));
-    }
-  };
-};
-
 export const setUserID = (userID, email) => {
   console.log("Email:", userID, email);
   // console.log("User ID:", userID);
@@ -177,6 +151,36 @@ export const fetchFavPosts = () => {
       dispatch(fetchPostsSuccess(response.data));
     } catch (error) {
       dispatch(fetchPostsFailure(error.message));
+    }
+  };
+};
+
+// /login
+export const fetchLoginUser = (credentials) => {
+  console.log(credentials, "credentials");
+  return async (dispatch) => {
+    try {
+      dispatch(loginRequest());
+      const response = await axios.post(
+        "http://localhost:8000/api/users/login",
+        credentials
+      );
+      console.log("Response data from server:", response.data);
+
+      const { token, userID, email } = response.data;
+      localStorage.setItem("userID", userID);
+      localStorage.setItem("token", token);
+      localStorage.setItem("email", email);
+      console.log(response.data, token, "bolded token");
+      console.log(token, "token bbb"); // Log the token
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: loginSuccess(token, userID, email),
+      });
+      return token;
+    } catch (error) {
+      dispatch(loginFailure(error.message));
     }
   };
 };

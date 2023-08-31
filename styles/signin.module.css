@@ -3,14 +3,13 @@
   font-size: 30px;
   color: #ffffff;
   margin: 0%;
-  text-align: center;
   font-weight: 700;
 }
 
 .signupmycontainer {
   height: 100vh;
   width: 100%;
-  background-image: url("../public/images/bgimage.jpg");
+  /* background-image: url("../public/images/bgimag.jpg"); */
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -20,10 +19,11 @@
 }
 .signupsignupcontainer {
   width: 45%;
-  background-image: url("../public/images/Rectangle\ 103.png");
+  /* background-image: url("../public/images/Rectangle\ 103.png"); */
+  background-color: #7cc5e5;
   background-size: cover;
   border-radius: 20px;
-  padding: 80px 30px;
+  padding: 45px 40px;
 }
 .signupinputfield {
   text-align: center;
@@ -32,7 +32,7 @@
   text-align: center;
   width: 30%;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 20px;
   border-color: white;
   margin-top: 10px;
   outline: none;
@@ -54,7 +54,7 @@
 /* confirm sign in   */
 .confirmme {
   height: 100vh;
-  background-image: url("../public/images/bgimage.jpg");
+  background-image: url("../public/images/bglogin.svg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -103,7 +103,7 @@
 @media only screen and (max-width: 1440px) {
   .signupsignupcontainer {
     width: 43%;
-    padding: 60px 20px;
+    padding: 45px 40px;
   }
   .confirm_container {
     max-width: 45%;

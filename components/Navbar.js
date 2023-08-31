@@ -27,6 +27,7 @@ const Navbar = () => {
   };
   const handleLogout1 = () => {
     handleLogout();
+    router.push("/login");
   };
 
   // globe
@@ -53,6 +54,8 @@ const Navbar = () => {
       setEmail(storedEmail);
     }
   }, []);
+
+  console.count("navvvvv");
 
   const handleCreateItinerary = () => {
     if (!userID) {
@@ -147,17 +150,7 @@ const Navbar = () => {
                     className={`mx-3 ${styles.menicon}`}
                   />
                 </Link> */}
-                {userID ? (
-                  <Link href="/profile">
-                    <Image
-                      width={50}
-                      height={50}
-                      src={men}
-                      alt=""
-                      className={`mx-3 ${styles.menicon}`}
-                    />
-                  </Link>
-                ) : (
+                {/* {userID ? (
                   <Link href="/login">
                     <Image
                       width={50}
@@ -167,15 +160,55 @@ const Navbar = () => {
                       className={`mx-3 ${styles.menicon}`}
                     />
                   </Link>
+                ) : (
+                  <Image
+                    src={logout}
+                    width={50}
+                    height={50}
+                    alt=""
+                    onClick={handleLogout1}
+                    className={`mx-3 object-fit-contain cursor-pointer ${styles.menicon}`}
+                  />
+                )} */}
+
+                {userID ? (
+                  <>
+                    <Link href="/createitinerary">
+                      {/* Show "Create Itinerary" icon */}
+                    </Link>
+                    <Image
+                      src={logout}
+                      width={50}
+                      height={50}
+                      alt=""
+                      onClick={handleLogout1}
+                      className={`mx-3 object-fit-contain cursor-pointer ${styles.menicon}`}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <div onClick={handleCreateItinerary}>
+                      {/* Show "Create Itinerary" icon */}
+                    </div>
+                    <Link href="/login">
+                      <Image
+                        width={50}
+                        height={50}
+                        src={men} // Show "Profile" icon for logged-out user
+                        alt=""
+                        className={`mx-3 ${styles.menicon}`}
+                      />
+                    </Link>
+                  </>
                 )}
-                <Image
+                {/* <Image
                   src={logout}
                   width={50}
                   height={50}
                   alt=""
                   onClick={handleLogout1}
                   className={`mx-3 object-fit-contain cursor-pointer ${styles.menicon}`}
-                />
+                /> */}
               </div>
             </div>
             {/* searchbar */}
