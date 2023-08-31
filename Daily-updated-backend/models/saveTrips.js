@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
-const savePostsSchema = new mongoose.Schema({
-  postId: {
+const saveTripsSchema = new mongoose.Schema({
+  tripId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Post",
+    ref: "Trip",
     required: true,
   },
   userID: {
@@ -12,6 +12,6 @@ const savePostsSchema = new mongoose.Schema({
   },
 });
 
-const SavePosts = mongoose.model("SavePosts", savePostsSchema);
+const SaveTrips = mongoose.model("SaveTrips", saveTripsSchema);
 
-module.exports = SavePosts;
+module.exports = SaveTrips;

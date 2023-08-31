@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { fetchSingleTrip } from "../../store/actions/singleTripAction";
 import newsletterimg from "../../public/images/card-two.svg";
+import {
+  updateTripAction,
+  removeTripAction,
+} from "../../store/actions/updateTripAction";
+
 import styles from "../../styles/viewsave.module.css";
 import NewsLetter from "../components/NewsLetter";
 // import Trip from "./components/Trip";
@@ -18,16 +24,44 @@ import { useDispatch, useSelector } from "react-redux";
 function ItiniraryDetail() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { id: singletripId } = router.query;
-  console.log(singletripId, "id");
-  const [tripIds, setTripIds] = useState(new Set());
 
+  const [tripIds, setTripIds] = useState(new Set());
+  const [singleTrips, setSingleTrips] = useState(null);
   const saveTripsData = useSelector((state) => state.tripIdSave.savetrips);
   const tripIdData = useSelector((state) => state?.tripIdSave.savedTripsId);
   const savedTripIds = tripIdData?.tripsPosts?.map((trip) => trip.tripId) || [];
   const savedTripsData = useSelector((state) => state.tripIdSave.savetrips);
+  const singleTrip = useSelector((state) => state.singleTrip.singleTrip);
 
-  console.log(savedTripIds, "saveTripsData");
+  console.log(singleTrip, "singleTriped");
+
+  const { id: singletripId } = router.query;
+
+  useEffect(() => {
+    if (singletripId) {
+      dispatch(fetchSingleTrip(singletripId));
+    }
+  }, [dispatch, singletripId]);
+
+  // const fetchSingleTrips = async () => {
+  //   setSingleTrips(singleTrip);
+  // };
+
+  // const fetchSingleTrips = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:8000/api/trips/${singletripId}`
+  //     );
+  //   } catch (error) {
+  //     console.error("Error fetching trips:", error);
+  //   }
+  // };
+
+  useEffect(() => {
+    if (singleTrip) {
+      setSingleTrips([singleTrip]);
+    }
+  }, [singleTrip]);
 
   useEffect(() => {
     dispatch(fetchGetTrips());
@@ -46,8 +80,7 @@ function ItiniraryDetail() {
   useEffect(() => {
     setTrips(savedTripsData);
   }, [savedTripsData]);
-  const [singleTrips, setSingleTrips] = useState([]);
-  console.log(singleTrips, "singleTrips");
+  // console.log(singleTrips, "singleTrips");
   const [updateTrip, setUpdateTrip] = useState({
     id: null,
     image: "",
@@ -64,39 +97,38 @@ function ItiniraryDetail() {
     setTrips(saveTripsData);
   };
 
-  const fetchSingleTrips = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/trips/${singletripId}`
-      );
-      setSingleTrips(response.data);
-    } catch (error) {
-      console.error("Error fetching trips:", error);
-    }
-  };
-
   useEffect(() => {
     fetchTripsIds();
   }, []);
 
+  // useEffect(() => {
+  //   if (singletripId) {
+  //     fetchSingleTrips();
+  //   }
+  // }, [singletripId]);
 
-  useEffect(() => {
-    if (singletripId) {
-      fetchSingleTrips();
-    }
-  }, [singletripId]);
+  // const handleRemoveTrips = async (tripId) => {
+  //   try {
+  //     const response = await axios.delete(
+  //       `http://localhost:8000/api/trips/${tripId}`
+  //     );
+  //     console.log(response.data);
+  //     fetchTrips();
+  //   } catch (error) {
+  //     console.error("Error deleting trip:", error);
+  //   }
+  // };
 
   const handleRemoveTrips = async (tripId) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/api/trips/${tripId}`
-      );
-      console.log(response.data);
+      await dispatch(removeTripAction(tripId));
+      console.log("Trip removed successfully!");
       fetchTrips();
     } catch (error) {
       console.error("Error deleting trip:", error);
     }
   };
+
   const updateTripEditHandle = (trip) => {
     setUpdateTrip({
       id: trip._id,
@@ -105,22 +137,14 @@ function ItiniraryDetail() {
       region: trip.region,
       sdate: trip.sdate,
       edate: trip.edate,
+      setUpdateTrip,
     });
   };
 
   const handleUpdateSubmit = async () => {
     try {
-      const response = await axios.put(
-        `http://localhost:8000/api/trips/${updateTrip.id}`,
-        {
-          image: updateTrip.image,
-          title: updateTrip.title,
-          region: updateTrip.region,
-          sdate: updateTrip.sdate,
-          edate: updateTrip.edate,
-        }
-      );
-      console.log(response.data);
+      await dispatch(updateTripAction(updateTrip));
+      console.log("Trip updated successfully!");
       setUpdateTrip({
         id: null,
         image: "",
@@ -134,6 +158,7 @@ function ItiniraryDetail() {
       console.error("Error updating trip:", error);
     }
   };
+
   return (
     <>
       <div className="container-fluid">
@@ -204,7 +229,7 @@ function ItiniraryDetail() {
                         <div>
                           <input
                             type="text"
-                            value={updateTrip.title}
+                            value={updateTrip.title || ""}
                             onChange={(e) =>
                               setUpdateTrip({
                                 ...updateTrip,
@@ -215,7 +240,7 @@ function ItiniraryDetail() {
                           />
                           <input
                             type="text"
-                            value={updateTrip.region}
+                            value={updateTrip.region || ""}
                             onChange={(e) =>
                               setUpdateTrip({
                                 ...updateTrip,
@@ -226,7 +251,7 @@ function ItiniraryDetail() {
                           />
                           <input
                             type="text"
-                            value={updateTrip.sdate}
+                            value={updateTrip.sdate || ""}
                             onChange={(e) =>
                               setUpdateTrip({
                                 ...updateTrip,
@@ -237,7 +262,7 @@ function ItiniraryDetail() {
                           />
                           <input
                             type="text"
-                            value={updateTrip.edate}
+                            value={updateTrip.edate || ""}
                             onChange={(e) =>
                               setUpdateTrip({
                                 ...updateTrip,
@@ -247,7 +272,8 @@ function ItiniraryDetail() {
                             placeholder="End Date"
                           />
                           <button
-                            onClick={handleUpdateSubmit}
+                            // onClick={handleUpdateSubmit}
+                            onClick={() => handleUpdateSubmit(trip)}
                             className="bg-success rounded-2 border-0"
                           >
                             Update
@@ -371,7 +397,8 @@ function ItiniraryDetail() {
                               placeholder="End Date"
                             />
                             <button
-                              onClick={handleUpdateSubmit}
+                              // onClick={handleUpdateSubmit}
+                              onClick={() => handleUpdateSubmit(trip)}
                               className="bg-success rounded-2 border-0"
                             >
                               Update
@@ -386,123 +413,123 @@ function ItiniraryDetail() {
           </div>
 
           {/* <div className="col-lg-4 first-card position-relative">
-            <div
-              className={` d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_image1}`}
-            >
-              <div className="col-lg-12 yoursave_text">
-                <FontAwesomeIcon
-                  onClick={() => setModalShow(true)}
-                  className={styles.plusicon}
-                  icon={faPlus}
-                />
-                <div className="text-center w-100  d-flex justify-content-center align-items-center">
-                  <Trip
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                    setModalShow={setModalShow}
+              <div
+                className={` d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_image1}`}
+              >
+                <div className="col-lg-12 yoursave_text">
+                  <FontAwesomeIcon
+                    onClick={() => setModalShow(true)}
+                    className={styles.plusicon}
+                    icon={faPlus}
                   />
-                </div>{" "}
-                <p className="letterspac">ITINERARY</p>
-                <h3 className="landingeventheading"> Saved Activity 1 </h3>
-                <p className="mb-0 fw-500">Paris, France</p>
-              </div>
-            </div>
-            <div className="row ">
-              <div className="col-lg-12 col-md-12 pt-0 mt-0">
-                <div
-                  className={`row  d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
-                  style={{ background: "white" }}
-                >
-                  <Trip
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                    setModalShow={setModalShow}
-                  />
-                  {eventData1.map((item, index) => {
-                    return (
-                      <PlaceFullSubCard
-                        key={index}
-                        imageUrl={item.bgImg}
-                        showIcon={showIcon}
-                        itinerary={item.itinerary}
-                        title={item.title}
-                        place={item.place}
-                        time={item.time}
-                        setModalShow={setModalShow}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-8">
-            <div className="row">
-              <div className="col-lg-12 col-md-12 pt-0 mt-0">
-                <div
-                  className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
-                  style={{ background: "white" }}
-                >
-                  <Trip show={modalShow} onHide={() => setModalShow(false)} />
-                  {eventData.map((item, index) => {
-                    return (
-                      <PlaceFullSubCard
-                        key={index}
-                        imageUrl={item.bgImg}
-                        showIcon={showIcon}
-                        itinerary={item.itinerary}
-                        title={item.title}
-                        place={item.place}
-                        time={item.time}
-                        setModalShow={setModalShow}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-lg-4 first-card">
-                <div className={styles.yoursave_image1}>
-                  <div
-                    className={`col-lg-12 position-relative d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_text}`}
-                  >
-                    <FontAwesomeIcon
-                      onClick={() => setModalShow(true)}
-                      className={styles.plusicon2}
-                      icon={faPlus}
+                  <div className="text-center w-100  d-flex justify-content-center align-items-center">
+                    <Trip
+                      show={modalShow}
+                      onHide={() => setModalShow(false)}
+                      setModalShow={setModalShow}
                     />
-                    <Trip show={modalShow} onHide={() => setModalShow(false)} />
-                    <p className="fw-500 ltr-shrt-spec">ITINERARY</p>
-                    <h3 className="landingeventheading"> Saved Activity 1 </h3>
-                    <p className="mb-0 fw-500">Paris, France</p>
+                  </div>{" "}
+                  <p className="letterspac">ITINERARY</p>
+                  <h3 className="landingeventheading"> Saved Activity 1 </h3>
+                  <p className="mb-0 fw-500">Paris, France</p>
+                </div>
+              </div>
+              <div className="row ">
+                <div className="col-lg-12 col-md-12 pt-0 mt-0">
+                  <div
+                    className={`row  d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
+                    style={{ background: "white" }}
+                  >
+                    <Trip
+                      show={modalShow}
+                      onHide={() => setModalShow(false)}
+                      setModalShow={setModalShow}
+                    />
+                    {eventData1.map((item, index) => {
+                      return (
+                        <PlaceFullSubCard
+                          key={index}
+                          imageUrl={item.bgImg}
+                          showIcon={showIcon}
+                          itinerary={item.itinerary}
+                          title={item.title}
+                          place={item.place}
+                          time={item.time}
+                          setModalShow={setModalShow}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               </div>
-              <div className="col-lg-8">
-                <div
-                  className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
-                  style={{ background: "white" }}
-                >
-                  {eventData2.map((item, index) => {
-                    return (
-                      <PlaceFullSubCard
-                        key={index}
-                        imageUrl={item.bgImg}
-                        showIcon={showIcon}
-                        itinerary={item.itinerary}
-                        title={item.title}
-                        place={item.place}
-                        time={item.time}
-                        setModalShow={setModalShow}
-                      />
-                    );
-                  })}
+            </div>
+            <div className="col-lg-8">
+              <div className="row">
+                <div className="col-lg-12 col-md-12 pt-0 mt-0">
+                  <div
+                    className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
+                    style={{ background: "white" }}
+                  >
+                    <Trip show={modalShow} onHide={() => setModalShow(false)} />
+                    {eventData.map((item, index) => {
+                      return (
+                        <PlaceFullSubCard
+                          key={index}
+                          imageUrl={item.bgImg}
+                          showIcon={showIcon}
+                          itinerary={item.itinerary}
+                          title={item.title}
+                          place={item.place}
+                          time={item.time}
+                          setModalShow={setModalShow}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div> */}
+
+              <div className="row">
+                <div className="col-lg-4 first-card">
+                  <div className={styles.yoursave_image1}>
+                    <div
+                      className={`col-lg-12 position-relative d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_text}`}
+                    >
+                      <FontAwesomeIcon
+                        onClick={() => setModalShow(true)}
+                        className={styles.plusicon2}
+                        icon={faPlus}
+                      />
+                      <Trip show={modalShow} onHide={() => setModalShow(false)} />
+                      <p className="fw-500 ltr-shrt-spec">ITINERARY</p>
+                      <h3 className="landingeventheading"> Saved Activity 1 </h3>
+                      <p className="mb-0 fw-500">Paris, France</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-8">
+                  <div
+                    className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
+                    style={{ background: "white" }}
+                  >
+                    {eventData2.map((item, index) => {
+                      return (
+                        <PlaceFullSubCard
+                          key={index}
+                          imageUrl={item.bgImg}
+                          showIcon={showIcon}
+                          itinerary={item.itinerary}
+                          title={item.title}
+                          place={item.place}
+                          time={item.time}
+                          setModalShow={setModalShow}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div> */}
         </div>
       </div>
 

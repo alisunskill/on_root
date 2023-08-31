@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/home.module.css";
-import paint from "../../public/images/paint.svg";
-import burger from "../../public/images/blackburger.svg";
-import Image from "next/image";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Box } from "@mui/material";
 import { Masonry } from "@mui/lab";
 import axios from "axios";
 import Link from "next/link";

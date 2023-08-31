@@ -74,7 +74,7 @@ exports.loginUser = async (req, res) => {
       return res.status(401).json({ message: "reCAPTCHA verification failed" });
     }
 
-    console.log(email, password);
+    // console.log(email, password, "jjj");
 
     // Find the user by email
     const user = await User.findOne({ email });
@@ -94,7 +94,12 @@ exports.loginUser = async (req, res) => {
       expiresIn: "1h",
     });
     user.token = token;
-    res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({
+      message: "Login successful",
+      token: token,
+      userID: user._id,
+      email: user.email,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

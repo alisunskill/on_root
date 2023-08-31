@@ -8,6 +8,7 @@ export const FETCH_GETTRIPS_REQUEST = "FETCH_GETTRIPS_REQUEST";
 export const FETCH_GETTRIPS_SUCCESS = "FETCH_GETTRIPS_SUCCESS";
 export const FETCH_GETTRIPS_FAILURE = "FETCH_GETTRIPS_FAILURE";
 
+
 export const SET_TRIP_ID = "SET_TRIP_ID";
 
 // export const setTripId = (tripId) => {
@@ -71,3 +72,5 @@ export const fetchGetTrips = () => {
     }
   };
 };
+
+

@@ -7,7 +7,7 @@ const app = express();
 
 app.use(express.json({ limit: "10mb" }));
 
-// app.use(express.json());
+app.use(express.json());
 
 var cors = require("cors");
 
@@ -21,11 +21,14 @@ const trips_routes = require("./routes/tripsRoute");
 
 const savePostRoute = require("./routes/savePostRoute");
 
+const saveTripRoute = require("./routes/saveTripsRoute");
+
 const userRoutes = require("./routes/userRoutes");
 
 const itineraryPost = require("./routes/itinerary");
 
 const creacreateRecommendation = require("./routes/recommendations");
+const SaveTrips = require("./models/saveTrips");
 
 app.get("/", (req, res) => {
   res.send("Hi, This is API Developed by Sunny");
@@ -58,6 +61,9 @@ app.use("/api/itineraryposts", itineraryPost);
 
 // saveposts
 app.use("/api/savepost", savePostRoute);
+
+// SaveTrips
+app.use("/api/savetrip", saveTripRoute);
 
 const start = async () => {
   try {
