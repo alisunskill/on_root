@@ -77,7 +77,6 @@ export default (props) => {
 
   const handleLocationClick = (event, data) => {
     const region = data.label;
-    props.onHide();
     router.push({
       pathname: "/infinitescroll",
       query: { region },
@@ -97,16 +96,17 @@ export default (props) => {
   );
   return (
     <div>
-      <Modal
-        {...props}
+      <h3 className="p-4 fw-600 d-flex justify-content-center w-100">
+        Discover the World
+      </h3>
+
+      <div
+        // {...props}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Globe</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ height: "500px" }}>
+        <div style={{ height: "500px" }}>
           <SizeMe>
             {({ size: { width } }) => (
               <div
@@ -119,7 +119,6 @@ export default (props) => {
                 }}
               >
                 <Globe
-                  // width="100px"
                   width="width"
                   height={width * 0.5}
                   globeImageUrl="images/8081_earthmap10k-blue-svg.webp"
@@ -127,7 +126,7 @@ export default (props) => {
                   labelLat={(d) => d.lat}
                   labelLng={(d) => d.lng}
                   labelText={(d) => d.label}
-                  labelSize={2}
+                  labelSize={8}
                   labelDotRadius={3}
                   labelColor={() => "white"}
                   labelResolution={2}
@@ -147,7 +146,7 @@ export default (props) => {
 
                     el.innerHTML =
                       renderToString(marker) +
-                      `<p style="font-size: 12px;color:white;text-align: center;">${d.label}</p>`;
+                      `<p style="font-size: 12px;color:white;text-align: center; margin: 8px 0;">${d.label}</p>`;
                     el.style.color = d.color;
                     el.style.width = `${d.size}px`;
 
@@ -160,8 +159,8 @@ export default (props) => {
               </div>
             )}
           </SizeMe>
-        </Modal.Body>
-      </Modal>
+        </div>
+      </div>
     </div>
   );
 };

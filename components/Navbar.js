@@ -93,26 +93,27 @@ const Navbar = () => {
                 className={`icons-right col-xl-3 col-lg-3 col-md-3 col-sm-3 position-absolute d-flex justify-content-end align-items-center ${styles.right_box}`}
               >
                 <Button
-                  className="bg-transparent border-0"
-                  onClick={() => setModalShow(true)}
+                  className="bg-transparent border-0 outline-none"
+                  // onClick={() => setModalShow(true)}
                 >
-                  {" "}
-                  <Image
-                    width={50}
-                    height={50}
-                    src={earth}
-                    alt="earth"
-                    style={{ objectFit: "contain" }}
-                    className={`mx-4" ${styles.plusicon}`}
-                  />
+                  <Link href="/globemap">
+                    <Image
+                      width={50}
+                      height={50}
+                      src={earth}
+                      alt="earth"
+                      style={{ objectFit: "contain" }}
+                      className={`mx-4" ${styles.plusicon}`}
+                    />
+                  </Link>
                 </Button>
-                {modalShow && (
+                {/* {modalShow && (
                   <Globe
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                     data={recommendationsData}
                   />
-                )}
+                )} */}
 
                 {userID ? (
                   <Link href="/createitinerary">

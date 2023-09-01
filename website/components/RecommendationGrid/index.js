@@ -5,6 +5,7 @@ import { fetchRecommendations } from "../../../store/actions/recommendationActio
 import styles from "../../../styles/home.module.css";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 const RecommendationGrid = ({
   recommendations,
@@ -17,13 +18,18 @@ const RecommendationGrid = ({
   }, [fetchRecommendations]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    );
   }
 
   if (error) {
     return <p>Error: {error}</p>;
   }
 
+  const router = useRouter();
   const recommendationData = recommendations.Recommendations || [];
   const recentRecommendations = recommendationData.slice(-6);
 
@@ -52,7 +58,16 @@ const RecommendationGrid = ({
                       )}`}
                       className="text-decoration-none"
                     >
-                      <div className={styles.landingimage1}>
+                      <div
+                        className={styles.landingimage1}
+                        style={{
+                          backgroundImage: `url(${recentRecommendations[0]?.images[0]})`,
+                        }}
+                      >
+                        {console.log(
+                          recentRecommendations[0],
+                          "ali image ye he"
+                        )}
                         <div className={`col-lg-12 ${styles.landingtext}`}>
                           <p
                             className={`mb-0 letter-spac ${styles.letterspac}`}

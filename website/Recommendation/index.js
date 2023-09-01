@@ -440,7 +440,7 @@ export default () => {
                         </p>
                         <p className="w-700 text-dark">Region: {post.region}</p>
                         <p className="w-700 text-dark">
-                          Description: {post.description}
+                          {/* Description: {post.description} */}
                         </p>
                       </div>
                     </div>

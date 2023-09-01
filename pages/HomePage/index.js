@@ -314,12 +314,12 @@ export default () => {
             style={{ marginBottom: "20px;" }}
           >
             {/* Events Zone */}
-            <div className={`col-lg-8 p-0`}>
+            <div className={`col-lg-12 p-0`}>
               <RecommendationGrid data={recommendationData} />
             </div>
-            <div className="col-lg-12">
+            {/* <div className="col-lg-12">
               <Global data={recommendationsData} />
-            </div>
+            </div> */}
           </div>
 
           <div className="row">

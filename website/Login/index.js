@@ -225,7 +225,7 @@ function Login() {
   };
 
   const loginSchema = Yup.object().shape({
-    email: Yup.string().required("Username or Email is required"),
+    email: Yup.string().required("Email is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters long")
       .matches(
@@ -325,7 +325,6 @@ function Login() {
                         Forgot Password?
                       </Link>{" "}
                       <br />
-                      
                       <Link
                         href="/signup"
                         style={{ color: "#fff", textDecoration: "none" }}

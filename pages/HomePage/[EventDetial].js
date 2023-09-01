@@ -4,13 +4,13 @@ import plusicon2 from "../../public/images/plusicon2.svg";
 import hearticon21 from "../../public/images/hearticon21.svg";
 import burger from "../../public/images/burger.svg";
 import painticon from "../../public/images/painticon.svg";
+import { useRouter } from "next/router";
 import travelicon from "../../public/images/travelicon.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import plane from "../../public/images/aeroplan.svg";
 import Image from "next/image";
 import SliderApps from "./SliderApps";
-import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import GoogleMapReact from "google-map-react";
 import Cookies from "js-cookie";
@@ -19,7 +19,7 @@ export default function EventDetail() {
   const router = useRouter();
 
   const { postId } = router.query;
-  console.log(postId, "klklkl");
+
   const itemData = [
     {
       img: "https://images.unsplash.com/photo-1663583784667-4a2a386fec62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
@@ -80,7 +80,7 @@ export default function EventDetail() {
   const recData = recommendations.Recommendations;
 
   const filteredData = recData?.find((item) => item._id === postid);
-  console.log(filteredData, "filteredData");
+  console.log(filteredData, "filteredData vv");
 
   const filterLoc = filteredData?.location;
   const [staticMarkerPosition, setStaticMarkerPosition] = useState({
@@ -243,26 +243,13 @@ export default function EventDetail() {
             </div>
             <div className="row">
               <div className="col-lg-12 col-md-12 mt-4">
-                <SliderApps images={imagesData} />
+                <SliderApps images={filteredData?.images} />
               </div>
 
               <div className="col-12 col-md-12 col-lg-12 py-3">
                 <p className={styles.eventtitlepara}>
-                  Dynamic <br />
+                  <br />
                   {filteredData?.description} <br />
-                  Dynamic
-                  <br /> <br /> Discover the best of New Jersey's arts and
-                  crafts as you browse through our artisan market featuring
-                  handmade goods from local vendors. Taste the flavors of the
-                  state with a selection of food and drink from some of the best
-                  restaurants and breweries in the area. And don't miss out on
-                  our live performances, featuring musicians, dancers, and other
-                  artists who represent the many cultures that call New Jersey
-                  home. <br /> <br />
-                  Whether you're a lifelong resident or visiting for the first
-                  time, the Garden State Gathering is an event you won't want to
-                  miss. Come celebrate the rich heritage of New Jersey and
-                  experience all that this great state has to offer!
                 </p>
               </div>
             </div>
@@ -272,11 +259,16 @@ export default function EventDetail() {
               <div
                 className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
               >
-                <div className={styles.eventicons}>
+                {/* <div className={styles.eventicons}>
                   <Image
                     className={`h-auto ${styles.foodIcons}`}
                     src={burger}
                     alt=""
+                    style={
+                      filteredData?.descriptor === "food"
+                        ? { border: "2px solid green", borderRadius: "50px" }
+                        : { border: "none" }
+                    }
                   />
                 </div>
                 <div className={` ${styles.eventicons}`}>
@@ -284,6 +276,11 @@ export default function EventDetail() {
                     className={`h-auto ${styles.foodIcons}`}
                     src={painticon}
                     alt=""
+                    style={
+                      filteredData?.descriptor === "Art"
+                        ? { border: "2px solid green", borderRadius: "50px" }
+                        : { border: "none" }
+                    }
                   />
                 </div>
                 <div className={` ${styles.eventicons}`}>
@@ -291,8 +288,57 @@ export default function EventDetail() {
                     className={`h-auto ${styles.foodIcons}`}
                     src={travelicon}
                     alt=""
+                    style={
+                      filteredData?.descriptor === "Hiking"
+                        ? { border: "2px solid green", borderRadius: "50px" }
+                        : { border: "none" }
+                    }
                   />
-                </div>
+                </div> */}
+                {filteredData?.descriptor === "food" && (
+                  <div className={styles.eventicons}>
+                    <Image
+                      className={`h-auto ${styles.foodIcons}`}
+                      src={burger}
+                      alt=""
+                      style={{
+                        border: "2px solid green",
+                        borderRadius: "50px",
+                      }}
+                    />
+                    {/* <h4> {filteredData?.descriptor} </h4> */}
+                  </div>
+                )}
+
+                {filteredData?.descriptor === "Art" && (
+                  <div className={` ${styles.eventicons}`}>
+                    <Image
+                      className={`h-auto ${styles.foodIcons}`}
+                      src={painticon}
+                      alt=""
+                      style={{
+                        border: "2px solid green",
+                        borderRadius: "50px",
+                      }}
+                    />
+                    {/* <h4> {filteredData?.descriptor} </h4> */}
+                  </div>
+                )}
+
+                {filteredData?.descriptor === "Hiking" && (
+                  <div className={` ${styles.eventicons}`}>
+                    <Image
+                      className={`h-auto ${styles.foodIcons}`}
+                      src={travelicon}
+                      alt=""
+                      style={{
+                        border: "2px solid green",
+                        borderRadius: "50px",
+                      }}
+                    />
+                    {/* <h4> {filteredData?.descriptor} </h4> */}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -316,9 +362,13 @@ export default function EventDetail() {
                 onGoogleApiLoaded={({ map, maps }) =>
                   handleApiLoaded(map, maps)
                 }
+                // center={{
+                //   lat: filterLoc,
+                //   lng: filterLoc,
+                // }}
                 center={{
-                  lat: filterLoc,
-                  lng: filterLoc,
+                  lat: 31.5204,
+                  lng: 74.3587,
                 }}
                 // center={mapCenter}
               >

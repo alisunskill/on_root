@@ -21,6 +21,13 @@
   font-size: 20px;
   cursor: pointer;
 }
+.inputgroupicon1 {
+  position: absolute;
+  right: 31px;
+  top: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
 .inputgroup {
   height: 40px;
   border-radius: 50px;
@@ -242,7 +249,7 @@
   border-radius: 20px;
   padding: 20px 0px;
   height: 590px;
-  background-image: url("../public/Images/card-one.svg");
+  /* background-image: url("../public/Images/card-one.svg"); */
   background-size: cover;
   color: white;
   display: flex;

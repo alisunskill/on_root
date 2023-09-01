@@ -36,7 +36,7 @@ const Searchbar = () => {
   const [showAll, setShowAll] = useState(false);
   const [regionData, setRegion] = useState([]);
   useEffect(() => {
-    console.count('search useeffect')
+    console.count("search useeffect");
     setPosts(filteredPosts);
     setHasMore(false);
   }, [router.query.region]);
@@ -147,7 +147,27 @@ const Searchbar = () => {
     },
   ];
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div
+        className={`col-xl-5 col-lg-5 col-md-5 col-sm-5  ${styles.inputgroup}`}
+      >
+        <Form>
+          <FormControl
+            type="text"
+            aria-describedby="button-addon5"
+            className={`form-control ${styles.searchvally}`}
+            list="itemList"
+          />
+          {/* <FontAwesomeIcon className={styles.inputgroupicon} icon={faSearch} /> */}
+          <div
+            className={`spinner-grow spinner-grow-sm text-primary ${styles.inputgroupicon1}`}
+            role="status"
+          >
+            <span class="sr-only">Loading...</span>
+          </div>
+        </Form>
+      </div>
+    );
   }
 
   if (error) {

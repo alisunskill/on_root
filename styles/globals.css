@@ -1,4 +1,4 @@
-@import 'react-datepicker/dist/react-datepicker.css';
+@import "react-datepicker/dist/react-datepicker.css";
 html,
 body {
   padding: 0;
@@ -10,7 +10,7 @@ ul {
   padding: 0 30;
   margin: 0;
 }
-.react-datepicker-wrapper{
+.react-datepicker-wrapper {
   width: 100%;
 }
 a {
@@ -164,17 +164,20 @@ input {
   border: none;
   font-size: 20px;
 }
+.text-sky {
+  color: #7ec4e6;
+}
 
-.savebtn1{
-  background-color: #4562B2;
+.savebtn1 {
+  background-color: #4562b2;
   padding: 8px 45px;
   font-weight: 600;
   border-radius: 10px;
   border: none;
   font-size: 20px;
 }
-.savebtn2{
-  background-color: #4562B2;
+.savebtn2 {
+  background-color: #4562b2;
   padding: 8px 25px;
   font-weight: 600;
   border-radius: 7px;
@@ -195,24 +198,6 @@ input {
   margin: 0;
   text-align: center;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* for all end */
 
