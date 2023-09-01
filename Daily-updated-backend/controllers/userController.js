@@ -127,8 +127,8 @@ exports.forgotPassword = async (req, res) => {
       host: "smtp.ethereal.email",
       port: 587,
       auth: {
-        user: "kellie.spinka62@ethereal.email",
-        pass: "uTGFjjuhTsKVn4UMHX",
+        user: "deshawn.leuschke53@ethereal.email",
+        pass: "dpwxJuePxGGcnkqw3b",
       },
     });
 
