@@ -10,6 +10,7 @@ import { fetchRecommendations } from "../../store/actions/recommendationActions"
 const InfiniteScrollComponent = () => {
   const router = useRouter();
   const region = router.query.region?.toLowerCase();
+  const { imageUrl } = router.query;
 
   const descriptor = router.query.descriptor?.toLowerCase();
   // redux
@@ -182,7 +183,11 @@ const InfiniteScrollComponent = () => {
     },
   ];
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    );
   }
 
   if (error) {
@@ -237,10 +242,8 @@ const InfiniteScrollComponent = () => {
                         <img
                           layout="fill"
                           objectFit="cover"
-                          src={`${
-                            itemData[index % itemData.length].img
-                          }?w=162&auto=format`}
-                          srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
+                          src={`${imageUrl}?w=162&auto=format`}
+                          srcSet={`${imageUrl}?w=162&auto=format&dpr=2 2x`}
                           alt={item.region}
                           loading="lazy"
                           style={{

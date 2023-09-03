@@ -11,13 +11,26 @@ import axios from "axios";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Cookies from "js-cookie";
+import ReCAPTCHA from "react-google-recaptcha";
 function Signup() {
   const router = useRouter();
   const fileInputRef = useRef(null);
   const [showPassword, setShowPassword] = useState(false);
-
+  const [recaptchaError, setRecaptchaError] = useState("");
+  const recaptchaValueRef = useRef("");
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     console.log(values);
+
+    if (!recaptchaValueRef.current) {
+      setRecaptchaError("Please complete the reCAPTCHA challenge.");
+      Swal.fire({
+        text: "Please complete the reCAPTCHA challenge.",
+        icon: "error",
+      });
+      setSubmitting(false);
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       console.log(token, "token he ye");
@@ -57,10 +70,20 @@ function Signup() {
     }
   };
 
+  const handleCaptchaChange = (value) => {
+    if (value) {
+      recaptchaValueRef.current = value; // Store reCAPTCHA value in the ref
+      setRecaptchaError("");
+    } else {
+      recaptchaValueRef.current = ""; // Clear the ref value
+      setRecaptchaError("Please complete the reCAPTCHA challenge.");
+    }
+  };
+
   const showAccountExistsAlert = () => {
     Swal.fire({
       title: "Account Exists",
-      text: "Provided username or email already exists.",
+      text: "Provided Email is Already Exists.",
       icon: "warning",
     });
   };
@@ -69,26 +92,26 @@ function Signup() {
     firstName: Yup.string()
       .min(2, "Too Short!")
       .max(10, "Too Long!")
-      .required("Required First Name"),
+      .required("Firstname is required"),
     lastName: Yup.string()
       .min(2, "Too Short!")
       .max(10, "Too Long!")
-      .required("Required Last Name"),
+      .required("Lastname is required"),
 
     image: Yup.mixed().required("Please upload a file"),
 
-    email: Yup.string().email("Invalid email").required("Required"),
+    email: Yup.string().email("Email is invalid").required("Email is required"),
     username: Yup.string()
       .min(2, "Too Short!")
       .max(20, "Too Long!")
-      .required("Required Username"),
+      .required("Username is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters long")
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
         "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"
       )
-      .required("Required Password"),
+      .required("Password is required"),
   });
 
   return (
@@ -212,10 +235,20 @@ function Signup() {
                   />
 
                   <div className="text-center">
+                    <div className="w-100 d-flex justify-content-center mt-3">
+                      <ReCAPTCHA
+                        sitekey="6LdNryEnAAAAAHvI4ty3RvMc2dnX0fR9aF1dXq7r"
+                        onChange={handleCaptchaChange}
+                      />
+                    </div>
+                    {recaptchaError && (
+                      <div className="text-light">{recaptchaError}</div>
+                    )}
                     <button
                       type="submit"
                       className="savebtn1 text-light mt-4"
-                      disabled={!isValid}
+                      // disabled={!isValid}
+                      disabled={!!recaptchaError}
                     >
                       Sign Up
                     </button>

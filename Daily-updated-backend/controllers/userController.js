@@ -36,15 +36,80 @@ exports.createUser = async (req, res) => {
 
     await user.save();
 
-    // const transporter = nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: {
-    //     user: process.env.GMAIL_USER,
-    //     pass: process.env.GMAIL_PASSWORD,
-    //   },
-    // });
+    // verification new user
+    const verificationToken = crypto.randomBytes(20).toString("hex");
+    user.verificationToken = verificationToken;
+    user.verificationTokenExpiration = Date.now() + 3600000; // 1 hour expiration, adjust as needed
+
+    await user.save();
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      auth: {
+        user: "adrien26@ethereal.email",
+        pass: "R6w9c7pJzBTbfpmr2W",
+      },
+    });
+
+    const verificationURL = `http://localhost:3000/login?token=${verificationToken}`;
+
+    const mailOptions = {
+      from: "harmony.carroll@ethereal.email",
+      to: user.email,
+      subject: "Email Verification",
+      text: `Click the following link to verify your email address: ${verificationURL}`,
+    };
+
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+        return res.status(500).json({ message: "Failed to send email" });
+      } else {
+        console.log("Email sent:", info.response);
+        res.status(201).json({
+          message:
+            "User created successfully. Check your email for verification instructions.",
+        });
+      }
+    });
 
     res.status(201).json({ message: "User created successfully", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// verify new user email
+
+exports.verifyEmail = async (req, res) => {
+  const { token } = req.query;
+
+  try {
+    const user = await User.findOneAndUpdate(
+      {
+        verificationToken: token,
+        verificationTokenExpiration: { $gt: Date.now() },
+      },
+      {
+        emailVerified: true,
+        $unset: {
+          verificationToken: 1,
+          verificationTokenExpiration: 1,
+        },
+      }
+    );
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ message: "Invalid or expired verification token" });
+    }
+
+    // Redirect to a login page or send a success response
+    res.redirect("/login"); // Or res.json({ message: 'Email verified successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -127,8 +192,8 @@ exports.forgotPassword = async (req, res) => {
       host: "smtp.ethereal.email",
       port: 587,
       auth: {
-        user: "deshawn.leuschke53@ethereal.email",
-        pass: "dpwxJuePxGGcnkqw3b",
+        user: "adrien26@ethereal.email",
+        pass: "R6w9c7pJzBTbfpmr2W",
       },
     });
 

@@ -20,10 +20,11 @@
 .signupsignupcontainer {
   width: 45%;
   /* background-image: url("../public/images/Rectangle\ 103.png"); */
-  background-color: #7cc5e5;
+  background-color: #7EC4E6;
   background-size: cover;
   border-radius: 20px;
-  padding: 45px 40px;
+  padding: 35px 40px;
+  margin: 60px 0px;
 }
 .signupinputfield {
   text-align: center;
@@ -42,6 +43,7 @@
 .signupinputinfo {
   width: 66%;
 }
+
 .signupbutton {
   padding: 10px;
   width: 66%;
@@ -53,11 +55,8 @@
 
 /* confirm sign in   */
 .confirmme {
-  height: 100vh;
   background-image: url("../public/images/bglogin.svg");
   background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
   display: flex;
   place-items: center;
   justify-content: center;

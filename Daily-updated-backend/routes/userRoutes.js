@@ -14,4 +14,7 @@ router.post("/forgot-password", userController.forgotPassword);
 // Reset password
 router.post("/resetpassword", userController.resetPassword);
 
+// verify new user email
+router.get("/login/:token", userController.verifyEmail);
+
 module.exports = router;

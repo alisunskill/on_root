@@ -63,16 +63,16 @@ function ForgotPassword() {
                     <ErrorMessage
                       name="email"
                       component="div"
-                      className="text-danger"
+                      className="text-light"
                     />
 
                     <div className="text-center">
                       <button
-                        className="savebtn text-light mt-4"
+                        className="savebtn1 text-light mt-4"
                         type="submit"
                         disabled={!isValid}
                       >
-                        SEND A PASSWORD RESET EMAIL
+                        Send a password reset email.
                       </button>
                     </div>
                   </Form>

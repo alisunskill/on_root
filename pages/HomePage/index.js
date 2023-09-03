@@ -98,40 +98,26 @@ export default () => {
     {
       bgImg:
         "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-      city: regionp[0],
-      country: "USA",
     },
     {
       bgImg:
         "https://images.unsplash.com/photo-1689072503598-638956beee7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=660&q=80",
-      city: regionp[1],
-      country: "USA",
     },
     {
       bgImg:
         "https://images.unsplash.com/photo-1593593595698-de9e5f682a14?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=834&q=80",
-      city: regionp[2],
-      country: "USA",
     },
     {
       bgImg:
         "https://images.unsplash.com/photo-1595112729465-942dafaa4e98?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=886&q=80",
-      city: regionp[2],
-      country: "USA",
     },
     {
       bgImg:
         "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-      city: regionp[1],
-
-      country: "USA",
     },
     {
       bgImg:
         "https://images.unsplash.com/photo-1519638399535-1b036603ac77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80",
-      city: regionp[0],
-
-      country: "USA",
     },
   ];
   const regionDescriptor = regionData.map((item) => {
@@ -345,19 +331,37 @@ export default () => {
           </div>
 
           <div
-            className={`row  px-lg-6 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
+            className={`row px-lg-6 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
           >
-            {data.map((item, index) => {
-              return (
-                <PostCard
-                  key={index}
-                  imageUrl={item.bgImg}
-                  city={item.city}
-                  // country={item.country}
-                />
-              );
+            {recommendationData.map((item, index) => {
+              if (data[index] && data[index].bgImg) {
+                return (
+                  <Link
+                    key={index}
+                    className="text-decoration-none text-dark"
+                    style={{ display: "contents" }}
+                    href={{
+                      pathname: "/infinitescroll",
+                      query: {
+                        region: item.region,
+                        imageUrl: data[index].bgImg,
+                      },
+                    }}
+                  >
+                    <PostCard
+                      key={index}
+                      imageUrl={data[index].bgImg}
+                      title={item.title}
+                      region={item.region}
+                      // country={item.country}
+                    />
+                  </Link>
+                );
+              }
+              return null; 
             })}
           </div>
+
           <br />
           <br />
 

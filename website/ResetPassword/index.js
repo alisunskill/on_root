@@ -82,7 +82,7 @@ function ResetPassword() {
                     <ErrorMessage
                       name="resetToken"
                       component="div"
-                      className="text-danger"
+                      className="text-light"
                     />
                     {resetToken ? (
                       <p className="text-success">
@@ -109,12 +109,12 @@ function ResetPassword() {
                     <ErrorMessage
                       name="password"
                       component="div"
-                      className="text-danger"
+                      className="text-light"
                     />
                     <div className="text-center">
                       <button
                         // disabled={!isValid}
-                        className="savebtn text-light mt-4"
+                        className="savebtn1 text-light mt-4"
                         type="submit"
                       >
                         RESET PASSWORD

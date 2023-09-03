@@ -28,6 +28,7 @@
   font-size: 20px;
   cursor: pointer;
 }
+
 .inputgroup {
   height: 40px;
   border-radius: 50px;
@@ -300,11 +301,14 @@
 }
 .landingnextbutton {
   padding: 10px 30px;
-  background-color: #0f3d95;
+  background-color: #4562b2;
   color: white;
   border-radius: 60px;
   font-size: 17px;
   border: none;
+}
+.landingnextbutton:hover {
+  background-color: #0f3d95;
 }
 .landingdivendheading {
   display: flex;

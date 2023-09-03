@@ -40,155 +40,6 @@ function Login() {
   const handleCaptchaChange = (response) => {
     setRecaptchaResponse(response);
   };
-  // const handleLogout = () => {
-  //   localStorage.removeItem("token");
-  //   router.push("/login");
-  // };
-  // eye password
-
-  // const handleLogin = async (values, { setSubmitting, resetForm }) => {
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:8000/api/users/login",
-  //       values
-  //     );
-  //     if (response.status === 200) {
-  //       const { token } = response.data;
-  //       localStorage.setItem("token", token);
-  //       resetForm();
-  //       setSubmitting(false);
-  //     }
-  //     const storedUserID = localStorage.getItem("userID");
-  //     const storedEmail = localStorage.getItem("email");
-
-  //     if (!storedEmail || !storedUserID) {
-  //       Swal.fire({
-  //         text: "Email or Password is missing. Please log in again.",
-  //         icon: "error",
-  //       });
-  //     } else {
-  //       // alert("successful");
-  //       router.push("/createitinerary");
-  //     }
-  //   } catch (error) {
-  //     Swal.fire({
-  //       text: "Error during Login.",
-  //       icon: "error",
-  //     });
-  //     console.error("Error during login:", error);
-  //   }
-  // };
-
-  // const handleLogin = async (values, { setSubmitting }) => {
-  //   try {
-  //     if (!recaptchaResponse) {
-  //       Swal.fire({
-  //         text: "Please complete the reCAPTCHA challenge.",
-  //         icon: "error",
-  //       });
-  //       return;
-  //     }
-
-  //     const response = await axios.post(
-  //       "http://localhost:8000/api/users/login",
-  //       // values
-  //       { ...values, recaptchaResponse }
-  //     );
-  //     // console.log("Response from server:", response.data);
-
-  //     if (response.status === 200) {
-  //       const { token, userID, email } = response.data;
-  //       setStoredUserID(userID);
-  //       setStoredEmail(email);
-  //       console.log(userID, email, "jkjkjk");
-  //       localStorage.setItem("token", token);
-  //       localStorage.setItem("userID", userID);
-  //       localStorage.setItem("email", email);
-  //       setSubmitting(false);
-  //       // router.push("/createitinerary");
-  //     }
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 401) {
-  //       Swal.fire({
-  //         text: "Invalid email or password.",
-  //         icon: "error",
-  //       });
-  //     } else {
-  //       Swal.fire({
-  //         text: "Error during Login.",
-  //         icon: "error",
-  //       });
-  //     }
-  //   }
-  // };
-  // const handleLogin = async (values, { setSubmitting }) => {
-  //   try {
-  //     if (!recaptchaResponse) {
-  //       Swal.fire({
-  //         text: "Please complete the reCAPTCHA challenge.",
-  //         icon: "error",
-  //       });
-  //       return;
-  //     }
-
-  //     dispatch(fetchLoginUser({ ...values, recaptchaResponse }));
-
-  //     setSubmitting(true);
-  //     router.push("/createitinerary");
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 401) {
-  //       Swal.fire({
-  //         text: "Invalid email or password.",
-  //         icon: "error",
-  //       });
-  //     } else {
-  //       Swal.fire({
-  //         text: "Error during Login.",
-  //         icon: "error",
-  //       });
-  //     }
-  //     setSubmitting(false);
-  //   }
-  // };
-
-  // const handleLogin = async (values, { setSubmitting }) => {
-  //   try {
-  //     if (!recaptchaResponse) {
-  //       Swal.fire({
-  //         text: "Please complete the reCAPTCHA challenge.",
-  //         icon: "error",
-  //       });
-  //       return;
-  //     }
-
-  //     const response = await dispatch(
-  //       fetchLoginUser({ ...values, recaptchaResponse })
-  //     );
-
-  //     if (response.error) {
-  //       // Handle errors, including invalid credentials
-  //       if (response.payload.response.status === 401) {
-  //         Swal.fire({
-  //           text: "Invalid email or password.",
-  //           icon: "error",
-  //         });
-  //       } else {
-  //         // Handle other errors
-  //         Swal.fire({
-  //           text: "An error occurred during login.",
-  //           icon: "error",
-  //         });
-  //       }
-  //     } else {
-  //       // Redirect to a new page after successful login
-  //       router.push("/recommendation");
-  //     }
-  //   } catch (error) {
-  //     // Handle other errors
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
 
   const handleLogin = async (values, { setSubmitting, getState }) => {
     try {
@@ -202,11 +53,10 @@ function Login() {
 
       await dispatch(fetchLoginUser({ ...values, recaptchaResponse }));
 
-      // Check if token is present in the state to determine login status
       const token = localStorage.getItem("token");
       console.log(token, "kkk");
       if (token) {
-        router.push("/recommendation");
+        router.push("/");
       } else {
         Swal.fire({
           text: "An error occurred during login.",
@@ -232,7 +82,7 @@ function Login() {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
         "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"
       )
-      .required("Required Password"),
+      .required("Password is required"),
   });
 
   return (
