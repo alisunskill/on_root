@@ -10,22 +10,9 @@ import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
 export default function SliderApps({ images1 }) {
-  const dynamicImage = images1;
-
-  console.log(dynamicImage, "dynamicImage");
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const [selectedData, setSelectedData] = useState(null);
-  const [imageLoading, setImageLoading] = useState(true);
-  const imageUrls = dynamicImage?.map((item) => (
-    <img key={item} src={item} alt="" onLoad={() => setImageLoading(false)} />
-  ));
-  // console.log(imageUrls, "imageUrlsimageUrlsimageUrls");
-  // const handleClick = (itemId) => {
-  //   const selected = slideImg.find((item) => item._id === itemId);
-  //   setSelectedData(selected);
-  // };
   const handleClick = (image) => {
     setSelectedImage(image);
   };
