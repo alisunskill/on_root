@@ -71,7 +71,6 @@ export default () => {
 
       setPostIds(savePosts);
       const postData = savePosts.map((post) => post.cost);
-      console.log(postData, "postIdListpostIdListpostIdListpostIdList");
     } catch (error) {
       console.error("Error fetching data:", error);
     }

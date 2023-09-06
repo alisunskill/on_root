@@ -8,6 +8,9 @@ export const FETCH_GETTRIPS_REQUEST = "FETCH_GETTRIPS_REQUEST";
 export const FETCH_GETTRIPS_SUCCESS = "FETCH_GETTRIPS_SUCCESS";
 export const FETCH_GETTRIPS_FAILURE = "FETCH_GETTRIPS_FAILURE";
 
+export const FETCH_SAVETRIP_REQUEST = "FETCH_SAVETRIP_REQUEST";
+export const FETCH_SAVETRIP_SUCCESS = "FETCH_SAVETRIP_SUCCESS";
+export const FETCH_SAVETRIP_FAILURE = "FETCH_SAVETRIP_FAILURE";
 
 export const SET_TRIP_ID = "SET_TRIP_ID";
 
@@ -46,6 +49,21 @@ export const fetchGetTripsFailure = (error) => ({
   payload: error,
 });
 
+// saved trips
+export const fetchSaveTripRequest = () => ({
+  type: FETCH_SAVETRIP_REQUEST,
+});
+
+export const fetchSaveTripSuccess = (favTrip) => ({
+  type: FETCH_SAVETRIP_SUCCESS,
+  payload: favTrip,
+});
+
+export const fetchSaveTripFailure = (error) => ({
+  type: FETCH_SAVETRIP_FAILURE,
+  payload: error,
+});
+
 // save trips on the base of trip post id
 export const fetchSavedTrips = (tripIdData) => {
   return async (dispatch) => {
@@ -73,4 +91,18 @@ export const fetchGetTrips = () => {
   };
 };
 
-
+// saved trips
+export const sendFavListToBackend = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(fetchSaveTripRequest());
+      const response = await axios.post("http://localhost:8000/api/savetrip", {
+        tripId: selectedIds,
+        userID: userIDPerson,
+      });
+      dispatch(fetchSaveTripSuccess(response.data));
+    } catch (error) {
+      dispatch(fetchSaveTripFailure(error.message));
+    }
+  };
+};

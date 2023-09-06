@@ -9,45 +9,26 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
-export default function SliderApps({ images }) {
-  const dynamicImage = images;
+export default function SliderApps({ images1 }) {
+  const dynamicImage = images1;
+
   console.log(dynamicImage, "dynamicImage");
-  // Assuming you have your static images defined like this
-  const slideImg = [
-    {
-      id: "dynamic",
-      img: images,
-    },
-    {
-      id: "3",
-      img: "https://swiperjs.com/demos/images/nature-3.jpg",
-    },
-    {
-      id: "5",
-      img: "https://swiperjs.com/demos/images/nature-5.jpg",
-    },
-    {
-      id: "6",
-      img: "https://swiperjs.com/demos/images/nature-6.jpg",
-    },
-    {
-      id: "7",
-      img: "https://swiperjs.com/demos/images/nature-7.jpg",
-    },
-    {
-      id: "8",
-      img: "https://swiperjs.com/demos/images/nature-8.jpg",
-    },
-  ];
+
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const [selectedData, setSelectedData] = useState(null);
-
-  const handleClick = (itemId) => {
-    const selected = slideImg.find((item) => item.id === itemId);
-    // console.log(selected, "ali");
-    setSelectedData(selected);
+  const [imageLoading, setImageLoading] = useState(true);
+  const imageUrls = dynamicImage?.map((item) => (
+    <img key={item} src={item} alt="" onLoad={() => setImageLoading(false)} />
+  ));
+  // console.log(imageUrls, "imageUrlsimageUrlsimageUrls");
+  // const handleClick = (itemId) => {
+  //   const selected = slideImg.find((item) => item._id === itemId);
+  //   setSelectedData(selected);
+  // };
+  const handleClick = (image) => {
+    setSelectedImage(image);
   };
-
   return (
     <>
       <Swiper
@@ -57,40 +38,46 @@ export default function SliderApps({ images }) {
         }}
         spaceBetween={10}
         navigation={true}
-        modules={[FreeMode, Navigation, Thumbs]}
+        modules={[Navigation, Thumbs]}
         className="mySwiper2"
         slidesPerView={1}
       >
-        {selectedData ? (
+        {selectedImage ? (
           <SwiperSlide>
-            <img className={` ${styles.scenery}`} src={selectedData.img} />
+            <img
+              className={`${styles.scenery} object-cover`}
+              src={selectedImage}
+              alt=""
+            />
           </SwiperSlide>
         ) : (
-          <SwiperSlide>
-            <img className={` ${styles.scenery}`} src={dynamicImage} />
-          </SwiperSlide>
+          images1?.map((item, index) => (
+            <SwiperSlide key={index}>
+              <img
+                className={`${styles.scenery} object-cover`}
+                src={item}
+                alt=""
+                onClick={() => handleClick(item)}
+              />
+            </SwiperSlide>
+          ))
         )}
-        {/* {slideImg.slice(1).map((item) => (
-          <SwiperSlide>
-            <img className={` ${styles.scenery}`} src={item.img} />
-          </SwiperSlide>
-        ))} */}
       </Swiper>
       <Swiper
         spaceBetween={10}
         slidesPerView={6}
         freeMode={true}
         watchSlidesProgress={true}
-        modules={[FreeMode, Navigation, Thumbs]}
+        modules={[Navigation, Thumbs]}
         className="mySwiper"
       >
-        {slideImg.map((item) => (
+        {images1?.map((item, index) => (
           <SwiperSlide
-            key={item.id}
-            onClick={() => handleClick(item.id)}
+            key={index}
+            onClick={() => handleClick(item)}
             style={{ marginRight: "0px" }}
           >
-            <img className={styles.smallimg} src={item.img} />
+            <img className={styles.smallimg} src={item} alt="" />
           </SwiperSlide>
         ))}
       </Swiper>

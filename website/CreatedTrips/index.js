@@ -5,7 +5,8 @@ import {
   updateTripAction,
   removeTripAction,
 } from "../../store/actions/updateTripAction";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../styles/viewsave.module.css";
 import NewsLetter from "../components/NewsLetter";
 // import Trip from "./components/Trip";
@@ -147,27 +148,25 @@ function ItiniraryDetail() {
                   {trips.map((trip, index) => (
                     <div>
                       <div className="position-relative" key={trip._id}>
-                        <button
-                          className="bg-danger border-0 rounded-2 position-absolute z-3 px-3 fw-700"
-                          style={{ right: "0px" }}
+                        <FontAwesomeIcon
+                          icon={faTimes}
+                          className={` bg-light border-0 rounded-5 text-dark position-absolute z-3 p-2 fw-700 animated cursor-pointer  ${styles.crossed}`}
                           onClick={() => handleRemoveTrips(trip._id)}
-                        >
-                          x
-                        </button>
-                      </div>
-                      <Link key={index} href={`/trip/${trip._id}`}>
-                        <img
-                          src={trip.image}
-                          alt="tripImg"
-                          className={styles.placeImg}
-                          loading="lazy"
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            borderRadius: "15px",
-                            opacity: "0.99990000999",
-                          }}
                         />
+                      </div>
+                      <Link
+                        key={index}
+                        href={`/trip/${trip._id}`}
+                        className="position-relative"
+                      >
+                        <div className={styles.placeImgWrapper}>
+                          <img
+                            src={trip.image}
+                            alt="tripImg"
+                            className={styles.placeImg}
+                            loading="lazy"
+                          />
+                        </div>
                       </Link>
 
                       <div className="d-flex justify-content-between mt-2">
@@ -175,7 +174,7 @@ function ItiniraryDetail() {
                           Title: {trip.title}
                         </h5>
                         <button
-                          className="savebtn text-light border-0 rounded-2 px-2"
+                          className="savebtn text-light border-0 rounded-2 px-2 f-16"
                           onClick={() => updateTripEditHandle(trip)}
                         >
                           Edit Trip
@@ -279,27 +278,31 @@ function ItiniraryDetail() {
                     .map((trip, index) => (
                       <div>
                         <div className="position-relative" key={trip._id}>
-                          <button
-                            className="bg-danger border-0 rounded-2 position-absolute z-3 px-3 fw-700"
-                            style={{ right: "0px" }}
+                          <FontAwesomeIcon
+                            icon={faTimes}
+                            className={` bg-light border-0 rounded-5 text-dark position-absolute z-3 p-2 fw-700 animated cursor-pointer  ${styles.crossed}`}
                             onClick={() => handleRemoveTrips(trip._id)}
-                          >
-                            x
-                          </button>
-                        </div>
-                        <Link key={index} href={`/trip/${trip._id}`}>
-                          <img
-                            src={trip.image}
-                            alt="tripImg"
-                            className={styles.placeImg}
-                            loading="lazy"
-                            style={{
-                              display: "block",
-                              width: "100%",
-                              borderRadius: "15px",
-                              opacity: "0.99990000999",
-                            }}
                           />
+                        </div>
+                        <Link
+                          key={index}
+                          href={`/trip/${trip._id}`}
+                          className="position-relative"
+                        >
+                          <div className={styles.placeImgWrapper}>
+                            <img
+                              src={trip.image}
+                              alt="tripImg"
+                              className={styles.placeImg}
+                              loading="lazy"
+                              style={{
+                                display: "block",
+                                width: "100%",
+                                borderRadius: "15px",
+                                opacity: "0.99990000999",
+                              }}
+                            />
+                          </div>
                         </Link>
 
                         <div className="d-flex justify-content-between mt-2">
@@ -307,7 +310,7 @@ function ItiniraryDetail() {
                             Title: {trip.title}
                           </h5>
                           <button
-                            className="text-light border-0 savebtn rounded-2 px-2 "
+                            className="text-light border-0 savebtn rounded-2 px-2 f-16"
                             onClick={() => updateTripEditHandle(trip)}
                           >
                             Edit Trip

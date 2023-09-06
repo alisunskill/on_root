@@ -19,8 +19,8 @@ const RecommendationGrid = ({
 
   if (loading) {
     return (
-      <div class="spinner-border text-primary" role="status">
-        <span class="sr-only">Loading...</span>
+      <div className="spinner-border text-primary" role="status">
+        <span className="sr-only">Loading...</span>
       </div>
     );
   }
@@ -51,23 +51,19 @@ const RecommendationGrid = ({
                   <div className={`col-lg-4 ${styles.landingfirstcard}`}>
                     <Link
                       onClick={() =>
-                        handleLinkClick(recentRecommendations[0]._id)
+                        handleLinkClick(recentRecommendations[1]._id)
                       }
                       href={`/eventdetail/${encodeURIComponent(
-                        recentRecommendations[0].title.replace(/ /g, "-")
+                        recentRecommendations[1].title.replace(/ /g, "-")
                       )}`}
                       className="text-decoration-none"
                     >
                       <div
                         className={styles.landingimage1}
                         style={{
-                          backgroundImage: `url(${recentRecommendations[0]?.images[0]})`,
+                          backgroundImage: `url(${recentRecommendations[1]?.images[0]})`,
                         }}
                       >
-                        {console.log(
-                          recentRecommendations[0],
-                          "ali image ye he"
-                        )}
                         <div className={`col-lg-12 ${styles.landingtext}`}>
                           <p
                             className={`mb-0 letter-spac ${styles.letterspac}`}
@@ -77,10 +73,10 @@ const RecommendationGrid = ({
                           <p
                             className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                           >
-                            {recentRecommendations[0].title}
+                            {recentRecommendations[1].title}
                           </p>
                           <p className={`mb-0 m1`}>
-                            {recentRecommendations[0].region}
+                            {recentRecommendations[1].region}
                           </p>
                         </div>
                       </div>
@@ -92,15 +88,18 @@ const RecommendationGrid = ({
                       <div className={`col-lg-12  ${styles.luxuryrow}`}>
                         <Link
                           onClick={() =>
-                            handleLinkClick(recentRecommendations[1]._id)
+                            handleLinkClick(recentRecommendations[0]._id)
                           }
                           href={`/eventdetail/${encodeURIComponent(
-                            recentRecommendations[1]?.title.replace(/ /g, "-")
+                            recentRecommendations[0]?.title.replace(/ /g, "-")
                           )}`}
                           className="text-decoration-none"
                         >
                           <div
                             className={`${styles.landingimage2} d-flex align-center light-dark`}
+                            style={{
+                              backgroundImage: `url(${recentRecommendations[0]?.images[0]})`,
+                            }}
                           >
                             <div
                               className={`col-lg-12 ${styles.landingtextmidgrid}`}
@@ -113,10 +112,10 @@ const RecommendationGrid = ({
                               <p
                                 className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                               >
-                                {recentRecommendations[1].title}
+                                {recentRecommendations[0].title}
                               </p>
                               <p className={`mb-0`}>
-                                {recentRecommendations[1].region}
+                                {recentRecommendations[0].region}
                               </p>
                             </div>
                           </div>
@@ -133,6 +132,9 @@ const RecommendationGrid = ({
                         >
                           <div
                             className={`${styles.landingimage3} d-flex align-center my-4 light-dark`}
+                            style={{
+                              backgroundImage: `url(${recentRecommendations[2]?.images[0]})`,
+                            }}
                           >
                             <div
                               className={`col-lg-12 ${styles.landingtextmidgrid}`}
@@ -153,7 +155,6 @@ const RecommendationGrid = ({
                             </div>
                           </div>
                         </Link>
-
                         <Link
                           onClick={() =>
                             handleLinkClick(recentRecommendations[3]._id)
@@ -164,7 +165,10 @@ const RecommendationGrid = ({
                           className="text-decoration-none"
                         >
                           <div
-                            className={`${styles.landingimage4} d-flex align-center light-dark`}
+                            className={`${styles.landingimage3} d-flex align-center my-4 light-dark`}
+                            style={{
+                              backgroundImage: `url(${recentRecommendations[3]?.images[0]})`,
+                            }}
                           >
                             <div
                               className={`col-lg-12 ${styles.landingtextmidgrid}`}
@@ -185,6 +189,41 @@ const RecommendationGrid = ({
                             </div>
                           </div>
                         </Link>
+                        {/* <Link
+                          onClick={() =>
+                            handleLinkClick(recentRecommendations[3]._id)
+                          }
+                          href={`/eventdetail/${encodeURIComponent(
+                            recentRecommendations[3]?.title.replace(/ /g, "-")
+                          )}`}
+                          className="text-decoration-none"
+                        >
+                          <div
+                            className={`${styles.landingimage4} d-flex align-center light-dark`}
+                            style={{
+                              backgroundImage: `url(${recentRecommendations[4]?.images[0]})`,
+                            }}
+                          >
+                            
+                            <div
+                              className={`col-lg-12 ${styles.landingtextmidgrid}`}
+                            >
+                              <p
+                                className={`mb-0 letter-spac ${styles.letterspac}`}
+                              >
+                                EVENT
+                              </p>
+                              <p
+                                className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
+                              >
+                                {recentRecommendations[3].title}
+                              </p>
+                              <p className={`mb-0 m1`}>
+                                {recentRecommendations[3].region}
+                              </p>
+                            </div>
+                          </div>
+                        </Link> */}
                       </div>
                     </div>
                   </div>
@@ -204,10 +243,14 @@ const RecommendationGrid = ({
                         <div className={`col-lg-12 p-0`}>
                           <div
                             className={`${styles.landingimage5} d-flex align-center p-0 m-0`}
+                            style={{
+                              backgroundImage: `url(${recentRecommendations[4]?.images[0]})`,
+                            }}
                           >
                             <div
-                              className={`col-lg-12 mb-0 p-0 ${styles.landingtextmidgrid} light-dark d-flex align-center flex-column flex-center`}
-                              style={{ height: "100%", borderRadius: "55px" }}
+                              // className={`col-lg-12 mb-0 p-0 ${styles.landingtextmidgrid} light-dark d-flex align-center flex-column flex-center`}
+                              // style={{ height: "100%", borderRadius: "55px" }}
+                              className={`col-lg-12 ${styles.landingtextmidgrid}`}
                             >
                               <p
                                 className={`mb-0 letter-spac ${styles.letterspac}`}
@@ -236,9 +279,16 @@ const RecommendationGrid = ({
                         )}`}
                         className="text-decoration-none m-0 p-0"
                       >
-                        <div className={`${styles.landingimage6} my-4`}>
+                        <div
+                          className={`${styles.landingimage6} my-4`}
+                          style={{
+                            backgroundImage: `url(${recentRecommendations[5]?.images[0]})`,
+                          }}
+                        >
                           <div
                             className={`col-lg-12 ${styles.landingtextinalgrid}`}
+                            // className={`col-lg-12 mb-0 p-0 ${styles.landingtextinalgrid}  d-flex align-center flex-column flex-center`}
+                            // style={{ height: "100%", borderRadius: "55px" }}
                           >
                             <p
                               className={`mb-0 letter-spac ${styles.letterspac}`}
@@ -248,10 +298,11 @@ const RecommendationGrid = ({
                             <p
                               className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                             >
-                              {recommendationData[5].title}
+                              {recentRecommendations[5].title}
+
                             </p>
                             <p className={`mb-0 m1`}>
-                              {recommendationData[5].region}
+                              {recentRecommendations[5].region}
                             </p>
                           </div>
                         </div>

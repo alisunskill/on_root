@@ -258,6 +258,9 @@
   align-items: end;
   padding-bottom: 0px;
 }
+.smallimg{
+  object-fit: cover;
+}
 .landingimage2 {
   border-radius: 20px;
   background-image: url("../public/Images/fove.png");
@@ -458,6 +461,8 @@
     width: 35px;
   }
 }
+/* animation */
+
 
 /* mediaqueries */
 @media only screen and (max-width: 1444px) {

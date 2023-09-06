@@ -21,30 +21,6 @@ import RecommendationGrid from "../../website/components/RecommendationGrid";
 import RangeSlider from "./RangeSlider";
 import Sliders from "./Sliders";
 import Global from "../../website/components/Globe";
-// import Navbar from "../../components/Navbar";
-
-const data1 = [
-  {
-    para: "Heavenly Expedition: Discovering the Beauty of Northern Pakistan",
-    bgImg:
-      "https://images.unsplash.com/photo-1589506356380-33c39d65a6a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-  },
-  {
-    para: "Heavenly Expedition: Discovering the Beauty of Northern Pakistan",
-    bgImg:
-      "https://images.unsplash.com/photo-1588668968719-194c0fd13773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=947&q=80",
-  },
-  {
-    para: "Heavenly Expedition: Discovering the Beauty of Northern Pakistan",
-    bgImg:
-      "https://images.unsplash.com/photo-1589497836818-9ad2fa1df1a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80",
-  },
-  {
-    para: "Heavenly Expedition: Discovering the Beauty of Northern Pakistan",
-    bgImg:
-      "https://images.unsplash.com/photo-1589497836818-9ad2fa1df1a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80",
-  },
-];
 
 export default () => {
   const dispatch = useDispatch();
@@ -162,7 +138,6 @@ export default () => {
             {filteredData.map((item) => (
               <div key={item.title}>
                 <h3>{item.title}</h3>
-                {/* Render other card details */}
               </div>
             ))}
           </div>
@@ -198,10 +173,10 @@ export default () => {
                 <Dropdown.Menu className={styles.menuhero}>
                   {regionData.map((item, index) => {
                     return (
-                      <React.Fragment key={index}>
+                      <div key={index}>
                         <Dropdown.Item>
                           <Link
-                            className="text-decoration-none text-dark"
+                            className="text-decoration-none text-dark w-100"
                             href={{
                               pathname: "/infinitescroll",
                               query: { region: item.region },
@@ -210,7 +185,7 @@ export default () => {
                             {item.region}
                           </Link>
                         </Dropdown.Item>
-                      </React.Fragment>
+                      </div>
                     );
                   })}
                 </Dropdown.Menu>
@@ -353,12 +328,11 @@ export default () => {
                       imageUrl={data[index].bgImg}
                       title={item.title}
                       region={item.region}
-                      // country={item.country}
                     />
                   </Link>
                 );
               }
-              return null; 
+              return null;
             })}
           </div>
 
@@ -366,12 +340,13 @@ export default () => {
           <br />
 
           <Slider {...settings}>
-            {data1.map((item, index) => {
+            {recommendationData.slice(-5).map((item, index) => {
+              const bgImg = data[index]?.bgImg;
               return (
                 <Sliders
                   key={index}
                   para={item.para}
-                  bgimg={item.bgImg}
+                  bgimg1={bgImg}
                   settings={settings}
                 />
               );

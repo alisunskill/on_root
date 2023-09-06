@@ -6,9 +6,9 @@ import hikingicon from "../../public/images/hikingicon.svg";
 import styles from "../../styles/home.module.css";
 import Image from "next/image";
 
-export default function Sliders({ bgimg, para }) {
+export default function Sliders({ bgimg1, para }) {
   const bgstyle = {
-    backgroundImage: `url(${bgimg})`,
+    backgroundImage: `url(${bgimg1})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRpeat: "no-repeat",

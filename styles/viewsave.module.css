@@ -101,8 +101,42 @@
   border-radius: 20px;
   cursor: pointer;
   position: absolute;
+  font-weight: 700px;
   right: 27px;
-  top: 26px;
+  top: 15px;
+}
+
+.placeImgWrapper {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.placeImg {
+  width: 100%;
+  border-radius: 15px;
+  opacity: 0.9999;
+  transition: transform 0.3s;
+}
+
+.placeImgWrapper:hover .placeImg {
+  transform: scale(1.1);
+}
+
+.crosicon {
+  right: 13px;
+  top: 15px;
+  font-weight: 700px;
+  padding: 5px;
+  width: 20px;
+  height: 20px;
+}
+.crossed {
+  width: 20px;
+  height: 20px;
+  top: 12px;
+  right: 12px;
 }
 .plusicon2 {
   width: 25px;
@@ -192,6 +226,7 @@
 .yoursave_input1 {
   border-radius: 20px;
 }
+
 .yoursave_btn1 {
   font-size: 1rem;
   padding: 0.5rem 0.5rem;
@@ -205,7 +240,30 @@
 .btn:active {
   transform: scale(1.05);
 }
-
+.savelink {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease-in-out;
+  overflow: hidden;
+  border-radius: 8px;
+}
+/* animation */
+.uploadimg {
+  background-size: 100% 100%;
+  width: 100%;
+  height: -webkit-fill-available;
+  border-radius: 7px;
+  object-fit: cover;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+.uploadimg:hover {
+  transform: scale(1.2);
+}
 .thumbnail {
   color: #767676;
 }
@@ -220,6 +278,8 @@
   border-radius: 6px;
   padding: 3px 40px;
   margin-top: 10px;
+  position: relative;
+  z-index: 999999999999999999 !important;
 }
 .radiobtn:checked {
   color: black;

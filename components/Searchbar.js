@@ -163,7 +163,7 @@ const Searchbar = () => {
             className={`spinner-grow spinner-grow-sm text-primary ${styles.inputgroupicon1}`}
             role="status"
           >
-            <span class="sr-only">Loading...</span>
+            <span className="sr-only">Loading...</span>
           </div>
         </Form>
       </div>

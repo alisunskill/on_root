@@ -20,7 +20,7 @@
 .signupsignupcontainer {
   width: 45%;
   /* background-image: url("../public/images/Rectangle\ 103.png"); */
-  background-color: #7EC4E6;
+  background-color: #7ec4e6;
   background-size: cover;
   border-radius: 20px;
   padding: 35px 40px;
@@ -64,8 +64,9 @@
 }
 .confirmme1 {
   height: 100vh;
-  background-image: url("../public/images/bgrecm.svg");
+  /* background-image: url("../public/images/bgrecm.svg"); */
   background-size: cover;
+  background-color: #7cc5e5;
   background-repeat: no-repeat;
   background-attachment: fixed;
   display: flex;
@@ -74,14 +75,16 @@
   background-position: center;
 }
 .confirm_container {
-  max-width: 55%;
-  background-image: url("../public/images/Rectangle\ 103.png");
+  max-width: 50%;
+  /* background-image: url("../public/images/Rectangle\ 103.png"); */
+  background-color: #7cc5e5;
   background-size: cover;
   border-radius: 20px;
+  margin: 150px 0px;
   text-align: center;
 }
 .confirm_container1 {
-  max-width: 55%;
+  max-width: 50%;
   background-image: url("../public/images/Rectangle\ 103.png");
   background-size: cover;
   border-radius: 20px;
@@ -91,7 +94,7 @@
 .confirm_font {
   color: white;
   font-weight: 700;
-  padding: 140px 50px;
+  padding: 90px 30px;
   font-size: 30px;
 }
 .confirm_font1 {
@@ -107,12 +110,9 @@
   .confirm_container {
     max-width: 45%;
   }
+
   .confirm_font {
-    padding: 100px 50px;
-    font-size: 25px;
-  }
-  .confirm_font {
-    padding: 90px 50px;
+    padding: 50px 50px;
     font-size: 25px;
   }
 }

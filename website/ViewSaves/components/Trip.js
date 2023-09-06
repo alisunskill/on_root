@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import styles from "../../../styles/viewsave.module.css";
 import NewTrip from "./NewTrip";
 import axios from "axios";
-import { setTripId } from "../../../store/actions/tripsAction";
+// import { setTripId } from "../../../store/actions/tripsAction";
 import { useDispatch } from "react-redux";
 
 export default function Trip(props) {
@@ -15,6 +15,7 @@ export default function Trip(props) {
   const [favList, setFavList] = useState([]);
   const [fullList, setFullList] = useState([]);
   const [showAllImages, setShowAllImages] = useState(false);
+  const [selectedTrips, setSelectedTrips] = useState([]);
 
   useEffect(() => {
     fetchTrips();
@@ -56,7 +57,11 @@ export default function Trip(props) {
     if (isAlreadyFav) {
       const updatedFavList = favList.filter((item) => item._id !== id);
       setFavList(updatedFavList);
-      // localStorage.setItem("favList", JSON.stringify(updatedFavList)); // Update local storage
+
+      setSelectedTrips((prevSelectedTrips) =>
+        prevSelectedTrips.filter((trip) => trip !== id)
+      );
+
       alert("This post is removed from your favorites.");
       // sendFavListToBackend(updatedFavList.map((item) => item._id));
       return;
@@ -67,9 +72,14 @@ export default function Trip(props) {
       const updatedFavList = [...favList, clickedItem];
       console.log(updatedFavList, "jkjk");
       setFavList(updatedFavList);
+      setSelectedTrips((prevSelectedTrips) => [...prevSelectedTrips, id]);
     }
   };
 
+  const handleSaveBtn = () => {
+    // Send the selectedTrips to the backend
+    sendFavListToBackend(selectedTrips);
+  };
   const sendFavListToBackend = async (selectedIds) => {
     const userIDPerson = localStorage.getItem("userID"); // Use "userID" key
 
@@ -78,7 +88,7 @@ export default function Trip(props) {
         tripId: selectedIds,
         userID: userIDPerson,
       });
-      dispatch(setTripId(selectedIds));
+      // dispatch(setTripId(selectedIds));
       localStorage.setItem("selectedIds", selectedIds);
       console.log("Updated backend with new favList:", response.data);
     } catch (error) {
@@ -129,7 +139,8 @@ export default function Trip(props) {
                 return (
                   <div
                     key={item._id}
-                    onClick={() => handleFavoriteTrips(item._id)}
+                    // onClick={() => handleFavoriteTrips(item._id)}
+                    onChange={() => handleFavoriteTrips(item._id)}
                     className={`form-check d-flex align-items-center justify-content-between  gap-3 ${styles.herosaves}`}
                   >
                     <div>
@@ -197,6 +208,12 @@ export default function Trip(props) {
               Trip to “EUROPE”
             </label>
           </div> */}
+          <button
+            className={`fw-500 ${styles.herobtn}`}
+            onClick={handleSaveBtn}
+          >
+            Save Trips
+          </button>
           <button
             className={`fw-500 ${styles.herobtn}`}
             onClick={handleClick}

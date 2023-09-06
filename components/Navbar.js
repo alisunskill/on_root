@@ -55,7 +55,6 @@ const Navbar = () => {
     }
   }, []);
 
-  console.count("navvvvv");
 
   const handleCreateItinerary = () => {
     if (!userID) {

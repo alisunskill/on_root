@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import newsletterimg from "../../public/images/card-two.svg";
 import styles from "../../styles/viewsave.module.css";
 import NewsLetter from "../../website/components/NewsLetter";
+import Image from "next/image";
 import Trip from "./components/Trip";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Box } from "@mui/material";
@@ -9,7 +10,7 @@ import { Masonry } from "@mui/lab";
 import axios from "axios";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
@@ -48,14 +49,15 @@ function ViewSaves() {
     dispatch(fetchSavePosts());
   }, [dispatch]);
 
-  console.log(delPostData, "saveposts he ye");
-
+  const [postCounts, setPostCounts] = useState({});
   const [postIds, setPostIds] = useState([]);
-  console.log(postIds, "post id is here");
+  console.log(postCounts, "post id is here");
   const [trigger, setTrigger] = useState(new Date());
   const recommendationsData = useSelector((state) => state.recommendation);
   const { recommendations, loading, error } = recommendationsData;
   const recommendationData = recommendations.Recommendations || [];
+  const [imageUrl, setImageUrl] = useState(""); // Define imageUrl in the component's state
+
   // const filteredRegion = recommendationData.filter(
   //   (item) => item.id === postIds.map((item) => item.id)
   // );
@@ -65,7 +67,11 @@ function ViewSaves() {
     postIds?.some((post) => post.id === item.id)
   );
 
-  const [showIcon, setShowIcon] = useState(true);
+  console.log(
+    filteredRegion,
+    "filteredRegionfilteredRegionfilteredRegionfilteredRegion"
+  );
+
   const [modalShow, setModalShow] = useState(false);
   // const [userId, setUserId] = useState(null);
   // const fetchPostIds = async () => {
@@ -98,6 +104,23 @@ function ViewSaves() {
       setPostIds(savePostsData);
     }
   }, [savePostsData, trigger]);
+
+  useEffect(() => {
+    if (savePostsData) {
+      const counts = {};
+      for (const savedPost of savePostsData) {
+        const postId = savedPost.postId;
+        counts[postId] = (counts[postId] || 0) + 1;
+      }
+      setPostCounts(counts);
+    }
+  }, [savePostsData, trigger]);
+
+  useEffect(() => {
+    if (postCounts) {
+      localStorage.setItem("postCounts", JSON.stringify(postCounts));
+    }
+  }, [postCounts]);
 
   // useEffect(() => {
   //   fetchPostIds();
@@ -137,6 +160,8 @@ function ViewSaves() {
     Cookies.set("postIdCookie", postId);
     // router.push(`/region/${encodeURIComponent(post.title)}`);
   };
+  // let imageUrl;
+
   return (
     <>
       <div className="container-fluid">
@@ -155,8 +180,10 @@ function ViewSaves() {
                   spacing={2}
                   style={{ display: "-webkit-inline-box" }}
                 >
-                  {/* {postIds.map((post, index) => { */}
                   {filteredRegion.map((post, index) => {
+                    const imageUrl = post.images;
+                    console.log(imageUrl, "imageUrl");
+
                     const matchingPostId = postIds.find(
                       (item) => item.postId === post._id
                     );
@@ -165,23 +192,21 @@ function ViewSaves() {
                         <div key={index}>
                           <div className="position-relative">
                             <div className="col-lg-12 ">
+                              <FontAwesomeIcon icon="fa-solid fa-plus" />
                               <FontAwesomeIcon
                                 onClick={() => setModalShow(true)}
-                                className={`${styles.plusicon} bg-success text-light top-0 border-0 rounded-2 position-absolute z-3 px-3 py-1 fw-700`}
+                                className={`${styles.plusicon} animated1 bg-light rounded-5 fw-700 text-dark border-0 position-absolute z-3 p-2.5 fw-700`}
                                 icon={faPlus}
-                                style={{ left: "0px" }}
+                                style={{ left: "13px" }}
                               />
                             </div>
-
-                            <button
-                              className="bg-danger border-0 rounded-2 position-absolute z-3 px-3 fw-700"
-                              style={{ right: "0px" }}
+                            <FontAwesomeIcon
+                              icon={faTimes}
+                              className={`animated1 bg-light rounded-5 fw-700 text-dark border-0 position-absolute z-3 p-2.5 fw-700 ${styles.crosicon}`}
                               onClick={() =>
                                 handleRemove(matchingPostId.postId)
                               }
-                            >
-                              x
-                            </button>
+                            />
                           </div>
                           <Link
                             key={index}
@@ -189,36 +214,40 @@ function ViewSaves() {
                             href={`/region/${encodeURIComponent(
                               post.title.replace(/ /g, "-")
                             )}`}
-                            style={{
-                              position: "relative",
-                              width: "100%",
-                              height: "100%",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
+                            className={styles.savelink}
                           >
+                            {/* <img
+                                layout="fill"
+                                objectFit="cover"
+                                src={`${
+                                  itemData[index % itemData.length].img
+                                }?w=162&auto=format`}
+                                srcSet={`${
+                                  itemData[index % itemData.length].img
+                                }?w=162&auto=format&dpr=2 2x`}
+                                className={styles.placeImg}
+                                loading="lazy"
+                                style={{
+                                  display: "block",
+                                  width: "100%",
+                                  borderRadius: "15px",
+                                  opacity: "0.99990000999",
+                                }}
+                              /> */}
+
+                            {/* <img
+            src={firstImage}
+            alt="save image"
+          /> */}
+
                             <img
-                              layout="fill"
-                              objectFit="cover"
-                              src={`${
-                                itemData[index % itemData.length].img
-                              }?w=162&auto=format`}
-                              srcSet={`${
-                                itemData[index % itemData.length].img
-                              }?w=162&auto=format&dpr=2 2x`}
-                              className={styles.placeImg}
-                              loading="lazy"
-                              style={{
-                                display: "block",
-                                width: "100%",
-                                borderRadius: "15px",
-                                opacity: "0.99990000999",
-                              }}
+                              className={styles.uploadimg}
+                              src={post.images[0]}
+                              alt="Uploaded Image"
                             />
 
                             <div
-                              style={{ position: "absolute ", zIndex: 11 }}
+                              style={{ position: "absolute ", zIndex: 99999 }}
                               className="text-center"
                             >
                               <p className={`mb-0 letterspac text-white`}>
@@ -233,11 +262,6 @@ function ViewSaves() {
                               </p>
                             </div>
                           </Link>
-
-                          {/* <div>
-                            <p className="w-700 text-dark"> {post.postId}</p>
-                            <p className="w-700 text-dark"> {post.userID}</p>
-                          </div> */}
                         </div>
                       );
                     }
@@ -255,116 +279,116 @@ function ViewSaves() {
           </div>
 
           {/* <div className="col-lg-4 first-card position-relative">
-            <div
-              className={` d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_image1}`}
-            >
-              <div className="col-lg-12 yoursave_text">
-                <FontAwesomeIcon
-                  className={styles.plusicon}
-                  icon={faPlus}
-                />
-                <div className="text-center w-100  d-flex justify-content-center align-items-center">
-                  <Trip
-                    
-                   
+              <div
+                className={` d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_image1}`}
+              >
+                <div className="col-lg-12 yoursave_text">
+                  <FontAwesomeIcon
+                    className={styles.plusicon}
+                    icon={faPlus}
                   />
-                </div>{" "}
-                <p className="letterspac">ITINERARY</p>
-                <h3 className="landingeventheading"> Saved Activity 1 </h3>
-                <p className="mb-0 fw-500">Paris, France</p>
-              </div>
-            </div>
-            <div className="row ">
-              <div className="col-lg-12 col-md-12 pt-0 mt-0">
-                <div
-                  className={`row  d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
-                  style={{ background: "white" }}
-                >
-             
-                  {eventData1.map((item, index) => {
-                    return (
-                      <PlaceFullSubCard
-                        key={index}
-                        imageUrl={item.bgImg}
-                        showIcon={showIcon}
-                        itinerary={item.itinerary}
-                        title={item.title}
-                        place={item.place}
-                        time={item.time}
-                        setModalShow={setModalShow}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-8">
-            <div className="row">
-              <div className="col-lg-12 col-md-12 pt-0 mt-0">
-                <div
-                  className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
-                  style={{ background: "white" }}
-                >
-                  <Trip show={modalShow} onHide={() => setModalShow(false)} />
-                  {eventData.map((item, index) => {
-                    return (
-                      <PlaceFullSubCard
-                        key={index}
-                        imageUrl={item.bgImg}
-                        showIcon={showIcon}
-                        itinerary={item.itinerary}
-                        title={item.title}
-                        place={item.place}
-                        time={item.time}
-                        setModalShow={setModalShow}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-lg-4 first-card">
-                <div className={styles.yoursave_image1}>
-                  <div
-                    className={`col-lg-12 position-relative d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_text}`}
-                  >
-                    <FontAwesomeIcon
-                      className={styles.plusicon2}
-                      icon={faPlus}
+                  <div className="text-center w-100  d-flex justify-content-center align-items-center">
+                    <Trip
+                      
+                    
                     />
-                  
-                    <p className="fw-500 ltr-shrt-spec">ITINERARY</p>
-                    <h3 className="landingeventheading"> Saved Activity 1 </h3>
-                    <p className="mb-0 fw-500">Paris, France</p>
+                  </div>{" "}
+                  <p className="letterspac">ITINERARY</p>
+                  <h3 className="landingeventheading"> Saved Activity 1 </h3>
+                  <p className="mb-0 fw-500">Paris, France</p>
+                </div>
+              </div>
+              <div className="row ">
+                <div className="col-lg-12 col-md-12 pt-0 mt-0">
+                  <div
+                    className={`row  d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
+                    style={{ background: "white" }}
+                  >
+              
+                    {eventData1.map((item, index) => {
+                      return (
+                        <PlaceFullSubCard
+                          key={index}
+                          imageUrl={item.bgImg}
+                          showIcon={showIcon}
+                          itinerary={item.itinerary}
+                          title={item.title}
+                          place={item.place}
+                          time={item.time}
+                          setModalShow={setModalShow}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               </div>
-              <div className="col-lg-8">
-                <div
-                  className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
-                  style={{ background: "white" }}
-                >
-                  {eventData2.map((item, index) => {
-                    return (
-                      <PlaceFullSubCard
-                        key={index}
-                        imageUrl={item.bgImg}
-                        showIcon={showIcon}
-                        itinerary={item.itinerary}
-                        title={item.title}
-                        place={item.place}
-                        time={item.time}
-                        setModalShow={setModalShow}
-                      />
-                    );
-                  })}
+            </div>
+            <div className="col-lg-8">
+              <div className="row">
+                <div className="col-lg-12 col-md-12 pt-0 mt-0">
+                  <div
+                    className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
+                    style={{ background: "white" }}
+                  >
+                    <Trip show={modalShow} onHide={() => setModalShow(false)} />
+                    {eventData.map((item, index) => {
+                      return (
+                        <PlaceFullSubCard
+                          key={index}
+                          imageUrl={item.bgImg}
+                          showIcon={showIcon}
+                          itinerary={item.itinerary}
+                          title={item.title}
+                          place={item.place}
+                          time={item.time}
+                          setModalShow={setModalShow}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div> */}
+
+              <div className="row">
+                <div className="col-lg-4 first-card">
+                  <div className={styles.yoursave_image1}>
+                    <div
+                      className={`col-lg-12 position-relative d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_text}`}
+                    >
+                      <FontAwesomeIcon
+                        className={styles.plusicon2}
+                        icon={faPlus}
+                      />
+                    
+                      <p className="fw-500 ltr-shrt-spec">ITINERARY</p>
+                      <h3 className="landingeventheading"> Saved Activity 1 </h3>
+                      <p className="mb-0 fw-500">Paris, France</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-8">
+                  <div
+                    className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
+                    style={{ background: "white" }}
+                  >
+                    {eventData2.map((item, index) => {
+                      return (
+                        <PlaceFullSubCard
+                          key={index}
+                          imageUrl={item.bgImg}
+                          showIcon={showIcon}
+                          itinerary={item.itinerary}
+                          title={item.title}
+                          place={item.place}
+                          time={item.time}
+                          setModalShow={setModalShow}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div> */}
         </div>
       </div>
 

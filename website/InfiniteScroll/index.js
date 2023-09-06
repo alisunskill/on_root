@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { fetchRecommendations } from "../../store/actions/recommendationActions";
-
+import styles from "../../styles/viewsave.module.css"
 const InfiniteScrollComponent = () => {
   const router = useRouter();
   const region = router.query.region?.toLowerCase();
@@ -184,8 +184,8 @@ const InfiniteScrollComponent = () => {
   ];
   if (loading) {
     return (
-      <div class="spinner-border text-primary" role="status">
-        <span class="sr-only">Loading...</span>
+      <div className="spinner-border text-primary" role="status">
+        <span className="sr-only">Loading...</span>
       </div>
     );
   }
@@ -252,6 +252,8 @@ const InfiniteScrollComponent = () => {
                             borderRadius: "15px",
                             opacity: "0.99990000999",
                           }}
+                          // className={styles.savelink}
+
                         />
 
                         <div style={{ position: "absolute ", zIndex: 9999 }}>

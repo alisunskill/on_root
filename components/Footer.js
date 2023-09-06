@@ -17,7 +17,7 @@ export default function Footer() {
     <div>
       <div className={`row justify-content-around m-0 ${styles.footer_main}`}>
         <div className={`col-md-12 col-lg-4 ${styles.footer_col}`}>
-          <Link href="/">
+          <Link target="_blank" href="/">
             <Image className={styles.footer_1_logo} src={logo} alt="logo" />
           </Link>
           <p className="fw-400">
@@ -28,31 +28,35 @@ export default function Footer() {
         </div>
         <div className={`col-lg-2 col-md-4 col-sm-4 col-6 `}>
           <p className={styles.footer_heading}>Quick Links</p>
-          <Link className={styles.footer_link} href="/">
+          <Link target="_blank" className={styles.footer_link} href="/">
             Home
           </Link>
-          <Link className={styles.footer_link} href="/">
+          <Link target="_blank" className={styles.footer_link} href="/">
             About
           </Link>
-          <Link className={styles.footer_link} href="/globemap">
+          <Link target="_blank" className={styles.footer_link} href="/globemap">
             Globe
           </Link>
-          <Link className={styles.footer_link} href="/">
+          <Link target="_blank" className={styles.footer_link} href="/">
             FAQs
           </Link>
         </div>
         <div className={`col-lg-2 col-md-4 col-sm-4 col-6 `}>
           <p className={styles.footer_heading}>Destinations</p>
-          <Link className={styles.footer_link} href="/login">
+          <Link target="_blank" className={styles.footer_link} href="/login">
             Login
           </Link>
-          <Link className={styles.footer_link} href="/signup">
+          <Link target="_blank" className={styles.footer_link} href="/signup">
             Sign Up
           </Link>
-          <Link className={styles.footer_link} href="/forgotpassword">
+          <Link
+            target="_blank"
+            className={styles.footer_link}
+            href="/forgotpassword"
+          >
             Forgot Password
           </Link>
-          <Link className={styles.footer_link} href="/">
+          <Link target="_blank" className={styles.footer_link} href="/">
             Terms & Conditions
           </Link>
         </div>
@@ -62,10 +66,10 @@ export default function Footer() {
           <p className={styles.footer_heading}>Social Media</p>
 
           <div className="d-flex align-items-center gap-2">
-            <Link href="https://www.facebook.com/">
+            <Link target="_blank" href="https://www.facebook.com/">
               <FontAwesomeIcon className="mx-2 w-30px" icon={faFacebook} />
             </Link>
-            <Link href="https://twitter.com/">
+            <Link target="_blank" href="https://twitter.com/">
               <Image
                 width={25}
                 height={25}
@@ -74,10 +78,10 @@ export default function Footer() {
                 alt="twitter"
               />
             </Link>
-            <Link href="https://www.instagram.com/">
+            <Link target="_blank" href="https://www.instagram.com/">
               <FontAwesomeIcon className="mx-2 w-30px" icon={faInstagram} />
             </Link>
-            <Link href="https://www.youtube.com/">
+            <Link target="_blank" href="https://www.youtube.com/">
               <FontAwesomeIcon className="mx-2 w-30px" icon={faYoutube} />
             </Link>
           </div>

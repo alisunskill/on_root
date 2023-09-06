@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../styles/singular.module.css";
 import plusicon2 from "../../public/images/plusicon2.svg";
-import hearticon21 from "../../public/images/hearticon21.svg";
+import Swal from "sweetalert2";
 import burger from "../../public/images/burger.svg";
 import painticon from "../../public/images/painticon.svg";
 import { useRouter } from "next/router";
@@ -14,9 +14,16 @@ import SliderApps from "./SliderApps";
 import { useDispatch, useSelector } from "react-redux";
 import GoogleMapReact from "google-map-react";
 import Cookies from "js-cookie";
+import axios from "axios";
+import Trip from "../../website/ViewSaves/components/Trip";
 
 export default function EventDetail() {
   const router = useRouter();
+
+  const [postCounts, setPostCounts] = useState();
+  const [modalShow, setModalShow] = useState(false);
+
+ 
 
   const { postId } = router.query;
 
@@ -38,7 +45,6 @@ export default function EventDetail() {
     },
   ];
 
-  const imagesData = itemData.map((item) => item.img);
   const RedMarker = ({ text, latitude, longitude }) => (
     <div
       style={{
@@ -63,16 +69,60 @@ export default function EventDetail() {
   );
 
   const [postid, setPostId] = useState("");
+  const [selectedItems, setSelectedItems] = useState({});
+  const [favList, setFavList] = useState([]);
+
+  const handleFavoriteClick = (id) => {
+    setSelectedItems((prevSelectedItems) => ({
+      ...prevSelectedItems,
+      [id]: !prevSelectedItems[id],
+    }));
+
+    const isAlreadyFav = favList.some((favItem) => favItem._id === id);
+    if (isAlreadyFav) {
+      const updatedFavList = favList.filter((item) => item._id !== id);
+      setFavList(updatedFavList);
+      Swal.fire({
+        text: "This post is removed from your favorites.",
+        icon: "info",
+      });
+      return;
+    }
+
+    const clickedItem = filteredData;
+    if (clickedItem) {
+      const updatedFavList = [clickedItem];
+      setFavList(updatedFavList);
+      localStorage.setItem(
+        "selectedIds",
+        JSON.stringify(updatedFavList.map((item) => item._id))
+      );
+    }
+  };
+
+  const sendFavListToBackend = async (selectedIds) => {
+    const userID = localStorage.getItem("userID");
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/savepost", {
+        postId: selectedIds,
+        userID: userID,
+      });
+    } catch (error) {
+      console.error("Error updating backend:", error);
+    }
+  };
+  useEffect(() => {
+    const selectedIds = favList.map((item) => item._id);
+    sendFavListToBackend(selectedIds);
+  }, [favList]);
 
   useEffect(() => {
     const postId = Cookies.get("postIdCookie");
-    console.log("Retrieved postId:", postId);
     setPostId(postId);
   }, []);
 
   // const { postId } = router.query;
-
-  console.log(postid, "id");
 
   const recommendationsData = useSelector((state) => state.recommendation);
   const { recommendations, loading, error } = recommendationsData;
@@ -80,7 +130,6 @@ export default function EventDetail() {
   const recData = recommendations.Recommendations;
 
   const filteredData = recData?.find((item) => item._id === postid);
-  console.log(filteredData, "filteredData vv");
 
   const filterLoc = filteredData?.location;
   const [staticMarkerPosition, setStaticMarkerPosition] = useState({
@@ -92,12 +141,12 @@ export default function EventDetail() {
   //   lat: 31.5204,
   //   lng: 74.3587,
   // });
+
   const [mapCenter, setMapCenter] = useState({
     lat: filterLoc?.coordinates?.[1] || 31.5204,
     lng: filterLoc?.coordinates?.[0] || 74.3587,
   });
   const [locationInput, setLocationInput] = useState("");
-  // const [imageUrls, setImageUrls] = useState([]);
 
   useEffect(() => {
     if (filterLoc?.coordinates) {
@@ -127,10 +176,22 @@ export default function EventDetail() {
       </>
     );
   });
-  // console.log(filteredData.images, "imageUrls");
 
-  // const filterLoc = filteredData?.location;
-  console.log(filterLoc?.coordinates, "filterLoc nnn");
+  // useEffect(() => {
+  //   const storedPostCounts = localStorage.getItem("postCounts");
+  //   if (storedPostCounts) {
+  //     const parsedPostCounts = JSON.parse(storedPostCounts);
+  //     setPostCounts(parsedPostCounts);
+  //   }
+  // }, []);
+  useEffect(() => {
+    const storedPostCounts = localStorage.getItem("postCounts");
+    console.log(storedPostCounts, "storedPostCounts");
+    if (storedPostCounts) {
+      const parsedPostCounts = JSON.parse(storedPostCounts);
+      setPostCounts(parsedPostCounts);
+    }
+  }, []);
 
   const handleApiLoaded = (map, maps) => {
     if (loading || !filteredData) {
@@ -190,8 +251,6 @@ export default function EventDetail() {
 
   useEffect(() => {
     if (filterLoc?.coordinates) {
-      console.log("Filter Location Coordinates:", filterLoc?.coordinates);
-
       setStaticMarkerPosition({
         // latitude: filterLoc?.coordinates[1],
         // longitude: filterLoc?.coordinates[0],
@@ -200,12 +259,13 @@ export default function EventDetail() {
       });
     }
   }, [filterLoc?.coordinates]);
+
+  const saveCount = postCounts && postCounts[postid] ? postCounts[postid] : 0;
+
+  console.log(`Save count for post ${postid}: ${saveCount}`);
+
   return (
     <>
-      {/* {postid} */}
-      {/* {filteredData?.experience} */}
-      {/* {filteredData?.cost} */}
-      {/* {imageUrls} */}
       <div className="container-fluid pb-5">
         <div className="row">
           <div
@@ -213,10 +273,7 @@ export default function EventDetail() {
           >
             <div className={`row align-items-center ${styles.eventtopsection}`}>
               <div className=" col-9 col-md-6 col-lg-8">
-                <h6 className="fw-500">
-                  {/* Garden State Gathering: Celebrating New Jersey's Rich Culture */}
-                  {filteredData?.title}
-                </h6>
+                <h4 className="fw-600">{filteredData?.title}</h4>
               </div>
               <div
                 className={` col-3 col-md-6 col-lg-4 align-items-center d-flex justify-content-end gap-3 ${styles.eventicon}`}
@@ -225,25 +282,46 @@ export default function EventDetail() {
                   className={`d-flex align-items-center justify-content-center ${styles.eventicondiv}`}
                 >
                   <Image
-                    className={styles.eventtopicons}
+                    onClick={() => setModalShow(true)}
+                    className={`${styles.eventtopicons} animated1`}
                     src={plusicon2}
                     alt=""
+                  />
+                </div>
+                <div className="text-center w-100  d-flex justify-content-center align-items-center">
+                  <Trip
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                    setModalShow={setModalShow}
                   />
                 </div>
                 <div
                   className={`d-flex align-items-center justify-content-center ${styles.eventicondiv}`}
                 >
-                  <Image
+                  {/* {console.log(filteredData?._id, "filteredData?._id")} */}
+
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    className="animated"
+                    onClick={() => handleFavoriteClick(filteredData?._id)}
+                    style={{
+                      color: selectedItems[filteredData?._id] ? "red" : "gray",
+                      cursor: "pointer",
+                    }}
+                  />
+
+                  {/* <Image
+                    onClick={() => handleFavoriteClick(filteredData?._id)}
                     className={styles.eventtopicons}
                     src={hearticon21}
                     alt=""
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
             <div className="row">
               <div className="col-lg-12 col-md-12 mt-4">
-                <SliderApps images={filteredData?.images} />
+                <SliderApps images1={filteredData?.images} />
               </div>
 
               <div className="col-12 col-md-12 col-lg-12 py-3">
@@ -256,45 +334,10 @@ export default function EventDetail() {
           </div>
           <div className="col-12 col-lg-1">
             <div className="row">
-              <div
+              {/* <div
                 className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
               >
-                {/* <div className={styles.eventicons}>
-                  <Image
-                    className={`h-auto ${styles.foodIcons}`}
-                    src={burger}
-                    alt=""
-                    style={
-                      filteredData?.descriptor === "food"
-                        ? { border: "2px solid green", borderRadius: "50px" }
-                        : { border: "none" }
-                    }
-                  />
-                </div>
-                <div className={` ${styles.eventicons}`}>
-                  <Image
-                    className={`h-auto ${styles.foodIcons}`}
-                    src={painticon}
-                    alt=""
-                    style={
-                      filteredData?.descriptor === "Art"
-                        ? { border: "2px solid green", borderRadius: "50px" }
-                        : { border: "none" }
-                    }
-                  />
-                </div>
-                <div className={` ${styles.eventicons}`}>
-                  <Image
-                    className={`h-auto ${styles.foodIcons}`}
-                    src={travelicon}
-                    alt=""
-                    style={
-                      filteredData?.descriptor === "Hiking"
-                        ? { border: "2px solid green", borderRadius: "50px" }
-                        : { border: "none" }
-                    }
-                  />
-                </div> */}
+                
                 {filteredData?.descriptor === "food" && (
                   <div className={styles.eventicons}>
                     <Image
@@ -306,7 +349,6 @@ export default function EventDetail() {
                         borderRadius: "50px",
                       }}
                     />
-                    {/* <h4> {filteredData?.descriptor} </h4> */}
                   </div>
                 )}
 
@@ -321,7 +363,6 @@ export default function EventDetail() {
                         borderRadius: "50px",
                       }}
                     />
-                    {/* <h4> {filteredData?.descriptor} </h4> */}
                   </div>
                 )}
 
@@ -336,7 +377,51 @@ export default function EventDetail() {
                         borderRadius: "50px",
                       }}
                     />
-                    {/* <h4> {filteredData?.descriptor} </h4> */}
+                  </div>
+                )}
+              </div> */}
+              <div
+                className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
+              >
+                {filteredData?.descriptor.includes("food") && (
+                  <div className={styles.eventicons}>
+                    <Image
+                      className={`h-auto ${styles.foodIcons}`}
+                      src={burger}
+                      alt=""
+                      style={{
+                        border: "2px solid green",
+                        borderRadius: "50px",
+                      }}
+                    />
+                  </div>
+                )}
+
+                {filteredData?.descriptor.includes("Art") && (
+                  <div className={` ${styles.eventicons}`}>
+                    <Image
+                      className={`h-auto ${styles.foodIcons}`}
+                      src={painticon}
+                      alt=""
+                      style={{
+                        border: "2px solid green",
+                        borderRadius: "50px",
+                      }}
+                    />
+                  </div>
+                )}
+
+                {filteredData?.descriptor.includes("Hiking") && (
+                  <div className={` ${styles.eventicons}`}>
+                    <Image
+                      className={`h-auto ${styles.foodIcons}`}
+                      src={travelicon}
+                      alt=""
+                      style={{
+                        border: "2px solid green",
+                        borderRadius: "50px",
+                      }}
+                    />
                   </div>
                 )}
               </div>
@@ -399,10 +484,10 @@ export default function EventDetail() {
           >
             <div className="d-flex align-center gap-2">
               <FontAwesomeIcon icon={faHeart} size="2x" color="red" />
-              <p className="bold mb-0">145 Saved</p>
+              <p className="bold mb-0">{saveCount}</p>
             </div>
             <div className="d-flex align-center gap-2">
-              <Image src={plane} width={70} height={50} />{" "}
+              <Image src={plane} width={70} height={50} />
               <p className="bold mb-0">30 Added to Trips</p>
             </div>
           </div>
