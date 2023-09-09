@@ -251,6 +251,13 @@
   overflow: hidden;
   border-radius: 8px;
 }
+.smallimg1 {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  object-fit: cover;
+}
 /* animation */
 .uploadimg {
   background-size: 100% 100%;
@@ -264,6 +271,7 @@
 .uploadimg:hover {
   transform: scale(1.2);
 }
+
 .thumbnail {
   color: #767676;
 }

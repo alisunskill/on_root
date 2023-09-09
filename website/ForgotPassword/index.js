@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../../styles/signin.module.css";
 import axios from "axios";
 import wlogo from "../../public/images/rootwhite.png";
@@ -9,15 +9,14 @@ import { useRouter } from "next/router";
 
 function ForgotPassword() {
   const router = useRouter();
-
+  const [loading, setLoading] = useState(false);
   const forgotSchema = Yup.object().shape({
     email: Yup.string().required("email is required"),
   });
 
   const handleForgot = async (values) => {
-    console.log("ALi");
-
     try {
+      setLoading(true);
       const response = await axios.post(
         "http://localhost:8000/api/users/forgot-password",
         values
@@ -25,12 +24,14 @@ function ForgotPassword() {
 
       if (response.status === 200) {
         console.log("Password reset request successful.");
-        router.push("/resetpassword");
+        router.push("/confirmedreset");
       } else {
         console.error("Password reset request failed.");
       }
     } catch (error) {
       console.error("Error occurred:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,7 +73,13 @@ function ForgotPassword() {
                         type="submit"
                         disabled={!isValid}
                       >
-                        Send a password reset email.
+                        {loading ? (
+                          <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">Loading...</span>
+                          </div>
+                        ) : (
+                          "Send a password reset email"
+                        )}
                       </button>
                     </div>
                   </Form>

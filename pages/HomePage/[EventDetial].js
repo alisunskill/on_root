@@ -20,30 +20,16 @@ import Trip from "../../website/ViewSaves/components/Trip";
 export default function EventDetail() {
   const router = useRouter();
 
-  const [postCounts, setPostCounts] = useState();
+  const [postCounts, setPostCounts] = useState({});
   const [modalShow, setModalShow] = useState(false);
-
- 
-
+  // const totalTrips = localStorage.getItem('tripsLength')
+  const [tripCount, setTripCount] = useState("");
+  useEffect(() => {
+    const totalTrips = localStorage.getItem("tripsLength");
+    setTripCount(totalTrips);
+  }, []);
+  console.log(tripCount, "tripCount");
   const { postId } = router.query;
-
-  const itemData = [
-    {
-      img: "https://images.unsplash.com/photo-1663583784667-4a2a386fec62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1622397815608-359540676c67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1550850839-8dc894ed385a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=875&q=80",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1587162146766-e06b1189b907?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=956&q=80",
-    },
-  ];
 
   const RedMarker = ({ text, latitude, longitude }) => (
     <div
@@ -82,6 +68,10 @@ export default function EventDetail() {
     if (isAlreadyFav) {
       const updatedFavList = favList.filter((item) => item._id !== id);
       setFavList(updatedFavList);
+      setPostCounts((prevCounts) => ({
+        ...prevCounts,
+        [id]: (prevCounts[id] || 0) - 1,
+      }));
       Swal.fire({
         text: "This post is removed from your favorites.",
         icon: "info",
@@ -93,6 +83,10 @@ export default function EventDetail() {
     if (clickedItem) {
       const updatedFavList = [clickedItem];
       setFavList(updatedFavList);
+      setPostCounts((prevCounts) => ({
+        ...prevCounts,
+        [id]: (prevCounts[id] || 0) + 1,
+      }));
       localStorage.setItem(
         "selectedIds",
         JSON.stringify(updatedFavList.map((item) => item._id))
@@ -296,20 +290,21 @@ export default function EventDetail() {
                   />
                 </div>
                 <div
-                  className={`d-flex align-items-center justify-content-center ${styles.eventicondiv}`}
+                  className={`d-flex align-items-center justify-content-center bold1 ${styles.eventicondiv}`}
                 >
-                  {/* {console.log(filteredData?._id, "filteredData?._id")} */}
-
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    className="animated"
-                    onClick={() => handleFavoriteClick(filteredData?._id)}
-                    style={{
-                      color: selectedItems[filteredData?._id] ? "red" : "gray",
-                      cursor: "pointer",
-                    }}
-                  />
-
+                  <div className="animated">
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      className="heartbeat"
+                      onClick={() => handleFavoriteClick(filteredData?._id)}
+                      style={{
+                        color: selectedItems[filteredData?._id]
+                          ? "red"
+                          : "black",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </div>
                   {/* <Image
                     onClick={() => handleFavoriteClick(filteredData?._id)}
                     className={styles.eventtopicons}
@@ -334,95 +329,54 @@ export default function EventDetail() {
           </div>
           <div className="col-12 col-lg-1">
             <div className="row">
-              {/* <div
-                className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
-              >
-                
-                {filteredData?.descriptor === "food" && (
-                  <div className={styles.eventicons}>
-                    <Image
-                      className={`h-auto ${styles.foodIcons}`}
-                      src={burger}
-                      alt=""
-                      style={{
-                        border: "2px solid green",
-                        borderRadius: "50px",
-                      }}
-                    />
-                  </div>
-                )}
-
-                {filteredData?.descriptor === "Art" && (
-                  <div className={` ${styles.eventicons}`}>
-                    <Image
-                      className={`h-auto ${styles.foodIcons}`}
-                      src={painticon}
-                      alt=""
-                      style={{
-                        border: "2px solid green",
-                        borderRadius: "50px",
-                      }}
-                    />
-                  </div>
-                )}
-
-                {filteredData?.descriptor === "Hiking" && (
-                  <div className={` ${styles.eventicons}`}>
-                    <Image
-                      className={`h-auto ${styles.foodIcons}`}
-                      src={travelicon}
-                      alt=""
-                      style={{
-                        border: "2px solid green",
-                        borderRadius: "50px",
-                      }}
-                    />
-                  </div>
-                )}
-              </div> */}
               <div
                 className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
               >
-                {filteredData?.descriptor.includes("food") && (
-                  <div className={styles.eventicons}>
-                    <Image
-                      className={`h-auto ${styles.foodIcons}`}
-                      src={burger}
-                      alt=""
-                      style={{
-                        border: "2px solid green",
-                        borderRadius: "50px",
-                      }}
-                    />
-                  </div>
-                )}
+                {console.log(filteredData, "filteredData.descriptors")}
+                {filteredData && filteredData.descriptors && (
+                  <>
+                    {filteredData.descriptors.includes("food") && (
+                      <div className={styles.eventicons}>
+                        <Image
+                          className={`h-auto ${styles.foodIcons}`}
+                          src={burger}
+                          alt=""
+                          style={{
+                            border: "2px solid green",
+                            borderRadius: "50px",
+                          }}
+                        />
+                      </div>
+                    )}
 
-                {filteredData?.descriptor.includes("Art") && (
-                  <div className={` ${styles.eventicons}`}>
-                    <Image
-                      className={`h-auto ${styles.foodIcons}`}
-                      src={painticon}
-                      alt=""
-                      style={{
-                        border: "2px solid green",
-                        borderRadius: "50px",
-                      }}
-                    />
-                  </div>
-                )}
+                    {filteredData.descriptors.includes("Art") && (
+                      <div className={` ${styles.eventicons}`}>
+                        <Image
+                          className={`h-auto ${styles.foodIcons}`}
+                          src={painticon}
+                          alt=""
+                          style={{
+                            border: "2px solid green",
+                            borderRadius: "50px",
+                          }}
+                        />
+                      </div>
+                    )}
 
-                {filteredData?.descriptor.includes("Hiking") && (
-                  <div className={` ${styles.eventicons}`}>
-                    <Image
-                      className={`h-auto ${styles.foodIcons}`}
-                      src={travelicon}
-                      alt=""
-                      style={{
-                        border: "2px solid green",
-                        borderRadius: "50px",
-                      }}
-                    />
-                  </div>
+                    {filteredData.descriptors.includes("Hiking") && (
+                      <div className={` ${styles.eventicons}`}>
+                        <Image
+                          className={`h-auto ${styles.foodIcons}`}
+                          src={travelicon}
+                          alt=""
+                          style={{
+                            border: "2px solid green",
+                            borderRadius: "50px",
+                          }}
+                        />
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -485,10 +439,11 @@ export default function EventDetail() {
             <div className="d-flex align-center gap-2">
               <FontAwesomeIcon icon={faHeart} size="2x" color="red" />
               <p className="bold mb-0">{saveCount}</p>
+              <p className="bold px-2 mb-0">Saves</p>
             </div>
             <div className="d-flex align-center gap-2">
               <Image src={plane} width={70} height={50} />
-              <p className="bold mb-0">30 Added to Trips</p>
+              <p className="bold mb-0">{tripCount} Trips are Added</p>
             </div>
           </div>
           <div className="col-3"></div>

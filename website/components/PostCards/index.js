@@ -9,9 +9,14 @@ export default ({ imageUrl, title, region }) => {
     backgroundRpeat: "no-repeat",
   };
   return (
-    <div className="col-12 col-md-6 col-lg-4 p-lg-2 p-2">
+    <div
+      className={`col-12 col-md-6 col-lg-4 p-lg-2 p-2 overflow-hidden ${styles.sweetslide}`}
+    >
       {imageUrl ? (
-        <div className={styles.landingimage} style={cardStyle}>
+        <div
+          className={`${styles.landingimage} ${styles.animateOnHover}`}
+          style={cardStyle}
+        >
           <h6 className={`fw-500 mb-0 ${styles.landingeventheading}`}>
             {title} <br />
             <span className="my-3">{region}</span>

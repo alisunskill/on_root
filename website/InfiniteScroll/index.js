@@ -6,7 +6,9 @@ import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { fetchRecommendations } from "../../store/actions/recommendationActions";
-import styles from "../../styles/viewsave.module.css"
+import styles from "../../styles/viewsave.module.css";
+import Cookies from "js-cookie";
+
 const InfiniteScrollComponent = () => {
   const router = useRouter();
   const region = router.query.region?.toLowerCase();
@@ -58,24 +60,17 @@ const InfiniteScrollComponent = () => {
       setMaxCost(maxParam);
     }
   }, [dispatch, router.query.min, router.query.max]);
-  const fetchPosts = () => {
-    // Replace this with your static data array or import from a separate file
-    const staticPosts = [
-      {
-        id: 1,
-        title: "Post 1",
-        body: "Lorem ipsum dolor sit amet.",
-        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-      },
-      {
-        id: 2,
-        title: "Post 2",
-        body: "Consectetur adipiscing elit.",
-        img: "https://images.unsplash.com/photo-1689126494042-39f69fa4c8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-      },
-      // Add more static posts as needed
-    ];
 
+  const handleLinkClick = (itemId, postTitle) => {
+    localStorage.setItem("itemId", JSON.stringify(itemId));
+    // router.push(`/destinationpage/${encodeURIComponent(postTitle)}`);
+    router.push(
+      `/destinationpage/${encodeURIComponent(postTitle.replace(/ /g, "-"))}`
+    );
+    console.log(itemId, "itemId");
+  };
+
+  const fetchPosts = () => {
     const startIndex = (page - 1) * 10;
     const endIndex = page * 10;
     const newPosts = recommendationData.slice(startIndex, endIndex);
@@ -150,9 +145,15 @@ const InfiniteScrollComponent = () => {
   );
 
   // current Descriptor
-  const filtereDescriptor = recommendationData.filter(
-    (post) => post.descriptor.toLowerCase() === descriptor
-  );
+  // const filtereDescriptor = recommendationData.filter(
+  //   (post) => post.descriptors.toLowerCase() === descriptor
+  // );
+  const filtereDescriptor = recommendationData.filter((post) => {
+    if (typeof post.descriptor === "string") {
+      return post.descriptor.toLowerCase() === descriptor;
+    }
+    return false;
+  });
 
   // filterPrice
   const filterPrice = recommendationData.filter(
@@ -226,37 +227,17 @@ const InfiniteScrollComponent = () => {
                     : recommendationData
                   ).map((item, index) => (
                     <div key={index} className="">
-                      <Link
-                        className="text-decoration-none d-flex justify-content-center flex-column"
-                        href="/infopage"
-                        style={{
-                          position: "relative",
-                          width: "100%",
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          // opacity: "0.9",
-                        }}
+                      <div
+                        className={`text-decoration-none d-flex justify-content-center flex-column ${styles.savelink}`}
+                        onClick={() => handleLinkClick(item._id, item.title)}
                       >
                         <img
-                          layout="fill"
-                          objectFit="cover"
-                          src={`${imageUrl}?w=162&auto=format`}
-                          srcSet={`${imageUrl}?w=162&auto=format&dpr=2 2x`}
-                          alt={item.region}
-                          loading="lazy"
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            borderRadius: "15px",
-                            opacity: "0.99990000999",
-                          }}
-                          // className={styles.savelink}
-
+                          className={styles.uploadimg}
+                          src={item.images[0]}
+                          alt="Uploaded Image"
                         />
 
-                        <div style={{ position: "absolute ", zIndex: 9999 }}>
+                        <div style={{ position: "absolute ", zIndex: 999 }}>
                           <div className="text-center">
                             <p className={`mb-0 letterspac text-white`}>
                               Event
@@ -268,7 +249,7 @@ const InfiniteScrollComponent = () => {
                             </p>
                           </div>
                         </div>
-                      </Link>
+                      </div>
                     </div>
                   ))}
                 </Masonry>

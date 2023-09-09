@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 
+
 export const handleLogout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("userID");
@@ -8,5 +9,6 @@ export const handleLogout = () => {
   Swal.fire({
     text: "User is Logout.",
     icon: "info",
-  }).then(() => {});
+  }).then(() => {
+  });
 };

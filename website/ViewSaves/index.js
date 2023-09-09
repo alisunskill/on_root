@@ -56,7 +56,8 @@ function ViewSaves() {
   const recommendationsData = useSelector((state) => state.recommendation);
   const { recommendations, loading, error } = recommendationsData;
   const recommendationData = recommendations.Recommendations || [];
-  const [imageUrl, setImageUrl] = useState(""); // Define imageUrl in the component's state
+  const [imageUrl, setImageUrl] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null); // State to hold the selected image
 
   // const filteredRegion = recommendationData.filter(
   //   (item) => item.id === postIds.map((item) => item.id)
@@ -182,7 +183,6 @@ function ViewSaves() {
                 >
                   {filteredRegion.map((post, index) => {
                     const imageUrl = post.images;
-                    console.log(imageUrl, "imageUrl");
 
                     const matchingPostId = postIds.find(
                       (item) => item.postId === post._id
@@ -194,7 +194,11 @@ function ViewSaves() {
                             <div className="col-lg-12 ">
                               <FontAwesomeIcon icon="fa-solid fa-plus" />
                               <FontAwesomeIcon
-                                onClick={() => setModalShow(true)}
+                                // onClick={() => setModalShow(true)}
+                                onClick={() => {
+                                  setSelectedImage(post.images[0]);
+                                  setModalShow(true);
+                                }}
                                 className={`${styles.plusicon} animated1 bg-light rounded-5 fw-700 text-dark border-0 position-absolute z-3 p-2.5 fw-700`}
                                 icon={faPlus}
                                 style={{ left: "13px" }}
@@ -247,16 +251,13 @@ function ViewSaves() {
                             />
 
                             <div
-                              style={{ position: "absolute ", zIndex: 99999 }}
+                              style={{ position: "absolute ", zIndex: 999 }}
                               className="text-center"
                             >
                               <p className={`mb-0 letterspac text-white`}>
                                 Event
                               </p>
-                              <h3 className="w-700 text-white">
-                                {" "}
-                                {post.title}
-                              </h3>
+                              <h3 className="w-700 text-white">{post.title}</h3>
                               <p className={`mb-0 m1 text-white`}>
                                 {post.region}
                               </p>
@@ -271,6 +272,7 @@ function ViewSaves() {
                       show={modalShow}
                       onHide={() => setModalShow(false)}
                       setModalShow={setModalShow}
+                      selectedImage={selectedImage}
                     />
                   </div>
                 </Masonry>

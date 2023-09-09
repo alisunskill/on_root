@@ -27,6 +27,7 @@ const Navbar = () => {
   };
   const handleLogout1 = () => {
     handleLogout();
+    getLocalStorageState()
     router.push("/login");
   };
 
@@ -35,7 +36,7 @@ const Navbar = () => {
   const recommendationsData = useSelector((state) => state.recommendation);
   const [searchTerm, setSearchTerm] = useState("");
   const { recommendations, loading, error } = recommendationsData;
-  const [userIDs, setUserID] = useState(null);
+  const [userIDs, setUserID] = useState('');
   const [emails, setEmail] = useState(null);
 
   const { userID, email } = useSelector((state) => state.recommendation);
@@ -46,21 +47,24 @@ const Navbar = () => {
   // const email =
   //   typeof window !== "undefined" ? localStorage.getItem("email") : null;
 
+  const getLocalStorageState = ()=>{if (typeof window !== "undefined") {
+    const storedUserID = localStorage.getItem("userID");
+    const storedEmail = localStorage.getItem("email");
+    setUserID(storedUserID);
+    setEmail(storedEmail);
+  }}
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedUserID = localStorage.getItem("userID");
-      const storedEmail = localStorage.getItem("email");
-      setUserID(storedUserID);
-      setEmail(storedEmail);
-    }
-  }, []);
+    getLocalStorageState()
+  });
 
 
   const handleCreateItinerary = () => {
     if (!userID) {
       Swal.fire({
         text: "Please login to create an itinerary.",
-        icon: "warning",
+        icon: "warning"
+      }).then(() => {
+        router.push("/login");
       });
     } else {
       router.push("/createitinerary");
@@ -95,7 +99,7 @@ const Navbar = () => {
                   className="bg-transparent border-0 outline-none"
                   // onClick={() => setModalShow(true)}
                 >
-                  <Link href="/globemap">
+                  <a href="/globemap">
                     <Image
                       width={50}
                       height={50}
@@ -104,7 +108,7 @@ const Navbar = () => {
                       style={{ objectFit: "contain" }}
                       className={`mx-4" ${styles.plusicon}`}
                     />
-                  </Link>
+                  </a>
                 </Button>
                 {/* {modalShow && (
                   <Globe
@@ -171,11 +175,8 @@ const Navbar = () => {
                   />
                 )} */}
 
-                {userID ? (
+                {userIDs ? (
                   <>
-                    <Link href="/createitinerary">
-                      {/* Show "Create Itinerary" icon */}
-                    </Link>
                     <Image
                       src={logout}
                       width={50}
@@ -184,6 +185,7 @@ const Navbar = () => {
                       onClick={handleLogout1}
                       className={`mx-3 object-fit-contain cursor-pointer ${styles.menicon}`}
                     />
+                
                   </>
                 ) : (
                   <>

@@ -21,7 +21,6 @@ export default function NewTrip(props) {
     sdate: "",
     edate: "",
   });
-  console.log(formData, formData.region, "formData");
   const onSelectImage = (file) => {
     const imageBase64 = file.base64.toString();
     setFormData((prevData) => ({
@@ -69,6 +68,20 @@ export default function NewTrip(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ padding: "20px 40px 20px 40px" }}>
+          {/* <img
+                  src={props.selectedImage}
+                  alt="tripimg"
+                  className={styles.smallimg1}
+                /> */}
+          {formData.image ? (
+            <img
+              src={formData.image}
+              alt="tripimg"
+              className={styles.smallimg1}
+            />
+          ) : (
+            ""
+          )}
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <h5>Choose an Image</h5>
@@ -87,7 +100,6 @@ export default function NewTrip(props) {
                 }}
               >
                 <div className="placeholder-text">Choose an image</div>
-
                 <div
                   style={{
                     fontSize: "20px",

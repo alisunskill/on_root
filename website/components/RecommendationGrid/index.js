@@ -56,7 +56,7 @@ const RecommendationGrid = ({
                       href={`/eventdetail/${encodeURIComponent(
                         recentRecommendations[1].title.replace(/ /g, "-")
                       )}`}
-                      className="text-decoration-none"
+                      className={`text-decoration-none ${styles.inneranimate}`}
                     >
                       <div
                         className={styles.landingimage1}
@@ -299,7 +299,6 @@ const RecommendationGrid = ({
                               className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                             >
                               {recentRecommendations[5].title}
-
                             </p>
                             <p className={`mb-0 m1`}>
                               {recentRecommendations[5].region}

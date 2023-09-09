@@ -12,13 +12,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import plane from "../../public/images/aeroplan.svg";
 import Image from "next/image";
-import SliderApp from "./sliderApp";
+import SliderApp from "./SliderApps";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import GoogleMapReact from "google-map-react";
 import Cookies from "js-cookie";
 
-export default function ItemDetail() {
+export default function DestinationPage({ params }) {
   const itemData = [
     {
       img: "https://images.unsplash.com/photo-1663583784667-4a2a386fec62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
@@ -62,17 +62,14 @@ export default function ItemDetail() {
   );
   const router = useRouter();
 
-  const [postid, setPostId] = useState("");
+  const [postid, setPostId] = useState(null);
 
   useEffect(() => {
-    const postId = Cookies.get("postIdCookie");
-    console.log("Retrieved postId:", postId);
-    setPostId(postId);
+    const itemData = JSON.parse(localStorage.getItem("itemId"));
+    setPostId(itemData);
   }, []);
 
-  // const { postId } = router.query;
-
-  console.log(postid, "id");
+  console.log(postid, "id 64c775d2e242f87fa2db45fb");
 
   const recommendationsData = useSelector((state) => state.recommendation);
   const { recommendations, loading, error } = recommendationsData;
@@ -221,10 +218,7 @@ export default function ItemDetail() {
           >
             <div className={`row align-items-center ${styles.eventtopsection}`}>
               <div className=" col-9 col-md-6 col-lg-8">
-                <h6 className="fw-500">
-                  {/* Garden State Gathering: Celebrating New Jersey's Rich Culture */}
-                  {filteredData?.title}
-                </h6>
+                <h6 className="fw-500">{filteredData?.title}</h6>
               </div>
               <div
                 className={` col-3 col-md-6 col-lg-4 align-items-center d-flex justify-content-end gap-3 ${styles.eventicon}`}
@@ -251,33 +245,19 @@ export default function ItemDetail() {
             </div>
             <div className="row">
               <div className="col-lg-12 col-md-12 mt-4">
-                <SliderApp images={imagesData} />
+                <SliderApp images1={filteredData?.images} />
               </div>
 
               <div className="col-12 col-md-12 col-lg-12 py-3">
                 <p className={styles.eventtitlepara}>
-                  Dynamic <br />
                   {filteredData?.description} <br />
-                  Dynamic
-                  <br /> <br /> Discover the best of New Jersey's arts and
-                  crafts as you browse through our artisan market featuring
-                  handmade goods from local vendors. Taste the flavors of the
-                  state with a selection of food and drink from some of the best
-                  restaurants and breweries in the area. And don't miss out on
-                  our live performances, featuring musicians, dancers, and other
-                  artists who represent the many cultures that call New Jersey
-                  home. <br /> <br />
-                  Whether you're a lifelong resident or visiting for the first
-                  time, the Garden State Gathering is an event you won't want to
-                  miss. Come celebrate the rich heritage of New Jersey and
-                  experience all that this great state has to offer!
                 </p>
               </div>
             </div>
           </div>
           <div className="col-12 col-lg-1">
             <div className="row">
-              <div
+              {/* <div
                 className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
               >
                 <div className={styles.eventicons}>
@@ -301,6 +281,58 @@ export default function ItemDetail() {
                     alt=""
                   />
                 </div>
+              </div> */}
+
+              <div
+                className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
+              >
+                {console.log(
+                  filteredData?.descriptors,
+                  "filteredData.descriptors"
+                )}
+                {filteredData && filteredData.descriptors && (
+                  <>
+                    {filteredData.descriptor === "Art" && (
+                      <div className={` ${styles.eventicons}`}>
+                        <Image
+                          className={`h-auto ${styles.foodIcons}`}
+                          src={painticon}
+                          alt=""
+                          style={{
+                            border: "2px solid green",
+                            borderRadius: "50px",
+                          }}
+                        />
+                      </div>
+                    )}
+                    {filteredData.descriptor === "Hiking" && (
+                      <div className={` ${styles.eventicons}`}>
+                        <Image
+                          className={`h-auto ${styles.foodIcons}`}
+                          src={travelicon} // Replace with your hiking icon
+                          alt=""
+                          style={{
+                            border: "2px solid green",
+                            borderRadius: "50px",
+                          }}
+                        />
+                      </div>
+                    )}
+                    {filteredData.descriptor === "food" && (
+                      <div className={` ${styles.eventicons}`}>
+                        <Image
+                          className={`h-auto ${styles.foodIcons}`}
+                          src={burger}
+                          alt=""
+                          style={{
+                            border: "2px solid green",
+                            borderRadius: "50px",
+                          }}
+                        />
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>

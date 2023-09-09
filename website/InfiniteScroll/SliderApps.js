@@ -1,7 +1,5 @@
-import React, { useRef, useState } from "react";
-// Import Swiper React components
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Image from "next/image";
 import styles from "../../styles/singular.module.css";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -10,7 +8,7 @@ import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
 export default function SliderApps({ images1 }) {
-console.log(images1, 'ali');
+  console.log(images1, "ali");
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleClick = (image) => {

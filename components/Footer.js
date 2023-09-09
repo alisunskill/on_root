@@ -17,7 +17,7 @@ export default function Footer() {
     <div>
       <div className={`row justify-content-around m-0 ${styles.footer_main}`}>
         <div className={`col-md-12 col-lg-4 ${styles.footer_col}`}>
-          <Link target="_blank" href="/">
+          <Link href="/">
             <Image className={styles.footer_1_logo} src={logo} alt="logo" />
           </Link>
           <p className="fw-400">
@@ -28,35 +28,31 @@ export default function Footer() {
         </div>
         <div className={`col-lg-2 col-md-4 col-sm-4 col-6 `}>
           <p className={styles.footer_heading}>Quick Links</p>
-          <Link target="_blank" className={styles.footer_link} href="/">
+          <Link className={styles.footer_link} href="/">
             Home
           </Link>
-          <Link target="_blank" className={styles.footer_link} href="/">
+          <Link className={styles.footer_link} href="/">
             About
           </Link>
-          <Link target="_blank" className={styles.footer_link} href="/globemap">
+          <Link className={styles.footer_link} href="/globemap">
             Globe
           </Link>
-          <Link target="_blank" className={styles.footer_link} href="/">
+          <Link className={styles.footer_link} href="/">
             FAQs
           </Link>
         </div>
         <div className={`col-lg-2 col-md-4 col-sm-4 col-6 `}>
           <p className={styles.footer_heading}>Destinations</p>
-          <Link target="_blank" className={styles.footer_link} href="/login">
+          <Link className={styles.footer_link} href="/login">
             Login
           </Link>
-          <Link target="_blank" className={styles.footer_link} href="/signup">
+          <Link className={styles.footer_link} href="/signup">
             Sign Up
           </Link>
-          <Link
-            target="_blank"
-            className={styles.footer_link}
-            href="/forgotpassword"
-          >
+          <Link className={styles.footer_link} href="/forgotpassword">
             Forgot Password
           </Link>
-          <Link target="_blank" className={styles.footer_link} href="/">
+          <Link className={styles.footer_link} href="/">
             Terms & Conditions
           </Link>
         </div>

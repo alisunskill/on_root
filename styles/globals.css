@@ -133,7 +133,10 @@ input {
 .m1 {
   margin-top: 5px;
 }
-
+.zindextop {
+  z-index: 99999999999999999 !important;
+  position: relative;
+}
 .flex-column {
   flex-direction: column;
 }
@@ -153,21 +156,32 @@ input {
 ::-webkit-file-upload-button {
   display: none;
 }
-
 /* animation */
-.animated:hover {
-  transition: 0.7s;
-  -webkit-transition: 0.7s;
-  -moz-transition: 0.7s;
-  -ms-transition: 0.7s;
-  -o-transition: 0.7s;
-  -webkit-transform: rotate(360deg);
-  -moz-transform: rotate(360deg);
-  -o-transform: rotate(360deg);
-  -ms-transform: rotate(360deg);
-  transform: rotate(360deg);
+.animated {
+  transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }
-
+.animated:hover {
+  transform: scale(1.2);
+  color: red;
+  animation: heartbeat 1.5s infinite;
+}
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  70% {
+    transform: scale(1.7);
+  }
+  150% {
+    transform: scale(1);
+  }
+}
+.bold1:hover .heartbeat {
+  color: red !important;
+}
+.bold1 {
+  cursor: pointer;
+}
 .animated1:hover {
   transition: 0.7s;
   -webkit-transition: 0.7s;
@@ -213,6 +227,12 @@ input {
 
 iframe {
   border-radius: 16px;
+}
+
+.parentcontainer input {
+  width: 100px !important;
+  height: 100px !important;
+  cursor: pointer;
 }
 
 .savebtn1 {

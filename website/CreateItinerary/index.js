@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import styles from "../../styles/singular.module.css";
 import calender from "../../public/images/calender.svg";
 import moneyicon from "../../public/images/moneyicon.svg";
-import hearticon21 from "../../public/images/hearticon21.svg";
 import burger from "../../public/images/burger.svg";
 import painticon from "../../public/images/painticon.svg";
 import travelicon from "../../public/images/travelicon.svg";
 import Image from "next/image";
-import GoogleLoc from "./components/GoogleLoc";
 import axios, { all } from "axios";
 import { useRouter } from "next/router";
 import GoogleMapReact from "google-map-react";
@@ -16,7 +14,6 @@ import {
   fetchCreateRecommendations,
 } from "../../store/actions/recommendationActions";
 import { useDispatch, useSelector } from "react-redux";
-import Link from "next/link";
 import FileBase64 from "react-file-base64";
 
 const apiKey = process.env.SECRET_KEY;
@@ -208,7 +205,8 @@ export default () => {
     experience: "",
     location: { type: "Point", coordinates: [0, 0] },
     region: "",
-    links: "",
+    descriptors: [],
+    description: "",
   });
 
   console.log(formData, "formData formDataformDataformData");
@@ -221,7 +219,7 @@ export default () => {
       !formData.experience ||
       !formData.location ||
       !formData.region ||
-      !formData.descriptor ||
+      formData.descriptors.length === 0 ||
       !formData.description
     ) {
       return false;
@@ -245,7 +243,6 @@ export default () => {
 
       formData.creator = userID;
 
-      // Dispatch the action to create recommendation
       dispatch(fetchCreateRecommendations(formData, token));
 
       alert("Recommendation creation requested. Please wait...");
@@ -255,78 +252,25 @@ export default () => {
         formData,
       ]);
 
-      // Clear the form data (if needed)
       setFormData({
         title: "",
         images: [],
         cost: "",
         hours: "",
         experience: "",
-        descriptor: "",
+        descriptors: [],
         location: { type: "Point", coordinates: [0, 0] },
         region: "",
         description: "",
       });
 
-      router.push("/confirmsignup");
+      router.push("/");
     } catch (error) {
       console.error("Error:", error);
       alert("Failed to create recommendation. Please try again.");
     }
   };
 
-  // const handleApiLoaded = (map, maps) => {
-  //   if (loading || !recommendations?.Recommendations) {
-  //     return;
-  //   }
-
-  //   recommendations.Recommendations.forEach((location) => {
-  //     const marker = new maps.Marker({
-  //       position: { lat: location.lat, lng: location.lng },
-  //       map,
-  //       title: location.title,
-  //     });
-
-  //     marker.addListener("click", () => {
-  //       alert(`Title: ${location.title}`);
-  //     });
-  //   });
-  //   recommendation.forEach((form) => {
-  //     const formMarker = new maps.Marker({
-  //       position: {
-  //         lat: form.location.coordinates[1],
-  //         lng: form.location.coordinates[0],
-  //       },
-  //       map,
-  //       title: form.title,
-  //     });
-
-  //     formMarker.addListener("click", () => {
-  //       alert(`Title: ${form.title}\nCost: ${form.cost}\nHours: ${form.hours}`);
-  //     });
-  //   });
-  // };
-
-  // const handleMapDoubleClick = (event) => {
-  //   const latitude = event.lat;
-  //   const longitude = event.lng;
-
-  //   const geocoder = new window.google.maps.Geocoder();
-  //   geocoder.geocode(
-  //     { location: { lat: latitude, lng: longitude } },
-  //     (results, status) => {
-  //       if (status === "OK" && results[0]) {
-  //         const locationName = results[0].formatted_address;
-
-  //         setLocationInput(locationName);
-  //         setFormData({
-  //           ...formData,
-  //           location: { type: "Point", coordinates: [longitude, latitude] },
-  //         });
-  //       }
-  //     }
-  //   );
-  // };
   const handleMapDoubleClick = (event) => {
     if (typeof window !== "undefined") {
       const latitude = event.lat;
@@ -400,25 +344,73 @@ export default () => {
     });
   };
 
-  const onSelectImages = (files, component) => {
-    const imagesArray = files.map((file) => file.base64.toString());
+  const [imageFields, setImageFields] = useState([
+    { id: "component1", images: [] },
+  ]);
+  const onSelectImages = (files, fieldId) => {
+    const imageUrlsArray = files.map((file) => file.base64.toString());
 
-    if (component === "component1") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        images: [...prevFormData.images, ...imagesArray],
-      }));
-    } else if (component === "component2") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        images: [...prevFormData.images, ...imagesArray],
-      }));
-    } else if (component === "component3") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        images: [...prevFormData.images, ...imagesArray],
-      }));
+    const updatedImageFields = imageFields.map((field) => {
+      if (field.id === fieldId) {
+        return { ...field, images: imageUrlsArray };
+      } else {
+        return field;
+      }
+    });
+
+    setImageFields(updatedImageFields);
+
+    const allImages = updatedImageFields.reduce(
+      (accumulator, field) => [...accumulator, ...field.images],
+      []
+    );
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      images: allImages,
+    }));
+  };
+
+  const addOneMore = () => {
+    if (imageFields.length < 7) {
+      const newField = { id: `component${imageFields.length + 1}`, images: [] };
+      setImageFields([...imageFields, newField]);
     }
+  };
+
+  // const onSelectImages = (files) => {
+  //   const imageUrlsArray = files.map((file) => file.base64.toString()); // Get image URLs
+
+  //   // Combine all selected images into a single array
+  //   const allImages = imageFields.reduce(
+  //     (accumulator, field) => [...accumulator, ...field.images],
+  //     []
+  //   );
+
+  //   // Update the formData with the combined array of images
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     images: [...allImages, ...imageUrlsArray],
+  //   }));
+  // };
+
+  const handleDescriptorChange = (descriptor) => {
+    // Clone the current array to avoid mutating state directly
+    const updatedDescriptors = [...formData.descriptors];
+
+    if (updatedDescriptors.includes(descriptor)) {
+      // If the descriptor is already in the array, remove it
+      updatedDescriptors.splice(updatedDescriptors.indexOf(descriptor), 1);
+    } else {
+      // If the descriptor is not in the array, add it
+      updatedDescriptors.push(descriptor);
+    }
+
+    // Update the state with the new array of descriptors
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      descriptors: updatedDescriptors,
+    }));
   };
 
   return (
@@ -448,26 +440,23 @@ export default () => {
               </div>
 
               <div className="row justify-content-between gap-3">
-                <div className="col-lg-3  form-control-file custom-file-input">
-                  <FileBase64
-                    multiple
-                    onDone={(files) => onSelectImages(files, "component1")}
-                  />
-                </div>
-                <div className="col-lg-3  form-control-file p-0 custom-file-input">
-                  <FileBase64
-                    multiple
-                    onDone={(files) => onSelectImages(files, "component2")}
-                  />
-                </div>
-                <div className="col-lg-3  form-control-file p-0 custom-file-input">
-                  <FileBase64
-                    multiple
-                    onDone={(files) => onSelectImages(files, "component3")}
-                  />
-                </div>
-              </div>
+                <button className="savebtn" onClick={addOneMore}>
+                  Add Image
+                </button>
 
+                {imageFields.map((field) => (
+                  <div
+                    key={field.id}
+                    className={`col-lg-3 form-control-file p-0 custom-file-input parentcontainer`}
+                  >
+                    <FileBase64
+                      multiple
+                      onDone={(files) => onSelectImages(files, field.id)}
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                  </div>
+                ))}
+              </div>
               <div className="row mt-5 align-items-center">
                 <div className="form-group col-lg-6 col-12 text-center">
                   <Image
@@ -576,22 +565,29 @@ export default () => {
                     <input
                       type="radio"
                       value="food"
-                      checked={formData.descriptor === "food"}
-                      onChange={(e) =>
-                        setFormData({ ...formData, descriptor: e.target.value })
-                      }
+                      // checked={formData.descriptor === "food"}
+                      checked={formData.descriptors.includes("food")}
+                      // onChange={(e) =>
+                      //   setFormData({ ...formData, descriptor: e.target.value })
+                      // }
+                      onChange={(e) => handleDescriptorChange(e.target.value)}
                       style={{ display: "none" }}
                     />
                     <Image
                       className={`h-auto cursor-pointer ${styles.foodIcons}`}
                       src={burger}
                       alt=""
+                      // style={
+                      //   formData.descriptor === "food"
+                      //     ? { border: "2px solid green", borderRadius: "50px" }
+                      //     : formData.descriptor === {}
+                      //     ? { border: "none" }
+                      //     : {}
+                      // }
                       style={
-                        formData.descriptor === "food"
+                        formData.descriptors.includes("food")
                           ? { border: "2px solid green", borderRadius: "50px" }
-                          : formData.descriptor === {}
-                          ? { border: "none" }
-                          : {}
+                          : { border: "none" }
                       }
                     />
                   </label>
@@ -601,22 +597,29 @@ export default () => {
                     <input
                       type="radio"
                       value="Art"
-                      checked={formData.descriptor === "Art"}
-                      onChange={(e) =>
-                        setFormData({ ...formData, descriptor: e.target.value })
-                      }
+                      // checked={formData.descriptor === "Art"}
+                      checked={formData.descriptors.includes("Art")}
+                      // onChange={(e) =>
+                      //   setFormData({ ...formData, descriptor: e.target.value })
+                      // }
+                      onChange={(e) => handleDescriptorChange(e.target.value)}
                       style={{ display: "none" }}
                     />
                     <Image
                       className={`h-auto cursor-pointer ${styles.foodIcons}`}
                       src={painticon}
                       alt=""
+                      // style={
+                      //   formData.descriptor === "Art"
+                      //     ? { border: "2px solid green", borderRadius: "50px" }
+                      //     : formData.descriptor === {}
+                      //     ? { border: "none" }
+                      //     : {}
+                      // }
                       style={
-                        formData.descriptor === "Art"
+                        formData.descriptors.includes("Art")
                           ? { border: "2px solid green", borderRadius: "50px" }
-                          : formData.descriptor === {}
-                          ? { border: "none" }
-                          : {}
+                          : { border: "none" }
                       }
                     />
                   </label>
@@ -626,22 +629,29 @@ export default () => {
                     <input
                       type="radio"
                       value="Hiking"
-                      checked={formData.descriptor === "Hiking"}
-                      onChange={(e) =>
-                        setFormData({ ...formData, descriptor: e.target.value })
-                      }
+                      // checked={formData.descriptor === "Hiking"}
+                      checked={formData.descriptors.includes("Hiking")}
+                      // onChange={(e) =>
+                      //   setFormData({ ...formData, descriptor: e.target.value })
+                      // }
+                      onChange={(e) => handleDescriptorChange(e.target.value)}
                       style={{ display: "none" }}
                     />
                     <Image
                       className={`h-auto cursor-pointer ${styles.foodIcons}`}
                       src={travelicon}
                       alt=""
+                      // style={
+                      //   formData.descriptor === "Hiking"
+                      //     ? { border: "2px solid green", borderRadius: "50px" }
+                      //     : formData.descriptor === {}
+                      //     ? { border: "none" }
+                      //     : {}
+                      // }
                       style={
-                        formData.descriptor === "Hiking"
+                        formData.descriptors.includes("Hiking")
                           ? { border: "2px solid green", borderRadius: "50px" }
-                          : formData.descriptor === {}
-                          ? { border: "none" }
-                          : {}
+                          : { border: "none" }
                       }
                     />
                   </label>

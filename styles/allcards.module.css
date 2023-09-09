@@ -12,8 +12,15 @@
   align-items: center;
   justify-content: center;
   border-radius: 25px !important;
+  transition: transform 0.3s ease;
+  overflow: hidden ;
 }
-
+.landingimage:hover {
+  transform: scale(1.1);
+}
+.sweetslide:hover {
+  border-radius: 25px;
+}
 .landingimage1 {
   background-size: cover;
   background-repeat: no-repeat;

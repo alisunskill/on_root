@@ -5,8 +5,10 @@ import NewTrip from "./NewTrip";
 import axios from "axios";
 // import { setTripId } from "../../../store/actions/tripsAction";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 export default function Trip(props) {
+  const router = useRouter();
   const { setModalShow } = props;
   const dispatch = useDispatch();
   const [modalTrip, setModalTrip] = useState(false);
@@ -75,10 +77,9 @@ export default function Trip(props) {
       setSelectedTrips((prevSelectedTrips) => [...prevSelectedTrips, id]);
     }
   };
-
   const handleSaveBtn = () => {
-    // Send the selectedTrips to the backend
     sendFavListToBackend(selectedTrips);
+    router.push("/createdtrips");
   };
   const sendFavListToBackend = async (selectedIds) => {
     const userIDPerson = localStorage.getItem("userID"); // Use "userID" key
@@ -109,7 +110,7 @@ export default function Trip(props) {
   console.log(favList, "favList");
 
   return (
-    <div>
+    <div className="zindextop">
       <Modal
         {...props}
         size="lg"
@@ -136,6 +137,9 @@ export default function Trip(props) {
                 const isFav = favList.some(
                   (favItem) => favItem._id === item.id
                 );
+                const tripsLength = trips.length;
+                localStorage.setItem("tripsLength", tripsLength);
+
                 return (
                   <div
                     key={item._id}
@@ -208,24 +212,26 @@ export default function Trip(props) {
               Trip to “EUROPE”
             </label>
           </div> */}
-          <button
-            className={`fw-500 ${styles.herobtn}`}
-            onClick={handleSaveBtn}
-          >
-            Save Trips
-          </button>
-          <button
-            className={`fw-500 ${styles.herobtn}`}
-            onClick={handleClick}
-            // onHide={() => setModalShow(false)}
-          >
+          <button className={`fw-500 ${styles.herobtn}`} onClick={handleClick}>
             + New Trip
           </button>
+          <div className="d-flex justify-content-center">
+            <button
+              className={`fw-500 savebtn mt-3 mt-lg-4`}
+              onClick={handleSaveBtn}
+            >
+              Save Trips
+            </button>
+          </div>
         </Modal.Body>
       </Modal>
       {/* New Trip */}
       <div className="text-center w-100  d-flex justify-content-center align-items-center">
-        <NewTrip show={modalTrip} onHide={() => setModalTrip(false)} />
+        <NewTrip
+          selectedImage={props.selectedImage}
+          show={modalTrip}
+          onHide={() => setModalTrip(false)}
+        />
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import hikingicon from "../../public/images/hikingicon.svg";
 import styles from "../../styles/home.module.css";
 import Image from "next/image";
 
-export default function Sliders({ bgimg1, para }) {
+export default function Sliders({ bgimg1, title, region, descriptor }) {
   const bgstyle = {
     backgroundImage: `url(${bgimg1})`,
     backgroundSize: "cover",
@@ -25,35 +25,44 @@ export default function Sliders({ bgimg1, para }) {
               <div
                 className={`${styles.landingiconcenter} d-flex justify-content-center gap-3 mb-4`}
               >
-                <div className={styles.landingicon1}>
-                  <Image
-                    src={foodicon}
-                    alt=""
-                    className={styles.landingsection3icon}
-                  />
-                </div>
+                {descriptor === "food" && (
+                  <div className={styles.landingicon1}>
+                    <Image
+                      src={foodicon}
+                      alt=""
+                      className={styles.landingsection3icon}
+                    />
+                  </div>
+                )}
                 <br />
-                <div className={styles.landingicon1}>
-                  <Image
-                    src={cultureicon}
-                    alt=""
-                    className={styles.landingsection3icon}
-                  />
-                </div>
+
+                {descriptor === "Art" && (
+                  <div className={styles.landingicon1}>
+                    <Image
+                      src={cultureicon}
+                      alt=""
+                      className={styles.landingsection3icon}
+                    />
+                  </div>
+                )}
+
                 <br />
-                <div className={styles.landingicon1}>
-                  <Image
-                    src={hikingicon}
-                    alt=""
-                    className={styles.landingsection3icon}
-                  />
-                </div>
+
+                {descriptor === "Hiking" && (
+                  <div className={styles.landingicon1}>
+                    <Image
+                      src={hikingicon}
+                      alt=""
+                      className={styles.landingsection3icon}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
           <div className={`${styles.landingsection3content} pb-5 fw-600`}>
-            <h5 className={`mb-0 fw-600`}>{para}</h5>
-            <h5 className={`mb-0 fw-600`}>Skardu, Pakistan</h5>
+            <h5 className={`mb-0 fw-600`}>{title}</h5>
+            <h5 className={`mb-0 fw-600`}>{region}</h5>
           </div>
         </div>
       </div>

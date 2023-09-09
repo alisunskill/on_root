@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 
 function ResetPassword() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [resetToken, setResetToken] = useState("");
 
   useEffect(() => {
@@ -34,6 +35,7 @@ function ResetPassword() {
 
   const handleReset = async (values) => {
     try {
+      setLoading(true);
       const response = await axios.post(
         "http://localhost:8000/api/users/resetpassword",
         // values
@@ -51,6 +53,8 @@ function ResetPassword() {
       }
     } catch (error) {
       console.error("Error occurred:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,7 +79,7 @@ function ResetPassword() {
                   <Form>
                     <Field
                       name="email"
-                      style={{ padding: "10px" }}
+                      style={{ padding: "10px", display: "none" }}
                       className="form-control rounded-2 border-0 mt-2"
                       placeholder="email"
                     />
@@ -117,7 +121,13 @@ function ResetPassword() {
                         className="savebtn1 text-light mt-4"
                         type="submit"
                       >
-                        RESET PASSWORD
+                        {loading ? (
+                          <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">Loading...</span>
+                          </div>
+                        ) : (
+                          "RESET PASSWORD"
+                        )}
                       </button>
                     </div>
                   </Form>

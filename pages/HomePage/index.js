@@ -10,7 +10,6 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import burger from "../../public/images/burger.svg";
 import newsletterimg from "../../public/images/card-two.svg";
-import globe from "../../public/images/globe.svg";
 import painticon from "../../public/images/painticon.svg";
 import travelicon from "../../public/images/travelicon.svg";
 import { fetchRecommendations } from "../../store/actions/recommendationActions";
@@ -223,7 +222,7 @@ export default () => {
                     className={`text-decoration-none text-dark  px-3 py-2 ${styles.descripthero}`}
                     href={{
                       pathname: "/infinitescroll",
-                      query: { descriptor: regionDescriptor[0] },
+                      query: { descriptor: "food" },
                     }}
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
@@ -238,7 +237,7 @@ export default () => {
                     className={`text-decoration-none text-dark  px-3 py-2 ${styles.descripthero}`}
                     href={{
                       pathname: "/infinitescroll",
-                      query: { descriptor: regionDescriptor[1] },
+                      query: { descriptor: "Hiking" },
                     }}
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
@@ -253,12 +252,11 @@ export default () => {
                   <Link
                     href={{
                       pathname: "/infinitescroll",
-                      query: { descriptor: regionDescriptor[2] },
+                      query: { descriptor: "Art" },
                     }}
                     className={`text-decoration-none text-dark  px-3 py-2 ${styles.descripthero}`}
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    {" "}
                     <span>Art</span>
                     <Image
                       className={`h-auto ${styles.foodIcons}`}
@@ -325,7 +323,7 @@ export default () => {
                   >
                     <PostCard
                       key={index}
-                      imageUrl={data[index].bgImg}
+                      imageUrl={item.images}
                       title={item.title}
                       region={item.region}
                     />
@@ -340,12 +338,14 @@ export default () => {
           <br />
 
           <Slider {...settings}>
-            {recommendationData.slice(-5).map((item, index) => {
+            {recommendationData.slice(4, 9).map((item, index) => {
               const bgImg = data[index]?.bgImg;
               return (
                 <Sliders
                   key={index}
-                  para={item.para}
+                  descriptor={item.descriptor}
+                  title={item.title}
+                  region={item.region}
                   bgimg1={bgImg}
                   settings={settings}
                 />

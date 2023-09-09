@@ -120,10 +120,15 @@ const Searchbar = () => {
   );
 
   // current Descriptor
-  const filtereDescriptor = recommendationData.filter(
-    (post) => post.descriptor.toLowerCase() === descriptor
-  );
-
+  // const filtereDescriptor = recommendationData.filter(
+  //   (post) => post.descriptor.toLowerCase() === descriptor
+  // );
+  const filtereDescriptor = recommendationData.filter((post) => {
+    if (typeof post.descriptor === "string") {
+      return post.descriptor.toLowerCase() === descriptor;
+    }
+    return false; // Handle non-string descriptor values
+  });
   useEffect(() => {
     setPosts(filtereDescriptor);
     setHasMore(false);
