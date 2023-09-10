@@ -229,6 +229,10 @@ iframe {
   border-radius: 16px;
 }
 
+.thirty {
+  width: 33% !important;
+}
+
 .parentcontainer input {
   width: 100px !important;
   height: 100px !important;

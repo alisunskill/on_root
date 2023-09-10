@@ -48,7 +48,7 @@ export default function RangeSlider() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (recommendations && recommendations.Recommendations.length > 0) {
+    if (recommendations && recommendations.Recommendations?.length > 0) {
       const minCost = Math.min(
         ...recommendations.Recommendations.map((post) => post.cost)
       );

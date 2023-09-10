@@ -13,7 +13,13 @@
 }
 .landingfirstcard {
   padding-right: 0px !important;
+  border-radius: 20px;
+  height: 590px;
 }
+.landingfirstcard:hover .landingimage1 {
+  transform: scale(1.2);
+}
+
 .inputgroupicon {
   position: absolute;
   right: 31px;
@@ -248,33 +254,61 @@
 .landingcontainer {
   padding: 40px 50px;
 }
+
 .landingimage1 {
   border-radius: 20px;
-  padding: 20px 0px;
-  height: 590px;
   background-size: cover;
+  justify-content: center;
   color: white;
+  height: 100%;
+  transition: transform 0.3s ease;
+  overflow: hidden;
   display: flex;
-  justify-content: flex-end;
   align-items: end;
-  padding-bottom: 0px;
+  width: 100%;
+  padding-bottom: 20px;
 }
+
+.landingimage1:hover {
+  transform: scale(1.1);
+}
+/* .landingimage2:hover {
+  transform: scale(1.1);
+} */
 .smallimg {
   object-fit: cover;
 }
 .landingimage2 {
   border-radius: 20px;
-  background-image: url("../public/Images/fove.png");
   background-size: cover;
   height: 180px;
   color: white;
+  border-radius: 20px;
+  transition: transform 0.3s ease;
+  width: 100%;
+}
+.luxuryrow {
+  overflow: hidden;
+}
+.animateimg {
+  border-radius: 20px;
+}
+.landingimage2:hover {
+  transform: scale(1.2);
+  overflow: hidden;
 }
 .landingimage3 {
   border-radius: 20px;
-  background-image: url("../public/Images/card1.png");
-  background-size: cover;
+  /* background-image: url("../public/Images/card1.png"); */
+  background-size: 100% 100%;
+  transition: transform 0.3s ease;
   height: 180px;
+  width: 100%;
   color: white;
+}
+.landingimage3:hover {
+  transform: scale(1.2);
+  overflow: hidden;
 }
 .landingimage4 {
   border-radius: 20px;
@@ -285,24 +319,34 @@
 }
 .landingimage5 {
   border-radius: 20px;
-  background-image: url("../public/Images/cardf.png");
-  background-size: cover;
   height: 180px;
   color: white;
+  background-size: 100% 100%;
+  transition: transform 0.3s ease;
 }
+.landingimage5:hover {
+  transform: scale(1.2);
+  overflow: hidden;
+}
+
 .landingimage6 {
   border-radius: 20px;
-  background-image: url("../public/Images/card4.png");
   background-size: cover;
-  height: 390px;
-  color: white;
-  text-align: center;
-  display: flex;
   justify-content: flex-end;
+  color: white;
+  height: 390px;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  display: flex;
   align-items: end;
-  flex-direction: column;
-  padding-bottom: 60px;
+  text-align: center;
+  width: 100%;
+  padding-bottom: 50px;
 }
+.landingimage6:hover {
+  transform: scale(1.2);
+}
+
 .landingnextbutton {
   padding: 10px 30px;
   background-color: #4562b2;
@@ -547,6 +591,7 @@
     margin-bottom: 20px;
     padding: 0px;
   }
+
   .landingtextinalgrid {
     width: 100%;
   }
@@ -563,6 +608,7 @@
   .luxuryrow {
     padding: 0px !important;
   }
+
   .landingdivsubheading {
     padding: 0px 20px;
     margin-bottom: 0px;

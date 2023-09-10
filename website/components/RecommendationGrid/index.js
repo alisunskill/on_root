@@ -48,7 +48,9 @@ const RecommendationGrid = ({
                 <div className={`row`}>
                   {/* football match */}
 
-                  <div className={`col-lg-4 ${styles.landingfirstcard}`}>
+                  <div
+                    className={`col-lg-4 overflow-hidden ${styles.landingfirstcard}`}
+                  >
                     <Link
                       onClick={() =>
                         handleLinkClick(recentRecommendations[1]._id)
@@ -85,7 +87,9 @@ const RecommendationGrid = ({
                   {/* 2tour */}
                   <div className={`col-lg-5`}>
                     <div className={`row`}>
-                      <div className={`col-lg-12  ${styles.luxuryrow}`}>
+                      <div
+                        className={`col-lg-12 overflow-hidden ${styles.luxuryrow}`}
+                      >
                         <Link
                           onClick={() =>
                             handleLinkClick(recentRecommendations[0]._id)
@@ -93,7 +97,7 @@ const RecommendationGrid = ({
                           href={`/eventdetail/${encodeURIComponent(
                             recentRecommendations[0]?.title.replace(/ /g, "-")
                           )}`}
-                          className="text-decoration-none"
+                          className={`text-decoration-none overflow-hidden d-flex ${styles.animateimg}`}
                         >
                           <div
                             className={`${styles.landingimage2} d-flex align-center light-dark`}
@@ -128,10 +132,10 @@ const RecommendationGrid = ({
                           href={`/eventdetail/${encodeURIComponent(
                             recentRecommendations[2]?.title.replace(/ /g, "-")
                           )}`}
-                          className="text-decoration-none"
+                          className={`text-decoration-none overflow-hidden my-4 d-flex ${styles.animateimg}`}
                         >
                           <div
-                            className={`${styles.landingimage3} d-flex align-center my-4 light-dark`}
+                            className={`${styles.landingimage2} d-flex align-center light-dark`}
                             style={{
                               backgroundImage: `url(${recentRecommendations[2]?.images[0]})`,
                             }}
@@ -149,7 +153,7 @@ const RecommendationGrid = ({
                               >
                                 {recentRecommendations[2].title}
                               </p>
-                              <p className={`mb-0 m1`}>
+                              <p className={`mb-0`}>
                                 {recentRecommendations[2].region}
                               </p>
                             </div>
@@ -162,10 +166,10 @@ const RecommendationGrid = ({
                           href={`/eventdetail/${encodeURIComponent(
                             recentRecommendations[3]?.title.replace(/ /g, "-")
                           )}`}
-                          className="text-decoration-none"
+                          className={`text-decoration-none overflow-hidden my-4 d-flex ${styles.animateimg}`}
                         >
                           <div
-                            className={`${styles.landingimage3} d-flex align-center my-4 light-dark`}
+                            className={`${styles.landingimage2} d-flex align-center light-dark`}
                             style={{
                               backgroundImage: `url(${recentRecommendations[3]?.images[0]})`,
                             }}
@@ -183,47 +187,12 @@ const RecommendationGrid = ({
                               >
                                 {recentRecommendations[3].title}
                               </p>
-                              <p className={`mb-0 m1`}>
+                              <p className={`mb-0`}>
                                 {recentRecommendations[3].region}
                               </p>
                             </div>
                           </div>
                         </Link>
-                        {/* <Link
-                          onClick={() =>
-                            handleLinkClick(recentRecommendations[3]._id)
-                          }
-                          href={`/eventdetail/${encodeURIComponent(
-                            recentRecommendations[3]?.title.replace(/ /g, "-")
-                          )}`}
-                          className="text-decoration-none"
-                        >
-                          <div
-                            className={`${styles.landingimage4} d-flex align-center light-dark`}
-                            style={{
-                              backgroundImage: `url(${recentRecommendations[4]?.images[0]})`,
-                            }}
-                          >
-                            
-                            <div
-                              className={`col-lg-12 ${styles.landingtextmidgrid}`}
-                            >
-                              <p
-                                className={`mb-0 letter-spac ${styles.letterspac}`}
-                              >
-                                EVENT
-                              </p>
-                              <p
-                                className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
-                              >
-                                {recentRecommendations[3].title}
-                              </p>
-                              <p className={`mb-0 m1`}>
-                                {recentRecommendations[3].region}
-                              </p>
-                            </div>
-                          </div>
-                        </Link> */}
                       </div>
                     </div>
                   </div>
@@ -238,7 +207,7 @@ const RecommendationGrid = ({
                         href={`/eventdetail/${encodeURIComponent(
                           recentRecommendations[4]?.title.replace(/ /g, "-")
                         )}`}
-                        className="text-decoration-none m-0 p-0"
+                        className={`text-decoration-none overflow-hidden m-0 p-0 d-flex ${styles.animateimg}`}
                       >
                         <div className={`col-lg-12 p-0`}>
                           <div
@@ -248,8 +217,6 @@ const RecommendationGrid = ({
                             }}
                           >
                             <div
-                              // className={`col-lg-12 mb-0 p-0 ${styles.landingtextmidgrid} light-dark d-flex align-center flex-column flex-center`}
-                              // style={{ height: "100%", borderRadius: "55px" }}
                               className={`col-lg-12 ${styles.landingtextmidgrid}`}
                             >
                               <p
@@ -277,18 +244,17 @@ const RecommendationGrid = ({
                         href={`/eventdetail/${encodeURIComponent(
                           recentRecommendations[5]?.title.replace(/ /g, "-")
                         )}`}
-                        className="text-decoration-none m-0 p-0"
+                        // className="text-decoration-none m-0 p-0"
+                        className={`text-decoration-none overflow-hidden my-4 p-0 d-flex ${styles.animateimg}`}
                       >
                         <div
-                          className={`${styles.landingimage6} my-4`}
+                          className={`${styles.landingimage6}  d-flex align-center  m-0`}
                           style={{
                             backgroundImage: `url(${recentRecommendations[5]?.images[0]})`,
                           }}
                         >
                           <div
                             className={`col-lg-12 ${styles.landingtextinalgrid}`}
-                            // className={`col-lg-12 mb-0 p-0 ${styles.landingtextinalgrid}  d-flex align-center flex-column flex-center`}
-                            // style={{ height: "100%", borderRadius: "55px" }}
                           >
                             <p
                               className={`mb-0 letter-spac ${styles.letterspac}`}

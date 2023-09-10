@@ -10,23 +10,23 @@ export default ({ imageUrl, title, region }) => {
   };
   return (
     <div
-      className={`col-12 col-md-6 col-lg-4 p-lg-2 p-2 overflow-hidden ${styles.sweetslide}`}
-    >
-      {imageUrl ? (
-        <div
-          className={`${styles.landingimage} ${styles.animateOnHover}`}
-          style={cardStyle}
-        >
-          <h6 className={`fw-500 mb-0 ${styles.landingeventheading}`}>
-            {title} <br />
-            <span className="my-3">{region}</span>
-          </h6>
-        </div>
-      ) : (
-        <div className="spinner-border text-primary" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
-      )}
-    </div>
+    className={`col-12  m-2 overflow-hidden ${styles.sweetslide}`}
+  >
+    {imageUrl ? (
+      <div
+        className={`${styles.landingimage} ${styles.animateOnHover}`}
+        style={cardStyle}
+      >
+        <h6 className={`fw-500 mb-0 ${styles.landingeventheading}`}>
+          {title} <br />
+          <span className="my-3">{region}</span>
+        </h6>
+      </div>
+    ) : (
+      <div className="spinner-border text-primary" role="status">
+        <span className="sr-only">Loading...</span>
+      </div>
+    )}
+  </div>
   );
 };
