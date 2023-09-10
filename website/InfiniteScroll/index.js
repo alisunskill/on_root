@@ -62,12 +62,11 @@ const InfiniteScrollComponent = () => {
   }, [dispatch, router.query.min, router.query.max]);
 
   const handleLinkClick = (itemId, postTitle) => {
-    localStorage.setItem("itemId", JSON.stringify(itemId));
-    // router.push(`/destinationpage/${encodeURIComponent(postTitle)}`);
     router.push(
-      `/destinationpage/${encodeURIComponent(postTitle.replace(/ /g, "-"))}`
+      `/eventdetail/${encodeURIComponent(
+        postTitle.replace(/ /g, "-")
+      )}?id=${itemId}`
     );
-    console.log(itemId, "itemId");
   };
 
   const fetchPosts = () => {
@@ -76,7 +75,6 @@ const InfiniteScrollComponent = () => {
     const newPosts = recommendationData.slice(startIndex, endIndex);
 
     if (newPosts.length > 0) {
-      // Append new posts to the existing list
       setPosts((prevPosts) => [...prevPosts, ...newPosts]);
       setPage((prevPage) => prevPage + 1);
     } else {
@@ -144,10 +142,7 @@ const InfiniteScrollComponent = () => {
     (post) => post.region.toLowerCase() === region
   );
 
-  // current Descriptor
-  // const filtereDescriptor = recommendationData.filter(
-  //   (post) => post.descriptors.toLowerCase() === descriptor
-  // );
+ 
   const filtereDescriptor = recommendationData.filter((post) => {
     if (typeof post.descriptor === "string") {
       return post.descriptor.toLowerCase() === descriptor;

@@ -312,7 +312,6 @@ export default () => {
                   <Link
                     key={index}
                     className="text-decoration-none text-dark flex thirty"
-                    // style={{ display: "content" }}
                     href={{
                       pathname: "/infinitescroll",
                       query: {

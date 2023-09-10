@@ -157,11 +157,10 @@ function ViewSaves() {
     setTrigger(new Date());
   };
 
-  const handleLinkClick = (postId) => {
-    Cookies.set("postIdCookie", postId);
-    // router.push(`/region/${encodeURIComponent(post.title)}`);
-  };
-  // let imageUrl;
+  // const handleLinkClick = (postId) => {
+  //   Cookies.set("postIdCookie", postId);
+  //   // router.push(`/region/${encodeURIComponent(post.title)}`);
+  // };
 
   return (
     <>
@@ -214,10 +213,13 @@ function ViewSaves() {
                           </div>
                           <Link
                             key={index}
-                            onClick={() => handleLinkClick(post._id)}
-                            href={`/region/${encodeURIComponent(
+                            // onClick={() => handleLinkClick(post._id)}
+                            // href={`/region/${encodeURIComponent(
+                            //   post.title.replace(/ /g, "-")
+                            // )}`}
+                            href={`/eventdetail/${encodeURIComponent(
                               post.title.replace(/ /g, "-")
-                            )}`}
+                            )}?id=${post._id}`}
                             className={styles.savelink}
                           >
                             {/* <img

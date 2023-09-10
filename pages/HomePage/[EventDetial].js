@@ -19,6 +19,7 @@ import Trip from "../../website/ViewSaves/components/Trip";
 
 export default function EventDetail() {
   const router = useRouter();
+  const { id } = router.query;
 
   const [postCounts, setPostCounts] = useState({});
   const [modalShow, setModalShow] = useState(false);
@@ -111,9 +112,14 @@ export default function EventDetail() {
     sendFavListToBackend(selectedIds);
   }, [favList]);
 
+  // useEffect(() => {
+  //   const postId = Cookies.get("postIdCookie");
+  //   setPostId(postId);
+  // }, []);
+
   useEffect(() => {
-    const postId = Cookies.get("postIdCookie");
-    setPostId(postId);
+    const itemData = JSON.parse(localStorage.getItem("itemId"));
+    setPostId(itemData);
   }, []);
 
   // const { postId } = router.query;
@@ -123,7 +129,10 @@ export default function EventDetail() {
 
   const recData = recommendations.Recommendations;
 
-  const filteredData = recData?.find((item) => item._id === postid);
+  const filteredData =
+    // recData?.find((item) => item._id === postid);
+    recData?.find((item) => item._id === postid) ||
+    recData?.find((item) => item._id === id);
 
   const filterLoc = filteredData?.location;
   const [staticMarkerPosition, setStaticMarkerPosition] = useState({
@@ -155,21 +164,18 @@ export default function EventDetail() {
     }
   }, [filterLoc?.coordinates]);
 
+  // useEffect(() => {
+  //   const selectedIdsFromLocalStorage =
+  //     JSON.parse(localStorage.getItem("postId")) || [];
+  //   setSelectedIds(selectedIdsFromLocalStorage);
+  // }, []);
+
   useEffect(() => {
-    const selectedIdsFromLocalStorage =
-      JSON.parse(localStorage.getItem("postId")) || [];
-    setSelectedIds(selectedIdsFromLocalStorage);
+    const selectedIdsFromLocalStorage = localStorage.getItem("postId");
+    if (selectedIdsFromLocalStorage) {
+      setPostId(selectedIdsFromLocalStorage);
+    }
   }, []);
-
-  // const imageUrls = filteredData?.images;
-
-  const imageUrls = filteredData?.images.map((item) => {
-    return (
-      <>
-        <img src={item} alt="" />
-      </>
-    );
-  });
 
   // useEffect(() => {
   //   const storedPostCounts = localStorage.getItem("postCounts");
@@ -180,7 +186,6 @@ export default function EventDetail() {
   // }, []);
   useEffect(() => {
     const storedPostCounts = localStorage.getItem("postCounts");
-    console.log(storedPostCounts, "storedPostCounts");
     if (storedPostCounts) {
       const parsedPostCounts = JSON.parse(storedPostCounts);
       setPostCounts(parsedPostCounts);
@@ -255,8 +260,6 @@ export default function EventDetail() {
   }, [filterLoc?.coordinates]);
 
   const saveCount = postCounts && postCounts[postid] ? postCounts[postid] : 0;
-
-  console.log(`Save count for post ${postid}: ${saveCount}`);
 
   return (
     <>
@@ -390,7 +393,7 @@ export default function EventDetail() {
           </div> */}
           <div className="col-lg-6 col-12 text-align-right p-0">
             <div style={{ height: "100vh", width: "100%" }}>
-              <GoogleMapReact
+              {/* <GoogleMapReact
                 bootstrapURLKeys={{
                   key: "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM",
                   libraries: ["places"],
@@ -426,7 +429,24 @@ export default function EventDetail() {
                     text={filteredData?.region}
                   />
                 )}
-              </GoogleMapReact>
+              </GoogleMapReact> */}
+              <div class="mapouter">
+                <div class="gmap_canvas">
+                  <iframe
+                    width="770"
+                    height="590"
+                    id="gmap_canvas"
+                    src="https://maps.google.com/maps?q=california&t=&z=10&ie=UTF8&iwloc=&output=embed"
+                    frameborder="0"
+                    scrolling="no"
+                    marginheight="0"
+                    marginwidth="0"
+                  ></iframe>
+                  <a href="https://2yu.co"></a>
+                  <br />
+                  <a href="https://embedgooglemap.2yu.co"></a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

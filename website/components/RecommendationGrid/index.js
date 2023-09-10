@@ -33,10 +33,18 @@ const RecommendationGrid = ({
   const recommendationData = recommendations.Recommendations || [];
   const recentRecommendations = recommendationData.slice(-6);
 
-  const handleLinkClick = (postId) => {
-    Cookies.set("postIdCookie", postId);
-    router.push(`/eventdetail/${encodeURIComponent(postId)}`);
+  // const handleLinkClick = (title) => {
+  //   router.push(`/eventdetail/${encodeURIComponent(title.replace(/ /g, "-"))}`);
+  // };
+  const handleLinkClick = (itemId, postTitle) => {
+    router.push(
+      `/eventdetail/${encodeURIComponent(
+        postTitle.replace(/ /g, "-")
+      )}?id=${itemId}`
+    );
+    console.log(itemId, "itemId");
   };
+
   return (
     <>
       {recommendationData.length > 0 ? (
@@ -52,12 +60,9 @@ const RecommendationGrid = ({
                     className={`col-lg-4 overflow-hidden ${styles.landingfirstcard}`}
                   >
                     <Link
-                      onClick={() =>
-                        handleLinkClick(recentRecommendations[1]._id)
-                      }
                       href={`/eventdetail/${encodeURIComponent(
                         recentRecommendations[1].title.replace(/ /g, "-")
-                      )}`}
+                      )}?id=${recentRecommendations[1]._id}`}
                       className={`text-decoration-none ${styles.inneranimate}`}
                     >
                       <div
@@ -91,12 +96,9 @@ const RecommendationGrid = ({
                         className={`col-lg-12 overflow-hidden ${styles.luxuryrow}`}
                       >
                         <Link
-                          onClick={() =>
-                            handleLinkClick(recentRecommendations[0]._id)
-                          }
                           href={`/eventdetail/${encodeURIComponent(
-                            recentRecommendations[0]?.title.replace(/ /g, "-")
-                          )}`}
+                            recentRecommendations[0].title.replace(/ /g, "-")
+                          )}?id=${recentRecommendations[0]._id}`}
                           className={`text-decoration-none overflow-hidden d-flex ${styles.animateimg}`}
                         >
                           <div
@@ -126,12 +128,9 @@ const RecommendationGrid = ({
                         </Link>
 
                         <Link
-                          onClick={() =>
-                            handleLinkClick(recentRecommendations[2]._id)
-                          }
                           href={`/eventdetail/${encodeURIComponent(
-                            recentRecommendations[2]?.title.replace(/ /g, "-")
-                          )}`}
+                            recentRecommendations[2].title.replace(/ /g, "-")
+                          )}?id=${recentRecommendations[2]._id}`}
                           className={`text-decoration-none overflow-hidden my-4 d-flex ${styles.animateimg}`}
                         >
                           <div
@@ -160,12 +159,9 @@ const RecommendationGrid = ({
                           </div>
                         </Link>
                         <Link
-                          onClick={() =>
-                            handleLinkClick(recentRecommendations[3]._id)
-                          }
                           href={`/eventdetail/${encodeURIComponent(
-                            recentRecommendations[3]?.title.replace(/ /g, "-")
-                          )}`}
+                            recentRecommendations[3].title.replace(/ /g, "-")
+                          )}?id=${recentRecommendations[3]._id}`}
                           className={`text-decoration-none overflow-hidden my-4 d-flex ${styles.animateimg}`}
                         >
                           <div
@@ -201,12 +197,9 @@ const RecommendationGrid = ({
                   <div className={`col-lg-3`}>
                     <div className={`row`}>
                       <Link
-                        onClick={() =>
-                          handleLinkClick(recentRecommendations[4]._id)
-                        }
                         href={`/eventdetail/${encodeURIComponent(
-                          recentRecommendations[4]?.title.replace(/ /g, "-")
-                        )}`}
+                          recentRecommendations[4].title.replace(/ /g, "-")
+                        )}?id=${recentRecommendations[4]._id}`}
                         className={`text-decoration-none overflow-hidden m-0 p-0 d-flex ${styles.animateimg}`}
                       >
                         <div className={`col-lg-12 p-0`}>
@@ -238,13 +231,9 @@ const RecommendationGrid = ({
                       </Link>
 
                       <Link
-                        onClick={() =>
-                          handleLinkClick(recentRecommendations[5]._id)
-                        }
                         href={`/eventdetail/${encodeURIComponent(
-                          recentRecommendations[5]?.title.replace(/ /g, "-")
-                        )}`}
-                        // className="text-decoration-none m-0 p-0"
+                          recentRecommendations[5].title.replace(/ /g, "-")
+                        )}?id=${recentRecommendations[5]._id}`}
                         className={`text-decoration-none overflow-hidden my-4 p-0 d-flex ${styles.animateimg}`}
                       >
                         <div

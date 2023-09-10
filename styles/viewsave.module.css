@@ -250,6 +250,8 @@
   /* transition: transform 0.3s ease-in-out;
   overflow: hidden; */
   border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
 }
 .smallimg1 {
   width: 90px;
