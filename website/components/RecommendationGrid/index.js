@@ -1,10 +1,8 @@
-// pages/Recommendations.js
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { fetchRecommendations } from "../../../store/actions/recommendationActions";
 import styles from "../../../styles/home.module.css";
 import Link from "next/link";
-import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 
 const RecommendationGrid = ({
@@ -31,11 +29,8 @@ const RecommendationGrid = ({
 
   const router = useRouter();
   const recommendationData = recommendations.Recommendations || [];
-  const recentRecommendations = recommendationData.slice(-6);
+  const recentRecommendations = recommendationData.slice(-12);
 
-  // const handleLinkClick = (title) => {
-  //   router.push(`/eventdetail/${encodeURIComponent(title.replace(/ /g, "-"))}`);
-  // };
   const handleLinkClick = (itemId, postTitle) => {
     router.push(
       `/eventdetail/${encodeURIComponent(
@@ -53,25 +48,26 @@ const RecommendationGrid = ({
             <>
               {/* Events Zone */}
               <div className={`container-fluid`}>
-                <div className={`row`}>
+                <div className={`d-flex ${styles.boxmajor}`}>
                   {/* football match */}
 
-                  <div
-                    className={`col-lg-4 overflow-hidden ${styles.landingfirstcard}`}
-                  >
+                  {/* first 1 tour */}
+                  <div className={` ${styles.boxhero}`}>
                     <Link
                       href={`/eventdetail/${encodeURIComponent(
-                        recentRecommendations[1].title.replace(/ /g, "-")
-                      )}?id=${recentRecommendations[1]._id}`}
-                      className={`text-decoration-none ${styles.inneranimate}`}
+                        recentRecommendations[5].title.replace(/ /g, "-")
+                      )}?id=${recentRecommendations[5]._id}`}
+                      className={`text-decoration-none overflow-hidden mb-4 p-0 d-flex ${styles.animateimg}`}
                     >
                       <div
-                        className={styles.landingimage1}
+                        className={`${styles.landingimage1}   d-flex align-center text-align-center  m-0`}
                         style={{
-                          backgroundImage: `url(${recentRecommendations[1]?.images[0]})`,
+                          backgroundImage: `url(${recentRecommendations[5]?.images[0]})`,
                         }}
                       >
-                        <div className={`col-lg-12 ${styles.landingtext}`}>
+                        <div
+                          className={`col-lg-12 ${styles.landingtextinalgrid}`}
+                        >
                           <p
                             className={`mb-0 letter-spac ${styles.letterspac}`}
                           >
@@ -80,17 +76,50 @@ const RecommendationGrid = ({
                           <p
                             className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                           >
-                            {recentRecommendations[1].title}
+                            {recentRecommendations[5].title}
                           </p>
                           <p className={`mb-0 m1`}>
-                            {recentRecommendations[1].region}
+                            {recentRecommendations[5].region}
                           </p>
+                        </div>
+                      </div>
+                    </Link>
+                    <Link
+                      href={`/eventdetail/${encodeURIComponent(
+                        recentRecommendations[4].title.replace(/ /g, "-")
+                      )}?id=${recentRecommendations[4]._id}`}
+                      className={`text-decoration-none overflow-hidden mb-4 p-0 d-flex ${styles.animateimg}`}
+                    >
+                      <div className={`col-lg-12 p-0`}>
+                        <div
+                          className={`${styles.landingimage5} d-flex align-center p-0 m-0`}
+                          style={{
+                            backgroundImage: `url(${recentRecommendations[4]?.images[0]})`,
+                          }}
+                        >
+                          <div
+                            className={`col-lg-12 ${styles.landingtextmidgrid}`}
+                          >
+                            <p
+                              className={`mb-0 letter-spac ${styles.letterspac}`}
+                            >
+                              EVENT
+                            </p>
+                            <p
+                              className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
+                            >
+                              {recentRecommendations[4].title}
+                            </p>
+                            <p className={`mb-0 m1`}>
+                              {recentRecommendations[4].region}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </Link>
                   </div>
                   {/* 2tour */}
-                  <div className={`col-lg-5`}>
+                  <div className={` ${styles.boxhero}`}>
                     <div className={`row`}>
                       <div
                         className={`col-lg-12 overflow-hidden ${styles.luxuryrow}`}
@@ -99,7 +128,7 @@ const RecommendationGrid = ({
                           href={`/eventdetail/${encodeURIComponent(
                             recentRecommendations[0].title.replace(/ /g, "-")
                           )}?id=${recentRecommendations[0]._id}`}
-                          className={`text-decoration-none overflow-hidden d-flex ${styles.animateimg}`}
+                          className={`text-decoration-none overflow-hidden mb-4 d-flex ${styles.animateimg}`}
                         >
                           <div
                             className={`${styles.landingimage2} d-flex align-center light-dark`}
@@ -158,20 +187,21 @@ const RecommendationGrid = ({
                             </div>
                           </div>
                         </Link>
+
                         <Link
                           href={`/eventdetail/${encodeURIComponent(
-                            recentRecommendations[3].title.replace(/ /g, "-")
-                          )}?id=${recentRecommendations[3]._id}`}
-                          className={`text-decoration-none overflow-hidden my-4 d-flex ${styles.animateimg}`}
+                            recentRecommendations[1].title.replace(/ /g, "-")
+                          )}?id=${recentRecommendations[1]._id}`}
+                          className={`text-decoration-none overflow-hidden my-4 p-0 d-flex ${styles.animateimg}`}
                         >
                           <div
-                            className={`${styles.landingimage2} d-flex align-center light-dark`}
+                            className={`${styles.landingimage6}  d-flex align-center  m-0`}
                             style={{
-                              backgroundImage: `url(${recentRecommendations[3]?.images[0]})`,
+                              backgroundImage: `url(${recentRecommendations[1]?.images[0]})`,
                             }}
                           >
                             <div
-                              className={`col-lg-12 ${styles.landingtextmidgrid}`}
+                              className={`col-lg-12 ${styles.landingtextinalgrid}`}
                             >
                               <p
                                 className={`mb-0 letter-spac ${styles.letterspac}`}
@@ -181,10 +211,10 @@ const RecommendationGrid = ({
                               <p
                                 className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                               >
-                                {recentRecommendations[3].title}
+                                {recentRecommendations[1].title}
                               </p>
-                              <p className={`mb-0`}>
-                                {recentRecommendations[3].region}
+                              <p className={`mb-0 m1`}>
+                                {recentRecommendations[1].region}
                               </p>
                             </div>
                           </div>
@@ -192,58 +222,120 @@ const RecommendationGrid = ({
                       </div>
                     </div>
                   </div>
-
-                  {/* 3rd tour */}
-                  <div className={`col-lg-3`}>
-                    <div className={`row`}>
-                      <Link
-                        href={`/eventdetail/${encodeURIComponent(
-                          recentRecommendations[4].title.replace(/ /g, "-")
-                        )}?id=${recentRecommendations[4]._id}`}
-                        className={`text-decoration-none overflow-hidden m-0 p-0 d-flex ${styles.animateimg}`}
-                      >
-                        <div className={`col-lg-12 p-0`}>
-                          <div
-                            className={`${styles.landingimage5} d-flex align-center p-0 m-0`}
-                            style={{
-                              backgroundImage: `url(${recentRecommendations[4]?.images[0]})`,
-                            }}
-                          >
-                            <div
-                              className={`col-lg-12 ${styles.landingtextmidgrid}`}
-                            >
-                              <p
-                                className={`mb-0 letter-spac ${styles.letterspac}`}
-                              >
-                                EVENT
-                              </p>
-                              <p
-                                className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
-                              >
-                                {recentRecommendations[4].title}
-                              </p>
-                              <p className={`mb-0 m1`}>
-                                {recentRecommendations[4].region}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-
-                      <Link
-                        href={`/eventdetail/${encodeURIComponent(
-                          recentRecommendations[5].title.replace(/ /g, "-")
-                        )}?id=${recentRecommendations[5]._id}`}
-                        className={`text-decoration-none overflow-hidden my-4 p-0 d-flex ${styles.animateimg}`}
+                  {/* 3 tour */}
+                  <div className={` ${styles.boxhero}`}>
+                    <Link
+                      href={`/eventdetail/${encodeURIComponent(
+                        recentRecommendations[6].title.replace(/ /g, "-")
+                      )}?id=${recentRecommendations[6]._id}`}
+                      className={`text-decoration-none overflow-hidden mb-4 p-0 d-flex ${styles.animateimg}`}
+                    >
+                      <div
+                        className={`${styles.landingimage6}  d-flex align-center  m-0`}
+                        style={{
+                          backgroundImage: `url(${recentRecommendations[6]?.images[0]})`,
+                        }}
                       >
                         <div
-                          className={`${styles.landingimage6}  d-flex align-center  m-0`}
+                          className={`col-lg-12 ${styles.landingtextinalgrid}`}
+                        >
+                          <p
+                            className={`mb-0 letter-spac ${styles.letterspac}`}
+                          >
+                            EVENT
+                          </p>
+                          <p
+                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
+                          >
+                            {recentRecommendations[6].title}
+                          </p>
+                          <p className={`mb-0 m1`}>
+                            {recentRecommendations[6].region}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                    <Link
+                      href={`/eventdetail/${encodeURIComponent(
+                        recentRecommendations[7].title.replace(/ /g, "-")
+                      )}?id=${recentRecommendations[7]._id}`}
+                      className={`text-decoration-none overflow-hidden my-4 d-flex ${styles.animateimg}`}
+                    >
+                      <div
+                        className={`${styles.landingimage2} d-flex align-center light-dark`}
+                        style={{
+                          backgroundImage: `url(${recentRecommendations[7]?.images[0]})`,
+                        }}
+                      >
+                        <div
+                          className={`col-lg-12 ${styles.landingtextmidgrid}`}
+                        >
+                          <p
+                            className={`mb-0 letter-spac ${styles.letterspac}`}
+                          >
+                            EVENT
+                          </p>
+                          <p
+                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
+                          >
+                            {recentRecommendations[7].title}
+                          </p>
+                          <p className={`mb-0`}>
+                            {recentRecommendations[7].region}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                    <Link
+                      href={`/eventdetail/${encodeURIComponent(
+                        recentRecommendations[8].title.replace(/ /g, "-")
+                      )}?id=${recentRecommendations[8]._id}`}
+                      className={`text-decoration-none overflow-hidden my-4 d-flex ${styles.animateimg}`}
+                    >
+                      <div
+                        className={`${styles.landingimage2} d-flex align-center light-dark`}
+                        style={{
+                          backgroundImage: `url(${recentRecommendations[8]?.images[0]})`,
+                        }}
+                      >
+                        <div
+                          className={`col-lg-12 ${styles.landingtextmidgrid}`}
+                        >
+                          <p
+                            className={`mb-0 letter-spac ${styles.letterspac}`}
+                          >
+                            EVENT
+                          </p>
+                          <p
+                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
+                          >
+                            {recentRecommendations[8].title}
+                          </p>
+                          <p className={`mb-0`}>
+                            {recentRecommendations[8].region}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+
+                  {/* 4th tour */}
+                  <div className={` ${styles.boxhero}`}>
+                    <Link
+                      href={`/eventdetail/${encodeURIComponent(
+                        recentRecommendations[9].title.replace(/ /g, "-")
+                      )}?id=${recentRecommendations[9]._id}`}
+                      className={`text-decoration-none overflow-hidden mb-4 p-0 d-flex ${styles.animateimg}`}
+                    >
+                      <div className={`col-lg-12 p-0`}>
+                        <div
+                          className={`${styles.landingimage5} d-flex align-center p-0 m-0`}
                           style={{
-                            backgroundImage: `url(${recentRecommendations[5]?.images[0]})`,
+                            backgroundImage: `url(${recentRecommendations[9]?.images[0]})`,
                           }}
                         >
                           <div
-                            className={`col-lg-12 ${styles.landingtextinalgrid}`}
+                            className={`col-lg-12 ${styles.landingtextmidgrid}`}
                           >
                             <p
                               className={`mb-0 letter-spac ${styles.letterspac}`}
@@ -253,15 +345,143 @@ const RecommendationGrid = ({
                             <p
                               className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
                             >
-                              {recentRecommendations[5].title}
+                              {recentRecommendations[9].title}
                             </p>
                             <p className={`mb-0 m1`}>
-                              {recentRecommendations[5].region}
+                              {recentRecommendations[9].region}
                             </p>
                           </div>
                         </div>
-                      </Link>
-                    </div>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href={`/eventdetail/${encodeURIComponent(
+                        recentRecommendations[10].title.replace(/ /g, "-")
+                      )}?id=${recentRecommendations[10]._id}`}
+                      className={`text-decoration-none overflow-hidden my-4 p-0 d-flex ${styles.animateimg}`}
+                    >
+                      <div
+                        className={`${styles.landingimage1}   d-flex align-center text-align-center  m-0`}
+                        style={{
+                          backgroundImage: `url(${recentRecommendations[10]?.images[0]})`,
+                        }}
+                      >
+                        <div
+                          className={`col-lg-12 ${styles.landingtextinalgrid}`}
+                        >
+                          <p
+                            className={`mb-0 letter-spac ${styles.letterspac}`}
+                          >
+                            EVENT
+                          </p>
+                          <p
+                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
+                          >
+                            {recentRecommendations[10].title}
+                          </p>
+                          <p className={`mb-0 m1`}>
+                            {recentRecommendations[10].region}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                  {/* 5 tour */}
+                  <div className={` ${styles.boxhero}`}>
+                    <Link
+                      href={`/eventdetail/${encodeURIComponent(
+                        recentRecommendations[1].title.replace(/ /g, "-")
+                      )}?id=${recentRecommendations[1]._id}`}
+                      className={`text-decoration-none overflow-hidden mb-4 p-0 d-flex ${styles.animateimg}`}
+                    >
+                      <div
+                        className={`${styles.landingimage6}  d-flex align-center  m-0`}
+                        style={{
+                          backgroundImage: `url(${recentRecommendations[1]?.images[0]})`,
+                        }}
+                      >
+                        <div
+                          className={`col-lg-12 ${styles.landingtextinalgrid}`}
+                        >
+                          <p
+                            className={`mb-0 letter-spac ${styles.letterspac}`}
+                          >
+                            EVENT
+                          </p>
+                          <p
+                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
+                          >
+                            {recentRecommendations[1].title}
+                          </p>
+                          <p className={`mb-0 m1`}>
+                            {recentRecommendations[1].region}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                    <Link
+                      href={`/eventdetail/${encodeURIComponent(
+                        recentRecommendations[7].title.replace(/ /g, "-")
+                      )}?id=${recentRecommendations[7]._id}`}
+                      className={`text-decoration-none overflow-hidden my-4 d-flex ${styles.animateimg}`}
+                    >
+                      <div
+                        className={`${styles.landingimage2} d-flex align-center light-dark`}
+                        style={{
+                          backgroundImage: `url(${recentRecommendations[7]?.images[0]})`,
+                        }}
+                      >
+                        <div
+                          className={`col-lg-12 ${styles.landingtextmidgrid}`}
+                        >
+                          <p
+                            className={`mb-0 letter-spac ${styles.letterspac}`}
+                          >
+                            EVENT
+                          </p>
+                          <p
+                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
+                          >
+                            {recentRecommendations[7].title}
+                          </p>
+                          <p className={`mb-0`}>
+                            {recentRecommendations[7].region}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                    <Link
+                      href={`/eventdetail/${encodeURIComponent(
+                        recentRecommendations[8].title.replace(/ /g, "-")
+                      )}?id=${recentRecommendations[8]._id}`}
+                      className={`text-decoration-none overflow-hidden my-4 d-flex ${styles.animateimg}`}
+                    >
+                      <div
+                        className={`${styles.landingimage2} d-flex align-center light-dark`}
+                        style={{
+                          backgroundImage: `url(${recentRecommendations[8]?.images[0]})`,
+                        }}
+                      >
+                        <div
+                          className={`col-lg-12 ${styles.landingtextmidgrid}`}
+                        >
+                          <p
+                            className={`mb-0 letter-spac ${styles.letterspac}`}
+                          >
+                            EVENT
+                          </p>
+                          <p
+                            className={`mb-0 ${styles.matchheader} mt-1 white fw-600`}
+                          >
+                            {recentRecommendations[8].title}
+                          </p>
+                          <p className={`mb-0`}>
+                            {recentRecommendations[8].region}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
                   </div>
                 </div>
               </div>

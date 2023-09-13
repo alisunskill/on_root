@@ -100,7 +100,7 @@ input {
   font-weight: 700;
 }
 .fw-600 {
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 
 .fw-400 {
@@ -225,8 +225,16 @@ input {
   color: #7ec4e6;
 }
 
+.amgray{
+  color: #838383;
+}
+
 iframe {
   border-radius: 16px;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .thirty {

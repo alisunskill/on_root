@@ -9,29 +9,23 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import burger from "../../public/images/burger.svg";
-import filter from "../../public/images/filter.svg";
+import newsletterimg from "../../public/images/card-two.svg";
 import painticon from "../../public/images/painticon.svg";
 import travelicon from "../../public/images/travelicon.svg";
 import { fetchRecommendations } from "../../store/actions/recommendationActions";
 import styles from "../../styles/home.module.css";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import NewsLetter from "../../website/components/NewsLetter";
-import Form from "react-bootstrap/Form";
+import PostCard from "../../website/components/PostCards";
 import RecommendationGrid from "../../website/components/RecommendationGrid";
 import RangeSlider from "./RangeSlider";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
+import Sliders from "./Sliders";
+import Global from "../../website/components/Globe";
 
-import Modal from "react-bootstrap/Modal";
-
-export default ({data1}) => {
-  console.log(data1,'data');
+export default () => {
   const dispatch = useDispatch();
   const recommendationsData = useSelector((state) => state.recommendation);
   const [searchTerm, setSearchTerm] = useState("");
   const { recommendations, loading, error } = recommendationsData;
-  const [modalShow, setModalShow] = React.useState(false);
 
   // const loading = true;
   useEffect(() => {
@@ -51,12 +45,7 @@ export default ({data1}) => {
   const { region } = router.query;
   const { descriptor } = router.query;
   const [filteredData, setFilteredData] = useState([]);
-  const [selectedValue, setSelectedValue] = React.useState("a");
-  const [selectedRegions, setSelectedRegions] = useState([]);
 
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
   useEffect(() => {
     if (region) {
       axios
@@ -140,14 +129,6 @@ export default ({data1}) => {
     autoplay: true,
     autoplaySpeed: 2000,
   };
-
-  const handleRegionChange = (region) => {
-    if (selectedRegions.includes(region)) {
-      setSelectedRegions(selectedRegions.filter((r) => r !== region));
-    } else {
-      setSelectedRegions([...selectedRegions, region]);
-    }
-  };
   return (
     <>
       {!searchTerm.length > 0 && (
@@ -159,149 +140,18 @@ export default ({data1}) => {
               </div>
             ))}
           </div>
-          <div
-            className={`d-flex align-content-center ${styles.filterhero}`}
-            onClick={() => setModalShow(true)}
-          >
-            <h6 className="fw-600 mb-0">Filters</h6>{" "}
-            <Image width={30} height={20} src={filter} alt="filter" />
-          </div>
-
-          {/* Modal */}
-          <Modal
-            show={modalShow}
-            onHide={() => setModalShow(false)}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-          >
-            <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title-vcenter " className="amgray text-center w-100 fw-600">
-                Filters
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body className="px-lg-5 px-3">
-              {/* region */}
-              <h5 className="amgray">Region</h5>
-              <div className="d-flex gap-3 flex-wrap">
-                <RadioGroup
-                  aria-label="radio-buttons"
-                  name="radio-buttons"
-                  value={selectedValue}
-                  onChange={handleChange}
-                  className="d-flex flex-row"
-                >
-                  {regionData.map((item, index) => (
-                    <div key={index} className={styles.regionbox}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={selectedRegions.includes(item.region)}
-                            onChange={() => handleRegionChange(item.region)}
-                          />
-                        }
-                        label={
-                          <Link
-                            className="text-decoration-none text-dark w-100"
-                            href={{
-                              pathname: "/infinitescroll",
-                              query: { region: item.region },
-                            }}
-                          >
-                            {item.region}
-                          </Link>
-                        }
-                      />
-                    </div>
-                  ))}
-                </RadioGroup>
-              </div>
-              {/* distance */}
-              <h5 className="amgray py-3">Distance from location</h5>
-
-              <div className="row w-100 p-0 mb-4">
-                <div className="col-lg-3">
-                  <Form.Control
-                    className="rounded-5"
-                    type="text"
-                    placeholder="Miles"
-                  />
-                </div>
-                <div className="col-lg-9">
-                  <Form.Control
-                    className="rounded-5"
-                    type="text"
-                    placeholder="from address"
-                  />
-                </div>
-              </div>
-              {/* category */}
-              <h5 className="amgray">Categories</h5>
-              <div className="d-flex gap-3 flex-wrap">
-                <RadioGroup
-                  aria-label="radio-buttons"
-                  name="radio-buttons"
-                  value={selectedValue}
-                  onChange={handleChange}
-                  className="d-flex flex-row"
-                >
-                  {regionData.map((item, index) => (
-                    <div key={index} className={styles.regionbox}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={selectedRegions.includes(item.title)}
-                            onChange={() => handleRegionChange(item.title)}
-                          />
-                        }
-                        label={
-                          <Link
-                            className="text-decoration-none text-dark w-100"
-                            href={{
-                              pathname: "/infinitescroll",
-                              query: { region: item.title },
-                            }}
-                          >
-                            {item.title}
-                          </Link>
-                        }
-                      />
-                    </div>
-                  ))}
-                </RadioGroup>
-              </div>
-              {/* keywords */}
-              <h5 className="amgray mt-3">Keyword(s)</h5>
-
-              <div className="py-3 ">
-                <Form.Control
-                  className="rounded-5"
-                  type="text"
-                  placeholder="ie. Surf"
-                />
-              </div>
-
-              <div className="d-flex justify-content-center gap-3 mb-3 py-3">
-                <button type="" className="savebtn">
-                  Reset
-                </button>{" "}
-                <button type="" className="savebtn">
-                  Appply
-                </button>
-              </div>
-            </Modal.Body>
-          </Modal>
 
           {/* filtered zone */}
           <div className={styles.landingcentral1}>
             <div className={`btn-group px-2 ${styles.landingbuttondivs} `}>
               {/* 1 */}
-
               <button
                 className={`btn btn-secondary btn-lg bg-light d-flex align-center border-0 rounded-5 mb-0 fw-bold ${styles.landingbtncolor}`}
                 type="button"
               >
                 <div
+                  // passHref
+                  // href="/infinitescroll"
                   className={`text-decoration-none cursor-arrow text-dark bg-light m-0 py-1 ${styles.filterbtn}`}
                 >
                   Filter by
@@ -426,26 +276,94 @@ export default ({data1}) => {
             <div className={`col-lg-12 p-0`}>
               <RecommendationGrid data={recommendationData} />
             </div>
+            {/* <div className="col-lg-12">
+              <Global data={recommendationsData} />
+            </div> */}
+          </div>
 
-            <div className="row pt-lg-5 pt-5 pb-3">
-              <div className="col-12  pt-4 text-center">
-                <h5 className="fw-500">
-                  Oops, looks like there’s no more to show.
-                </h5>
-                <br />
-                <h5 className="fw-500">
-                  Try searching for another destination or make a post of your
-                  own!
-                </h5>
-              </div>
+          <div className="row">
+            <div className={`col-lg-12 ${styles.landingcentral}`}>
+              <Link
+                href="/infinitescroll"
+                className={`${styles.landingnextbutton} text-decoration-none fw-600`}
+              >
+                View More
+              </Link>
             </div>
           </div>
+          <div className={styles.landingdivendheading}>
+            <h3 className={`mb-0 ${styles.landingendheading}`}>
+              Top Destinations
+            </h3>
+          </div>
+          <div className={styles.landingdivsubheading}>
+            <p className={`${styles.landingsubheading} mb-0`}>
+              Discover the world's top destinations and plan your next adventure
+              with ease using <br /> Onroot's curated posts and itineraries
+            </p>
+          </div>
+
+          <div
+            className={`row px-lg-6 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
+          >
+            {recommendationData.map((item, index) => {
+              if (data[index] && data[index].bgImg) {
+                return (
+                  <Link
+                    key={index}
+                    className="text-decoration-none text-dark flex thirty"
+                    href={{
+                      pathname: "/infinitescroll",
+                      query: {
+                        region: item.region,
+                        imageUrl: data[index].bgImg,
+                      },
+                    }}
+                  >
+                    <PostCard
+                      key={index}
+                      imageUrl={item.images}
+                      title={item.title}
+                      region={item.region}
+                    />
+                  </Link>
+                );
+              }
+              return null;
+            })}
+          </div>
+
+          <br />
+          <br />
+
+          <Slider {...settings}>
+            {recommendationData.slice(4, 9).map((item, index) => {
+              const bgImg = data[index]?.bgImg;
+              return (
+                <Sliders
+                  key={index}
+                  descriptor={item.descriptor}
+                  title={item.title}
+                  region={item.region}
+                  bgimg1={bgImg}
+                  settings={settings}
+                />
+              );
+            })}
+          </Slider>
+
+          {/* subscribe newsletter */}
+
+          <NewsLetter
+            newsletterimg={newsletterimg}
+            heading={"Subscribe to our Newsletter"}
+            title={"Get Special Offers and more from Traveller"}
+            para={
+              "Subscribe to see secret deals prices drop the moment you sign up!"
+            }
+          />
         </div>
       )}
     </>
   );
 };
-
-
-
-
