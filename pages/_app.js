@@ -8,7 +8,7 @@ import store from "../store";
 import Head from "next/head";
 
 export default function App({ Component, pageProps }) {
-  console.log(pageProps, "prop");
+  console.log(pageProps, "pbrop");
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
   }, []);
