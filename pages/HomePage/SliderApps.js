@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-import Image from "next/image";
 import styles from "../../styles/singular.module.css";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -10,7 +9,7 @@ import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
 export default function SliderApps({ images1 }) {
-console.log(images1, 'ali');
+  console.log(images1, "ali");
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleClick = (image) => {
@@ -30,16 +29,18 @@ console.log(images1, 'ali');
         slidesPerView={1}
       >
         {selectedImage ? (
-          <SwiperSlide>
+          <SwiperSlide className="m-0">
             <img
+              key={selectedImage}
               className={`${styles.scenery} object-cover`}
               src={selectedImage}
               alt=""
+              loading="lazy"
             />
           </SwiperSlide>
         ) : (
           images1?.map((item, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} className="m-0">
               <img
                 className={`${styles.scenery} object-cover`}
                 src={item}
@@ -62,7 +63,7 @@ console.log(images1, 'ali');
           <SwiperSlide
             key={index}
             onClick={() => handleClick(item)}
-            style={{ marginRight: "0px" }}
+            style={{ marginRight: "0px", width: "10%" }}
           >
             <img className={styles.smallimg} src={item} alt="" />
           </SwiperSlide>

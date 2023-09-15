@@ -3,6 +3,13 @@
 .eventicon1 {
   height: 60px;
 }
+
+.singleventhero {
+  margin: 20px 20px 15px 20px;
+  background-color: #f7f8fa;
+  border-radius: 50px;
+  padding: 0px 40px;
+}
 .eventicondiv {
   width: 40px;
   height: 40px;
@@ -16,12 +23,49 @@
   width: 100%;
   border-radius: 10px;
 }
+.scenery2 {
+  height: 200px;
+  border-radius: 10px;
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.scenery2:hover {
+  transform: scale(1.2);
+}
+.scenerybox {
+  transition: transform 0.3s ease;
+}
+.scenerybox:hover .scenery2 {
+  transform: scale(1.2);
+}
+.savelink1 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.mapbox {
+  margin-right: 30px;
+  padding: 30px 30px 30px 0px;
+  border-radius: 20px;
+}
+.menicon {
+  width: 35px;
+  height: 35px;
+}
 .smallimg {
-  max-width: 90px;
+  width: 100%;
   width: 100%;
   margin-top: 7px;
   height: 60px;
   border-radius: 8px;
+  object-fit: cover;
 }
 .foodIcons {
   max-width: 80px;
@@ -94,7 +138,6 @@
 
 .eventtitlepara {
   font-family: "Poppins", sans-serif;
-  padding-top: 20px;
 }
 .eventmidsection {
   background-image: url("../public/images/page2midimage.svg");
@@ -122,9 +165,9 @@
   justify-content: center;
   align-items: center;
 }
-.scenerypara {
+/* .scenerypara {
   padding-left: 60px;
-}
+} */
 .eventclockicon {
   width: 50px;
   margin-bottom: 10px;
@@ -224,9 +267,9 @@
   .foodIcons {
     max-width: 60px;
   }
-  .scenerypara {
+  /* .scenerypara {
     padding-left: 50px;
-  }
+  } */
 }
 
 @media only screen and (max-width: 600px) and (min-width: 300px) {

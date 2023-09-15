@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../styles/singular.module.css";
 import plusicon2 from "../../public/images/plusicon2.svg";
+import profile from "../../public/images/men.svg";
 import Swal from "sweetalert2";
 import burger from "../../public/images/burger.svg";
+import money from "../../public/images/moneyicon.svg";
+
+import clock from "../../public/images/clockicon.svg";
 import painticon from "../../public/images/painticon.svg";
 import { useRouter } from "next/router";
 import travelicon from "../../public/images/travelicon.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import plane from "../../public/images/aeroplan.svg";
 import Image from "next/image";
@@ -16,6 +21,7 @@ import GoogleMapReact from "google-map-react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Trip from "../../website/ViewSaves/components/Trip";
+import NearSlider from "./component/NearSlider";
 
 export default function EventDetail() {
   const router = useRouter();
@@ -23,13 +29,61 @@ export default function EventDetail() {
 
   const [postCounts, setPostCounts] = useState({});
   const [modalShow, setModalShow] = useState(false);
-  // const totalTrips = localStorage.getItem('tripsLength')
+  const [user, setUser] = useState(null);
   const [tripCount, setTripCount] = useState("");
+  const [loadings, setLoadings] = useState(true);
+  const [postid, setPostId] = useState("");
+  const [selectedItems, setSelectedItems] = useState({});
+  const [favList, setFavList] = useState([]);
+  const recommendationsData = useSelector((state) => state.recommendation);
+  const { recommendations, loading, error } = recommendationsData;
+
+  const recData = recommendations.Recommendations;
+
+  const filteredData =
+    recData?.find((item) => item._id === postid) ||
+    recData?.find((item) => item._id === id);
+
+  const filterLoc = filteredData?.location;
+  const [staticMarkerPosition, setStaticMarkerPosition] = useState({
+    lat: 0,
+    lng: 0,
+  });
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userIds = localStorage.getItem("userID");
+
+        if (userIds) {
+          const apiUrl = `http://localhost:8000/api/users/username/${userIds}`;
+          const response = await axios.get(apiUrl);
+          setUser(response.data);
+          setLoadings(false);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setLoadings(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   useEffect(() => {
     const totalTrips = localStorage.getItem("tripsLength");
     setTripCount(totalTrips);
   }, []);
-  console.log(tripCount, "tripCount");
+
+  useEffect(() => {
+    const selectedIds = favList.map((item) => item._id);
+    sendFavListToBackend(selectedIds);
+  }, [favList]);
+
+  useEffect(() => {
+    const itemData = JSON.parse(localStorage.getItem("itemId"));
+    setPostId(itemData);
+  }, []);
+
   const { postId } = router.query;
 
   const RedMarker = ({ text, latitude, longitude }) => (
@@ -54,10 +108,6 @@ export default function EventDetail() {
       <p className="px-5  py-1 bg-danger rounded-5">{text}</p>
     </div>
   );
-
-  const [postid, setPostId] = useState("");
-  const [selectedItems, setSelectedItems] = useState({});
-  const [favList, setFavList] = useState([]);
 
   const handleFavoriteClick = (id) => {
     setSelectedItems((prevSelectedItems) => ({
@@ -107,39 +157,7 @@ export default function EventDetail() {
       console.error("Error updating backend:", error);
     }
   };
-  useEffect(() => {
-    const selectedIds = favList.map((item) => item._id);
-    sendFavListToBackend(selectedIds);
-  }, [favList]);
 
-  // useEffect(() => {
-  //   const postId = Cookies.get("postIdCookie");
-  //   setPostId(postId);
-  // }, []);
-
-  useEffect(() => {
-    const itemData = JSON.parse(localStorage.getItem("itemId"));
-    setPostId(itemData);
-  }, []);
-
-  // const { postId } = router.query;
-
-  const recommendationsData = useSelector((state) => state.recommendation);
-  const { recommendations, loading, error } = recommendationsData;
-
-  const recData = recommendations.Recommendations;
-
-  const filteredData =
-    // recData?.find((item) => item._id === postid);
-    recData?.find((item) => item._id === postid) ||
-    recData?.find((item) => item._id === id);
-
-  const filterLoc = filteredData?.location;
-  const [staticMarkerPosition, setStaticMarkerPosition] = useState({
-    lat: 0,
-    lng: 0,
-  });
-  const [selectedIds, setSelectedIds] = useState([]);
   // const [mapCenter, setMapCenter] = useState({
   //   lat: 31.5204,
   //   lng: 74.3587,
@@ -164,12 +182,6 @@ export default function EventDetail() {
     }
   }, [filterLoc?.coordinates]);
 
-  // useEffect(() => {
-  //   const selectedIdsFromLocalStorage =
-  //     JSON.parse(localStorage.getItem("postId")) || [];
-  //   setSelectedIds(selectedIdsFromLocalStorage);
-  // }, []);
-
   useEffect(() => {
     const selectedIdsFromLocalStorage = localStorage.getItem("postId");
     if (selectedIdsFromLocalStorage) {
@@ -177,13 +189,6 @@ export default function EventDetail() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   const storedPostCounts = localStorage.getItem("postCounts");
-  //   if (storedPostCounts) {
-  //     const parsedPostCounts = JSON.parse(storedPostCounts);
-  //     setPostCounts(parsedPostCounts);
-  //   }
-  // }, []);
   useEffect(() => {
     const storedPostCounts = localStorage.getItem("postCounts");
     if (storedPostCounts) {
@@ -191,6 +196,17 @@ export default function EventDetail() {
       setPostCounts(parsedPostCounts);
     }
   }, []);
+
+  useEffect(() => {
+    if (filterLoc?.coordinates) {
+      setStaticMarkerPosition({
+        // latitude: filterLoc?.coordinates[1],
+        // longitude: filterLoc?.coordinates[0],
+        lat: filterLoc?.coordinates[1],
+        lng: filterLoc?.coordinates[0],
+      });
+    }
+  }, [filterLoc?.coordinates]);
 
   const handleApiLoaded = (map, maps) => {
     if (loading || !filteredData) {
@@ -248,94 +264,47 @@ export default function EventDetail() {
     return { lat: avgLat, lng: avgLng };
   };
 
-  useEffect(() => {
-    if (filterLoc?.coordinates) {
-      setStaticMarkerPosition({
-        // latitude: filterLoc?.coordinates[1],
-        // longitude: filterLoc?.coordinates[0],
-        lat: filterLoc?.coordinates[1],
-        lng: filterLoc?.coordinates[0],
-      });
-    }
-  }, [filterLoc?.coordinates]);
-
   const saveCount = postCounts && postCounts[postid] ? postCounts[postid] : 0;
 
+  if (loadings) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div>User not found.</div>;
+  }
   return (
     <>
-      <div className="container-fluid pb-5">
-        <div className="row">
+      <div className={`container-fluid pb-5 ${styles.singleventhero}`}>
+        <div className={`row `}>
           <div
-            className={`col-lg-5 col-12 col-md-12 mt-3 ${styles.scenerypara}`}
+            className={`col-lg-7 col-12 col-md-12 mt-3 ${styles.scenerypara}`}
           >
             <div className={`row align-items-center ${styles.eventtopsection}`}>
-              <div className=" col-9 col-md-6 col-lg-8">
+              <div className=" col-9 col-md-6 col-lg-12">
                 <h4 className="fw-600">{filteredData?.title}</h4>
               </div>
-              <div
-                className={` col-3 col-md-6 col-lg-4 align-items-center d-flex justify-content-end gap-3 ${styles.eventicon}`}
-              >
-                <div
-                  className={`d-flex align-items-center justify-content-center ${styles.eventicondiv}`}
-                >
-                  <Image
-                    onClick={() => setModalShow(true)}
-                    className={`${styles.eventtopicons} animated1`}
-                    src={plusicon2}
-                    alt=""
-                  />
-                </div>
-                <div className="text-center w-100  d-flex justify-content-center align-items-center">
-                  <Trip
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                    setModalShow={setModalShow}
-                  />
-                </div>
-                <div
-                  className={`d-flex align-items-center justify-content-center bold1 ${styles.eventicondiv}`}
-                >
-                  <div className="animated">
-                    <FontAwesomeIcon
-                      icon={faHeart}
-                      className="heartbeat"
-                      onClick={() => handleFavoriteClick(filteredData?._id)}
-                      style={{
-                        color: selectedItems[filteredData?._id]
-                          ? "red"
-                          : "black",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </div>
-                  {/* <Image
-                    onClick={() => handleFavoriteClick(filteredData?._id)}
-                    className={styles.eventtopicons}
-                    src={hearticon21}
-                    alt=""
-                  /> */}
-                </div>
+              {/* profile men */}
+              <div className="d-flex align-items-center gap-2">
+                <Image
+                  className={`${styles.menicon} mt-2`}
+                  src={profile}
+                  alt="profile"
+                />
+                <h6 className="fw-600 mb-0">{user?.username}</h6>
               </div>
             </div>
             <div className="row">
               <div className="col-lg-12 col-md-12 mt-4">
                 <SliderApps images1={filteredData?.images} />
               </div>
-
-              <div className="col-12 col-md-12 col-lg-12 py-3">
-                <p className={styles.eventtitlepara}>
-                  <br />
-                  {filteredData?.description} <br />
-                </p>
-              </div>
             </div>
           </div>
-          <div className="col-12 col-lg-1">
+          <div className="col-lg-1 col-12">
             <div className="row">
               <div
                 className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
               >
-                {console.log(filteredData, "filteredData.descriptors")}
                 {filteredData && filteredData.descriptors && (
                   <>
                     {filteredData.descriptors.includes("food") && (
@@ -384,16 +353,15 @@ export default function EventDetail() {
               </div>
             </div>
           </div>
-          {/* <div className="col-lg-6 text-align-right p-0">
-            <Image
-              className={`h-auto object-fit-cover ${styles.eventmapimage}`}
-              src={mapimage}
-              alt=""
-            />
-          </div> */}
-          <div className="col-lg-6 col-12 text-align-right p-0">
-            <div style={{ height: "100vh", width: "100%" }}>
-              {/* <GoogleMapReact
+          <div className="col-lg-4 col-12 text-align-right p-0">
+            <div
+              className={styles.mapbox}
+              style={{ height: "100vh", width: "100%" }}
+            >
+              <div className="d-flex justify-content-end w-100 pb-5 px-1">
+                <FontAwesomeIcon className="" icon={faX} />
+              </div>
+              <GoogleMapReact
                 bootstrapURLKeys={{
                   key: "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM",
                   libraries: ["places"],
@@ -429,9 +397,10 @@ export default function EventDetail() {
                     text={filteredData?.region}
                   />
                 )}
-              </GoogleMapReact> */}
-              <div class="mapouter">
-                <div class="gmap_canvas">
+              </GoogleMapReact>
+              {/* <div className={styles.mapbox}>
+             <div className="mapouter">
+                <div className="gmap_canvas">
                   <iframe
                     width="770"
                     height="590"
@@ -447,11 +416,57 @@ export default function EventDetail() {
                   <a href="https://embedgooglemap.2yu.co"></a>
                 </div>
               </div>
+             </div> */}
+              {/* hours and cost */}
+              <div></div>
+            </div>
+          </div>
+        </div>
+        {/* General info */}
+        <div className="row mt-3 py-3">
+          <div className="col-12 col-md-7 col-lg-7 ">
+            {/* General Information / Highlights */}
+            <h5 className="fw-600 mt-4">General Information / Highlights</h5>
+            <p className={styles.eventtitlepara}>
+              General Information / Highlights
+            </p>
+
+            {/* My Experience */}
+            <h5 className="fw-600 mt-4">My Experience</h5>
+            <p className={styles.eventtitlepara}>{filteredData?.experience}</p>
+
+            {/* Tips */}
+            <h5 className="fw-600 mt-4">Tips</h5>
+            <ul>
+              <li className={styles.eventtitlepara}>
+                {filteredData?.description}
+              </li>
+            </ul>
+
+            {/* Useful Links */}
+            <h5 className="fw-600 mt-4">Useful Links</h5>
+            <p className={styles.eventtitlepara}>
+              {filteredData?.links
+                ? filteredData?.links
+                : "This Post have no Links"}
+            </p>
+          </div>
+          <div className="col-12 col-md-5 col-lg-5 d-flex flex-column pt-lg-5 pt-4 align-items-center text-center">
+            <div className="mt-3">
+              <Image width={50} height={50} src={clock} />
+              <h5 className="fw-600 mt-3">Hours of Operation</h5>
+              <p className={styles.eventtitlepara}>{filteredData?.hours}</p>
+            </div>
+            <div className="mt-5">
+              <Image width={50} height={50} src={money} />
+
+              <h5 className="fw-600 mt-3">Cost to Attend</h5>
+              <p className={styles.eventtitlepara}>{filteredData?.cost} </p>
             </div>
           </div>
         </div>
 
-        <div className={`row ${styles.recommendtriphero}`}>
+        {/* <div className={`row ${styles.recommendtriphero}`}>
           <div className="col-3"></div>
           <div
             className={`col-5 col-lg-5 col-md-12 d-flex align-center justify-content-between p-3 px-4 ${styles.recommendtrip}`}
@@ -467,6 +482,53 @@ export default function EventDetail() {
             </div>
           </div>
           <div className="col-3"></div>
+        </div> */}
+
+        {/* extra */}
+        <div className="row d-flex justify-content-end mt-lg-5 mt-3 pt-lg-4 pt-3 px-lg-5  px-2 pb-2">
+          <div
+            className={` col-6 col-md-2 col-lg-1 align-items-center d-flex justify-content-center gap-3 ${styles.eventicon}`}
+          >
+            <div
+              className={`d-flex align-items-center justify-content-center ${styles.eventicondiv}`}
+            >
+              <Image
+                onClick={() => setModalShow(true)}
+                className={`${styles.eventtopicons} animated1`}
+                src={plusicon2}
+                alt=""
+              />
+            </div>
+            <div className="text-center w-100  d-flex justify-content-center align-items-center">
+              <Trip
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                setModalShow={setModalShow}
+              />
+            </div>
+            <div
+              className={`d-flex align-items-center justify-content-center bold1 ${styles.eventicondiv}`}
+            >
+              <div className="animated">
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  className="heartbeat"
+                  onClick={() => handleFavoriteClick(filteredData?._id)}
+                  style={{
+                    color: selectedItems[filteredData?._id] ? "red" : "black",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div>
+          <h6 className="fw-600 pt-2">Places of Interest Nearby</h6>
+          <div className="pt-3">
+            <NearSlider />
+          </div>
         </div>
       </div>
     </>

@@ -81,6 +81,7 @@ export default () => {
   const [regionData, setRegion] = useState([]);
   const { descriptor } = router.query;
   const [filteredData, setFilteredData] = useState([]);
+  const [showAlert, setShowAlert] = useState(false); // Step 2
 
   const recommendationData =
     (recommendations && recommendations.Recommendations) || [];
@@ -91,46 +92,7 @@ export default () => {
   const regionp = regionData.map((item) => {
     return item.region;
   });
-  const data = [
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-      city: regionp[0],
-      country: "USA",
-    },
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1689072503598-638956beee7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=660&q=80",
-      city: regionp[1],
-      country: "USA",
-    },
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1593593595698-de9e5f682a14?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=834&q=80",
-      city: regionp[2],
-      country: "USA",
-    },
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1595112729465-942dafaa4e98?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=886&q=80",
-      city: regionp[2],
-      country: "USA",
-    },
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-      city: regionp[1],
 
-      country: "USA",
-    },
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1519638399535-1b036603ac77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80",
-      city: regionp[0],
-
-      country: "USA",
-    },
-  ];
   const regionDescriptor = regionData.map((item) => {
     return item.descriptor;
   });
@@ -207,6 +169,7 @@ export default () => {
     region: "",
     descriptors: [],
     description: "",
+    links: "",
   });
 
   console.log(formData, "formData formDataformDataformData");
@@ -220,7 +183,8 @@ export default () => {
       !formData.location ||
       !formData.region ||
       formData.descriptors.length === 0 ||
-      !formData.description
+      !formData.description ||
+      !formData.links
     ) {
       return false;
     }
@@ -230,6 +194,7 @@ export default () => {
     e.preventDefault();
     if (!isFormDataValid()) {
       alert("Please fill in all required fields.");
+      setShowAlert(true);
       return;
     }
     try {
@@ -246,7 +211,9 @@ export default () => {
       dispatch(fetchCreateRecommendations(formData, token));
 
       alert("Recommendation creation requested. Please wait...");
-
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
       setRecommendation((prevRecommendation) => [
         ...prevRecommendation,
         formData,
@@ -262,12 +229,14 @@ export default () => {
         location: { type: "Point", coordinates: [0, 0] },
         region: "",
         description: "",
+        links: "",
       });
 
       router.push("/");
     } catch (error) {
       console.error("Error:", error);
       alert("Failed to create recommendation. Please try again.");
+      return;
     }
   };
 
@@ -415,6 +384,11 @@ export default () => {
 
   return (
     <>
+      {showAlert && (
+        <div className="alert alert-danger" role="alert">
+          Please fill in all required fields.
+        </div>
+      )}
       <div className="container-fluid pb-5">
         <div className="row">
           <div
@@ -541,13 +515,26 @@ export default () => {
 
               <div className="form-group mt-4">
                 <textarea
-                  placeholder="Additional Links..."
+                  placeholder="Description..."
                   className="form-control p-3"
                   id="exampleFormControlTextarea2"
                   rows="4"
                   name="description"
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
+                  }
+                  required
+                ></textarea>
+              </div>
+              <div className="form-group mt-4">
+                <textarea
+                  placeholder="Additional Links..."
+                  className="form-control p-3"
+                  id="exampleFormControlTextarea3"
+                  rows="4"
+                  name="links"
+                  onChange={(e) =>
+                    setFormData({ ...formData, links: e.target.value })
                   }
                   required
                 ></textarea>

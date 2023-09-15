@@ -7,13 +7,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { fetchRecommendations } from "../../store/actions/recommendationActions";
 import styles from "../../styles/viewsave.module.css";
-import Cookies from "js-cookie";
 
 const InfiniteScrollComponent = () => {
   const router = useRouter();
   const region = router.query.region?.toLowerCase();
   const { imageUrl } = router.query;
-
   const descriptor = router.query.descriptor?.toLowerCase();
   // redux
   const dispatch = useDispatch();
@@ -40,7 +38,6 @@ const InfiniteScrollComponent = () => {
   const [maxCost, setMaxCost] = useState(Number.MAX_VALUE);
 
   const cost = router.query.minCost & maxCost;
-  console.log(cost, "Ali Ghori");
 
   useEffect(() => {
     fetchPosts();
@@ -95,8 +92,6 @@ const InfiniteScrollComponent = () => {
     fetchRecommendations();
   }, [fetchRecommendations]);
 
-  console.log(minCost, maxCost, "ALi");
-
   // min and max base cost ueEffect
   useEffect(() => {
     const fetchPosts = async () => {
@@ -142,7 +137,6 @@ const InfiniteScrollComponent = () => {
     (post) => post.region.toLowerCase() === region
   );
 
- 
   const filtereDescriptor = recommendationData.filter((post) => {
     if (typeof post.descriptor === "string") {
       return post.descriptor.toLowerCase() === descriptor;
@@ -154,7 +148,6 @@ const InfiniteScrollComponent = () => {
   const filterPrice = recommendationData.filter(
     (post) => post.cost >= minCost && post.cost <= maxCost
   );
-  console.log(filterPrice, "filter");
 
   useEffect(() => {
     setPosts(filtereDescriptor);

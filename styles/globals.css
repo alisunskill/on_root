@@ -96,6 +96,9 @@ input {
   line-height: 22px;
 }
 
+.w-80 {
+  min-width: 80% !important;
+}
 .fw-700 {
   font-weight: 700;
 }
@@ -218,14 +221,20 @@ input {
   border: none;
   font-size: 20px;
 }
+.descriptorClicked {
+  background-color: #7cc5e5 !important;
+}
 .savebtn:hover {
+  background-color: #4562b2;
+}
+.descriptorClicked:hover {
   background-color: #4562b2;
 }
 .text-sky {
   color: #7ec4e6;
 }
 
-.amgray{
+.amgray {
   color: #838383;
 }
 

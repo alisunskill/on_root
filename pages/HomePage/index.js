@@ -3,8 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
+import Box from "@mui/material/Box";
+import Sliderm from "@mui/material/Slider";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -19,19 +20,22 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import NewsLetter from "../../website/components/NewsLetter";
 import Form from "react-bootstrap/Form";
 import RecommendationGrid from "../../website/components/RecommendationGrid";
-import RangeSlider from "./RangeSlider";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-
 import Modal from "react-bootstrap/Modal";
 
-export default ({data1}) => {
-  console.log(data1,'data');
+function valuetext(value) {
+  return `${value}°C`;
+}
+
+export default ({ data1 }) => {
+  console.log(data1, "data");
   const dispatch = useDispatch();
   const recommendationsData = useSelector((state) => state.recommendation);
   const [searchTerm, setSearchTerm] = useState("");
   const { recommendations, loading, error } = recommendationsData;
   const [modalShow, setModalShow] = React.useState(false);
+  const [selectedDescriptors, setSelectedDescriptors] = useState([]);
 
   // const loading = true;
   useEffect(() => {
@@ -53,6 +57,9 @@ export default ({data1}) => {
   const [filteredData, setFilteredData] = useState([]);
   const [selectedValue, setSelectedValue] = React.useState("a");
   const [selectedRegions, setSelectedRegions] = useState([]);
+  const [value, setValue] = useState([0, 1000]);
+  const [minValue, setMinValue] = useState(0);
+  const [maxValue, setMaxValue] = useState(1550);
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -77,38 +84,18 @@ export default ({data1}) => {
     setRegion(recommendationData);
   }, [regionData]);
 
-  const regionp = regionData.map((item) => {
-    return item.region;
-  });
-  const data = [
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=394&q=80",
-    },
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1689072503598-638956beee7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=660&q=80",
-    },
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1593593595698-de9e5f682a14?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=834&q=80",
-    },
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1595112729465-942dafaa4e98?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=886&q=80",
-    },
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-    },
-    {
-      bgImg:
-        "https://images.unsplash.com/photo-1519638399535-1b036603ac77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80",
-    },
-  ];
-  const regionDescriptor = regionData.map((item) => {
-    return item.descriptor;
-  });
+  const handleDescriptorChange = (descriptor) => {
+    if (selectedDescriptors.includes(descriptor)) {
+      // If the descriptor is already selected, remove it
+      setSelectedDescriptors(
+        selectedDescriptors.filter((d) => d !== descriptor)
+      );
+    } else {
+      // If the descriptor is not selected, add it
+      setSelectedDescriptors([...selectedDescriptors, descriptor]);
+    }
+  };
+
   // region urls
   useEffect(() => {
     if (region) {
@@ -128,25 +115,69 @@ export default ({data1}) => {
     }
   }, [descriptor, regionData]);
 
-  // const region
-
-  // api
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-  };
-
   const handleRegionChange = (region) => {
     if (selectedRegions.includes(region)) {
       setSelectedRegions(selectedRegions.filter((r) => r !== region));
     } else {
       setSelectedRegions([...selectedRegions, region]);
     }
+  };
+  // preice range
+  useEffect(() => {
+    if (recommendations && recommendations.Recommendations?.length > 0) {
+      const minCost = Math.min(
+        ...recommendations.Recommendations.map((post) => post.cost)
+      );
+      const maxCost = Math.max(
+        ...recommendations.Recommendations.map((post) => post.cost)
+      );
+      setMinValue(minCost);
+      setMaxValue(maxCost);
+      if (value[0] < minCost || value[1] > maxCost) {
+        setValue([minCost, maxCost]);
+      }
+    }
+  }, [value, recommendations]);
+
+  const handleChanges1 = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  // const handleApply = () => {
+  //   const descriptorQuery =
+  //     selectedDescriptors.length > 0
+  //       ? `descriptor=${selectedDescriptors.join(",")}`
+  //       : "";
+  //   const regionQuery =
+  //     selectedRegions.length > 0 ? `region=${selectedRegions.join(",")}` : "";
+  //   const url = `/infinitescroll?${descriptorQuery}${regionQuery}&min=${value[0]}&max=${value[1]}`;
+  //   router.push(url);
+  // };
+  const handleApply = () => {
+    const descriptorQuery =
+      selectedDescriptors.length > 0
+        ? `descriptor=${selectedDescriptors.join(",")}`
+        : "";
+
+    const regionQuery =
+      selectedRegions.length > 0 ? `region=${selectedRegions.join(",")}` : "";
+    const minQuery = `min=${value[0]}`;
+    const maxQuery = `max=${value[1]}`;
+
+    const queryParams = [descriptorQuery, regionQuery, minQuery, maxQuery]
+      .filter((param) => param)
+      .join("&");
+
+    const url = `/infinitescroll?${queryParams}`;
+    router.push(url);
+  };
+
+  const resetHandle = () => {
+    setSelectedDescriptors([]);
+    setSelectedRegions([]);
+    setValue([0, 1000]);
+    setSelectedValue("a");
+    setModalShow(false);
   };
   return (
     <>
@@ -160,10 +191,10 @@ export default ({data1}) => {
             ))}
           </div>
           <div
-            className={`d-flex align-content-center ${styles.filterhero}`}
+            className={`d-flex align-content-center px-3 ${styles.filterhero}`}
             onClick={() => setModalShow(true)}
           >
-            <h6 className="fw-600 mb-0">Filters</h6>{" "}
+            <h6 className="fw-600 mb-0">Filters</h6>
             <Image width={30} height={20} src={filter} alt="filter" />
           </div>
 
@@ -171,253 +202,140 @@ export default ({data1}) => {
           <Modal
             show={modalShow}
             onHide={() => setModalShow(false)}
-            size="lg"
+            size="xl"
             aria-labelledby="contained-modal-title-vcenter"
             centered
           >
             <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title-vcenter " className="amgray text-center w-100 fw-600">
+              <Modal.Title
+                id="contained-modal-title-vcenter "
+                className="amgray text-center w-100 fw-600"
+              >
                 Filters
               </Modal.Title>
             </Modal.Header>
             <Modal.Body className="px-lg-5 px-3">
               {/* region */}
-              <h5 className="amgray">Region</h5>
+              <h5 className="amgray">Price Range</h5>
               <div className="d-flex gap-3 flex-wrap">
-                <RadioGroup
-                  aria-label="radio-buttons"
-                  name="radio-buttons"
-                  value={selectedValue}
-                  onChange={handleChange}
-                  className="d-flex flex-row"
-                >
-                  {regionData.map((item, index) => (
-                    <div key={index} className={styles.regionbox}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={selectedRegions.includes(item.region)}
-                            onChange={() => handleRegionChange(item.region)}
-                          />
-                        }
-                        label={
-                          <Link
-                            className="text-decoration-none text-dark w-100"
-                            href={{
-                              pathname: "/infinitescroll",
-                              query: { region: item.region },
-                            }}
-                          >
-                            {item.region}
-                          </Link>
-                        }
-                      />
+                {/* <RangeSlider /> */}
+                <div className="d-flex justify-content-center">
+                  <Box sx={{ width: 275 }}>
+                    <Sliderm
+                      getAriaLabel={() => "Price range"}
+                      value={value}
+                      onChange={handleChanges1}
+                      valueLabelDisplay="auto"
+                      getAriaValueText={valuetext}
+                      min={minValue}
+                      max={1000}
+                    />
+                    <div>
+                      Min: ${value[0]} &#160; &#160; Max: ${value[1]}
                     </div>
-                  ))}
-                </RadioGroup>
-              </div>
-              {/* distance */}
-              <h5 className="amgray py-3">Distance from location</h5>
-
-              <div className="row w-100 p-0 mb-4">
-                <div className="col-lg-3">
-                  <Form.Control
-                    className="rounded-5"
-                    type="text"
-                    placeholder="Miles"
-                  />
-                </div>
-                <div className="col-lg-9">
-                  <Form.Control
-                    className="rounded-5"
-                    type="text"
-                    placeholder="from address"
-                  />
+                  </Box>
                 </div>
               </div>
-              {/* category */}
-              <h5 className="amgray">Categories</h5>
-              <div className="d-flex gap-3 flex-wrap">
-                <RadioGroup
-                  aria-label="radio-buttons"
-                  name="radio-buttons"
-                  value={selectedValue}
-                  onChange={handleChange}
-                  className="d-flex flex-row"
-                >
-                  {regionData.map((item, index) => (
-                    <div key={index} className={styles.regionbox}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={selectedRegions.includes(item.title)}
-                            onChange={() => handleRegionChange(item.title)}
-                          />
-                        }
-                        label={
-                          <Link
-                            className="text-decoration-none text-dark w-100"
-                            href={{
-                              pathname: "/infinitescroll",
-                              query: { region: item.title },
-                            }}
-                          >
-                            {item.title}
-                          </Link>
-                        }
-                      />
-                    </div>
-                  ))}
-                </RadioGroup>
-              </div>
-              {/* keywords */}
-              <h5 className="amgray mt-3">Keyword(s)</h5>
 
-              <div className="py-3 ">
-                <Form.Control
-                  className="rounded-5"
-                  type="text"
-                  placeholder="ie. Surf"
-                />
-              </div>
+              {/* REgions */}
+              <div className="row w-100 p-0 mb-4 mt-3">
+                <h5 className="amgray py-3">Filtered By Region</h5>
 
-              <div className="d-flex justify-content-center gap-3 mb-3 py-3">
-                <button type="" className="savebtn">
-                  Reset
-                </button>{" "}
-                <button type="" className="savebtn">
-                  Appply
-                </button>
-              </div>
-            </Modal.Body>
-          </Modal>
-
-          {/* filtered zone */}
-          <div className={styles.landingcentral1}>
-            <div className={`btn-group px-2 ${styles.landingbuttondivs} `}>
-              {/* 1 */}
-
-              <button
-                className={`btn btn-secondary btn-lg bg-light d-flex align-center border-0 rounded-5 mb-0 fw-bold ${styles.landingbtncolor}`}
-                type="button"
-              >
-                <div
-                  className={`text-decoration-none cursor-arrow text-dark bg-light m-0 py-1 ${styles.filterbtn}`}
-                >
-                  Filter by
-                </div>
-              </button>
-            </div>
-            {/* 2 */}
-            <div className="btn-group px-2">
-              <Dropdown>
-                <Dropdown.Toggle
-                  className={`btn btn-light rounded-5 ${styles.filterbtn}`}
-                  variant="primary"
-                  id="dropdown-basic"
-                >
-                  Region
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu className={styles.menuhero}>
-                  {regionData.map((item, index) => {
-                    return (
-                      <div key={index}>
-                        <Dropdown.Item>
-                          <Link
-                            className="text-decoration-none text-dark w-100"
-                            href={{
-                              pathname: "/infinitescroll",
-                              query: { region: item.region },
-                            }}
-                          >
-                            {item.region}
-                          </Link>
-                        </Dropdown.Item>
-                      </div>
-                    );
-                  })}
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-
-            {/* 3 */}
-            <div className="btn-group px-2">
-              <Dropdown>
-                <Dropdown.Toggle
-                  className={`btn btn-light rounded-5 ${styles.filterbtn}`}
-                  variant="primary"
-                  id="dropdown-basic"
-                >
-                  Price
-                </Dropdown.Toggle>
-                <Dropdown.Menu className={styles.rangehero}>
-                  <RangeSlider />
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-            {/* 4 */}
-            <div className={`btn-group px-2`}>
-              <Dropdown>
-                <Dropdown.Toggle
-                  className={`btn btn-light rounded-5 ${styles.filterbtn}`}
-                  variant="primary"
-                  id="dropdown-basic"
-                >
-                  Descriptor
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Link
-                    className={`text-decoration-none text-dark  px-3 py-2 ${styles.descripthero}`}
-                    href={{
-                      pathname: "/infinitescroll",
-                      query: { descriptor: "food" },
-                    }}
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                <div className="d-flex gap-3 flex-wrap">
+                  <RadioGroup
+                    aria-label="radio-buttons"
+                    name="radio-buttons"
+                    value={selectedValue}
+                    onChange={handleChange}
+                    className="d-flex flex-row"
                   >
-                    <span>Food</span>
+                    {regionData.map((item, index) => (
+                      <div key={index} className={styles.regionbox}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={selectedRegions.includes(item.title)}
+                              onChange={() => handleRegionChange(item.title)}
+                            />
+                          }
+                          label={item.title}
+                        />
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+              </div>
+
+              {/* Descriptors */}
+              <h5 className="amgray mt-3">Descriptors</h5>
+
+              <div className="py-3 py-lg-5">
+                <div
+                  className={`btn-group px-2 d-flex w-100 d-flex align-center justify-content-between `}
+                >
+                  <div
+                    className={`justify-between d-flex text-decoration-none text-dark gap-3 px-3 py-2 ${
+                      styles.descripthero
+                    } ${
+                      selectedDescriptors.includes("food")
+                        ? styles.selected
+                        : ""
+                    }`}
+                    onClick={() => handleDescriptorChange("food")}
+                  >
                     <Image
                       className={`h-auto ${styles.foodIcons}`}
                       src={burger}
                       alt=""
                     />
-                  </Link>
-                  <Link
-                    className={`text-decoration-none text-dark  px-3 py-2 ${styles.descripthero}`}
-                    href={{
-                      pathname: "/infinitescroll",
-                      query: { descriptor: "Hiking" },
-                    }}
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    <span>Food</span>
+                  </div>
+                  <div
+                    className={`justify-between d-flex text-decoration-none align-items-center text-dark gap-3 px-3 py-2 ${
+                      styles.descripthero
+                    } ${
+                      selectedDescriptors.includes("Hiking")
+                        ? styles.selected
+                        : ""
+                    }`}
+                    onClick={() => handleDescriptorChange("Hiking")}
                   >
-                    {" "}
-                    <span>Hiking</span>
                     <Image
                       className={`h-auto ${styles.foodIcons}`}
                       src={travelicon}
                       alt=""
                     />
-                  </Link>
-                  <Link
-                    href={{
-                      pathname: "/infinitescroll",
-                      query: { descriptor: "Art" },
-                    }}
-                    className={`text-decoration-none text-dark  px-3 py-2 ${styles.descripthero}`}
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    <span>Hiking</span>
+                  </div>
+                  <div
+                    className={`justify-between d-flex text-decoration-none align-items-center text-dark gap-3 px-3 py-2 ${
+                      styles.descripthero
+                    } ${
+                      selectedDescriptors.includes("Art") ? styles.selected : ""
+                    }`}
+                    onClick={() => handleDescriptorChange("Art")}
                   >
-                    <span>Art</span>
                     <Image
                       className={`h-auto ${styles.foodIcons}`}
                       src={painticon}
                       alt=""
                     />
-                  </Link>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          </div>
+                    <span>Art</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="d-flex justify-content-center gap-3 mb-3 py-3">
+                <button type="" className="savebtn" onClick={resetHandle}>
+                  Reset
+                </button>
+                <button onClick={handleApply} type="" className="savebtn">
+                  Apply
+                </button>
+              </div>
+            </Modal.Body>
+          </Modal>
+
           <div
             className={`row  ${styles.globalhero}`}
             style={{ marginBottom: "20px;" }}
@@ -445,7 +363,3 @@ export default ({data1}) => {
     </>
   );
 };
-
-
-
-
