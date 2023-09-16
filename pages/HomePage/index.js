@@ -181,7 +181,7 @@ export default ({ data1 }) => {
   };
   return (
     <>
-      {!searchTerm.length > 0 && (
+      {!searchTerm?.length > 0 && (
         <div>
           <div>
             {filteredData.map((item) => (

@@ -7,6 +7,7 @@ import createRecommendation from "./reducers/createRecommendationReducer";
 import tripIdSaveReducer from "./reducers/tripReducer";
 import singleTripReducer from "./reducers/singleTripReducer";
 import updateTripReducer from "./reducers/updateTripReducer";
+import userIdReducer from "./reducers/userIdReducer";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     tripIdSave: tripIdSaveReducer,
     singleTrip: singleTripReducer,
     updateTrip: updateTripReducer,
+    userId: userIdReducer,
   },
   middleware: [thunkMiddleware],
 });

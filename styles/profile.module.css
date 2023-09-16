@@ -10,11 +10,20 @@
   width: 100%;
   max-width: 900px;
 }
-
+.editbtn {
+  background-color: #f9f9f9;
+  border-radius: 20px;
+  border: none;
+  color: black;
+  padding: 7px 20px;
+}
+.editbtn:hover{
+  background-color: #c4c1c1;
+}
 .profilebutton {
   height: 50px;
   width: 220px;
-  background-color: rgba(20, 183, 255, 1);
+  background-color: #4562b2;
   color: white;
   border-radius: 10px;
   border: none;
@@ -31,10 +40,10 @@
   color: black;
 }
 .heartbtn {
-  background-color: rgba(197, 19, 20, 1);
+  background-color: #4562b2;
 }
 .reccommendbtn {
-  background-color: rgba(16, 62, 152, 1);
+  background-color: #4562b2;
 }
 .profileheart {
   color: #fff;

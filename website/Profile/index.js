@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/profile.module.css";
-import globe2 from "../../public/images/globe2.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { faPlus, faHeart } from "@fortawesome/free-solid-svg-icons";
@@ -8,11 +7,13 @@ import {
   fetchFavPosts,
   fetchRecommendations,
 } from "../../store/actions/recommendationActions";
+import profileicon from "../../public/images/men.svg";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Globe from "./Globe";
+import { fetchUserData } from "../../store/actions/userAction";
 
 const itemData = [
   {
@@ -33,84 +34,151 @@ const itemData = [
 ];
 
 function Profile() {
+  // const userIds = localStorage.getItem("userID");
+  const userID =
+    typeof window !== "undefined" ? localStorage.getItem("userID") : null;
   // fetch recommendation
   const router = useRouter();
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userId);
+
   // login Data id, email
-  const { userID, email } = useSelector((state) => state.recommendation);
-  console.log(userID, email, "userData");
+  // const { userID, email } = useSelector((state) => state.recommendation);
+  // console.log(userID, email, "userData");
 
   const recommendationsData = useSelector((state) => state.recommendation);
   const { recommendations, loading, error } = recommendationsData;
-  const [selectedItems, setSelectedItems] = useState({});
-  const [favList, setFavList] = useState([]);
+  const [user, setUser] = useState(null);
   const recData = recommendations.Recommendations;
-  const [fullList, setFullList] = useState([]);
-  const [showAllImages, setShowAllImages] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileData, setProfileData] = useState({
+    username: "",
+    region: "",
+    email: "",
+    password: "",
+  });
 
-  const handleShowAllClick = () => {
-    setShowAllImages(!showAllImages);
-  };
-  const handleFavoriteClick = (id) => {
-    setSelectedItems((prevSelectedItems) => ({
-      ...prevSelectedItems,
-      [id]: !prevSelectedItems[id],
-    }));
+  const { username, region, email, password } = profileData;
 
-    const isAlreadyFav = favList.some((favItem) => favItem._id === id);
-    if (isAlreadyFav) {
-      const updatedFavList = favList.filter((item) => item._id !== id);
-      setFavList(updatedFavList);
-      alert("This post is removed from your favorites.");
-      return;
-    }
-
-    const clickedItem = fullList.find((item) => item._id === id);
-    if (clickedItem) {
-      const updatedFavList = [clickedItem];
-      setFavList(updatedFavList);
-      localStorage.setItem(
-        "selectedIds",
-        JSON.stringify(updatedFavList.map((item) => item._id))
-      );
-    }
-  };
-
-  const sendFavListToBackend = async (selectedIds) => {
-    const userID = localStorage.getItem("userID");
-
-    try {
-      const response = await axios.post("http://localhost:8000/api/savepost", {
-        postId: selectedIds,
-        userID: userID,
-      });
-    } catch (error) {
-      console.error("Error updating backend:", error);
-    }
-  };
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   useEffect(() => {
     dispatch(fetchRecommendations());
   }, [dispatch]);
 
   useEffect(() => {
-    if (recData && Array.isArray(recData)) {
-      setFullList(recData);
-    }
-  }, [recData]);
+    const userIds = localStorage.getItem("userID");
 
-  useEffect(() => {
-    const selectedIds = favList.map((item) => item._id);
-    sendFavListToBackend(selectedIds);
-  }, [favList]);
+    if (userIds) {
+      dispatch(fetchUserData(userIds));
+      setUser(userData);
+    }
+  }, [dispatch]);
+
+  const handleEditProfile = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveProfile = async () => {
+    console.log(profileData, "profileData");
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/api/users/profile/${userID}`,
+        profileData
+      );
+
+      if (response.status === 200) {
+        setIsEditing(false);
+        // You may want to update the user's data in the Redux store or handle it accordingly
+      } else {
+        // Handle the case where the update was not successful (e.g., show an error message)
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
 
   return (
     <>
+      {isEditing ? (
+        <div>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) =>
+              setProfileData({ ...profileData, username: e.target.value })
+            }
+          />
+          <input
+            type="text"
+            value={region}
+            onChange={(e) =>
+              setProfileData({ ...profileData, region: e.target.value })
+            }
+          />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) =>
+              setProfileData({ ...profileData, email: e.target.value })
+            }
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) =>
+              setProfileData({ ...profileData, password: e.target.value })
+            }
+          />
+
+          <button onClick={handleSaveProfile}>Save Profile</button>
+        </div>
+      ) : (
+        <div>
+          <h6 className="fw-600 mb-0 mt-4">{userData?.userId?.username}</h6>
+          <h6 className="fw-600 mb-0 mt-4">{userData?.userId?.region}</h6>
+          <h6 className="fw-600 mb-0 mt-4">{userData?.userId?.email}</h6>
+          <p className="pt-3">Total shared experiences: 20</p>
+          <button
+            onClick={handleEditProfile}
+            className={`mt-3 fw-600 cursor-pointer ${styles.editbtn}`}
+          >
+            Edit Profile
+          </button>
+        </div>
+      )}
+
+      <div className="row px-5 py-3">
+        <div className=" col-lg-4 align-items-center gap-2 ">
+          <div className="d-flex align-items-center gap-3">
+            <Image
+              width={100}
+              height={100}
+              className={`${styles.menicon} mt-2`}
+              src={profileicon}
+              alt="profile"
+            />
+            <p>
+              Fell in love with traveling and want to share my experiences with
+              the world!
+            </p>
+          </div>
+          <h6 className="fw-600 mb-0 mt-4">{user?.userId?.username}</h6>
+          <p className="pt-3">Where you’ve been: 30 countries, 112 cities</p>
+          <h6 className="fw-600">Total shared experiences: 20 </h6>
+          <button className={`mt-3 fw-600 cursor-pointer ${styles.editbtn}`}>
+            Edit Profile
+          </button>
+        </div>
+        <div className="col-lg-8"></div>
+      </div>
+
       <div className="container-fluid pb-4">
         <div className="row">
           <div className="col-lg-12">
             <div className="text-center mt-5">
-              {/* <Image className={styles.profile_globe3d} src={globe2} alt="" /> */}
               <Globe data={recData} />
             </div>
           </div>
@@ -124,10 +192,10 @@ function Profile() {
             >
               <button
                 href="#"
-                className={`d-flex align-items-center justify-content-center d-flex  ${styles.profilebutton}`}
+                className={`d-flex align-items-center justify-content-start px-4 d-flex  ${styles.profilebutton}`}
               >
-                <h6 className="mb-0">Upcoming Trips</h6>
-                <FontAwesomeIcon className={styles.profileplus} icon={faPlus} />
+                <h6 className="mb-0 fw-600">Trips</h6>
+                {/* <FontAwesomeIcon className={styles.profileplus} icon={faPlus} /> */}
               </button>
             </Link>
           </div>
@@ -138,9 +206,9 @@ function Profile() {
             >
               <button
                 href="#"
-                className={`text-center d-flex align-items-center justify-content-between px-4 d-flex ${styles.profilebutton} ${styles.reccommendbtn}`}
+                className={`text-center d-flex align-items-center justify-content-between fw-600 px-4 d-flex ${styles.profilebutton} ${styles.reccommendbtn}`}
               >
-                Your Recommendtions
+                Your Experiences
               </button>
             </Link>
           </div>
@@ -150,165 +218,13 @@ function Profile() {
                 href="#"
                 className={`text-center d-flex align-items-center justify-content-between px-4 d-flex ${styles.profilebutton} ${styles.heartbtn}`}
               >
-                <h6 className="mb-0">Saves</h6>
+                <h6 className="mb-0 fw-600">Saves</h6>
                 <FontAwesomeIcon
                   className={styles.profileheart}
                   icon={faHeart}
                 />
               </button>
             </Link>
-          </div>
-        </div>
-
-        <div className={styles.profilefitimage}>
-          <div className={styles.profilesection2image}>
-            <div className={styles.profileimagetitle}>
-              <h1 className="text-light">Adventure Begins Here</h1>
-              <p className={`text-light ${styles.profilesubheading}`}>
-                Choose from thousands of organized adventures
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center pt-5">
-          <h1>Onroot Spotlight</h1>
-          <p className="pt-3">
-            Find out what’s happening at Onroot: from our special offers.
-          </p>
-        </div>
-        <div className="container">
-          <div className="row">
-            <div
-              className={`row px-4 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
-            >
-              {fullList.slice(0, 3).map((item, index) => {
-                const isAlreadyFav = favList.some(
-                  (favItem) => favItem._id === item._id
-                );
-
-                return (
-                  <>
-                    <div
-                      className="col-12 col-md-6 col-lg-4 p-3 position-relative"
-                      onClick={() => handleFavoriteClick(item._id)}
-                      key={index}
-                    >
-                      <div className="position-relative">
-                        <img
-                          layout="fill"
-                          objectFit="cover"
-                          src={`${
-                            itemData[index % itemData.length].img
-                          }?w=162&auto=format`}
-                          srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                          className={styles.placeImg}
-                          loading="lazy"
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            borderRadius: "15px",
-                            opacity: "0.99990000999",
-                          }}
-                        />
-                        <h6
-                          className={`fw-500 mb-0 mt-3 ${styles.landingeventheading}`}
-                        >
-                          {item?.title} <br />
-                        </h6>
-                      </div>
-                      <div
-                        className={`d-flex justify-content-center align-items-center ${styles.fvbtnhero}`}
-                      >
-                        <div className={styles.fvbtn}>
-                          <FontAwesomeIcon
-                            icon={faHeart}
-                            // style={{ color: isAlreadyFav ? "red" : "gray" }}
-                            style={{
-                              color: selectedItems[item._id] ? "red" : "gray",
-                              cursor: "pointer",
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <p className="text-center position-relative z-5">
-                        {item._id}
-                      </p>
-                    </div>
-                  </>
-                );
-              })}
-
-              <div className="text-center">
-                <button className="savebtn" onClick={handleShowAllClick}>
-                  {showAllImages ? "Close All" : "Show All"}
-                </button>
-              </div>
-              {showAllImages && (
-                <div
-                  className={`row px-4 d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
-                >
-                  {fullList.slice(3).map((item, index) => {
-                    const isAlreadyFav = favList.some(
-                      (favItem) => favItem._id === item._id
-                    );
-
-                    return (
-                      <>
-                        <div
-                          className="col-12 col-md-6 col-lg-4 p-3 position-relative"
-                          onClick={() => handleFavoriteClick(item._id)}
-                          key={index}
-                        >
-                          <div className="position-relative">
-                            <img
-                              layout="fill"
-                              objectFit="cover"
-                              src={`${
-                                itemData[index % itemData.length].img
-                              }?w=162&auto=format`}
-                              srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                              className={styles.placeImg}
-                              loading="lazy"
-                              style={{
-                                display: "block",
-                                width: "100%",
-                                borderRadius: "15px",
-                                opacity: "0.99990000999",
-                              }}
-                            />
-                            <h6
-                              className={`fw-500 mb-0 mt-3 ${styles.landingeventheading}`}
-                            >
-                              {item?.title} <br />
-                            </h6>
-                          </div>
-                          <div
-                            className={`d-flex justify-content-center align-items-center ${styles.fvbtnhero}`}
-                          >
-                            <div className={styles.fvbtn}>
-                              <FontAwesomeIcon
-                                icon={faHeart}
-                                // style={{ color: isAlreadyFav ? "red" : "gray" }}
-                                style={{
-                                  color: selectedItems[item._id]
-                                    ? "red"
-                                    : "gray",
-                                  cursor: "pointer",
-                                }}
-                              />
-                            </div>
-                          </div>
-                          <p className="text-center position-relative z-5">
-                            {item._id}
-                          </p>
-                        </div>
-                      </>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>

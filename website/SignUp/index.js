@@ -98,7 +98,10 @@ function Signup() {
       .max(10, "Too Long!")
       .required("Lastname is required"),
 
-    image: Yup.mixed().required("Please upload a file"),
+    region: Yup.string()
+      .min(2, "Too Short!")
+      .max(10, "Too Long!")
+      .required("Region is required"),
 
     email: Yup.string().email("Email is invalid").required("Email is required"),
     username: Yup.string()
@@ -128,7 +131,7 @@ function Signup() {
               initialValues={{
                 firstName: "",
                 lastName: "",
-                image: "",
+                region: "",
                 email: "",
                 username: "",
                 password: "",
@@ -163,19 +166,25 @@ function Signup() {
                       ) : null}
                     </div>
                   </div>
-
                   <Field
-                    type="file"
-                    name="image"
+                    name="username"
+                    style={{ padding: "10px" }}
+                    className="form-control rounded-3 border-0 mt-2"
+                    placeholder="Username"
+                  />
+                  {errors.username && touched.username ? (
+                    <div className="text-light ">{errors.username}</div>
+                  ) : null}
+                  <Field
+                    name="region"
                     ref={fileInputRef}
                     style={{ padding: "10px" }}
                     className="form-control rounded-3 border-0 mt-2"
-                    placeholder="Email"
-                    accept=".pdf,.doc,.docx,.jpg,.png"
+                    placeholder="Region"
                   />
 
-                  {errors.image && touched.image ? (
-                    <div className="text-light">{errors.image}</div>
+                  {errors.region && touched.region ? (
+                    <div className="text-light">{errors.region}</div>
                   ) : null}
 
                   <Field
@@ -187,15 +196,6 @@ function Signup() {
                   />
                   {errors.email && touched.email ? (
                     <div className="text-light">{errors.email}</div>
-                  ) : null}
-                  <Field
-                    name="username"
-                    style={{ padding: "10px" }}
-                    className="form-control rounded-3 border-0 mt-2"
-                    placeholder="Username"
-                  />
-                  {errors.username && touched.username ? (
-                    <div className="text-light ">{errors.username}</div>
                   ) : null}
 
                   <div className="position-relative">

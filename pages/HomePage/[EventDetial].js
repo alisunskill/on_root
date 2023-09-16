@@ -18,15 +18,17 @@ import Image from "next/image";
 import SliderApps from "./SliderApps";
 import { useDispatch, useSelector } from "react-redux";
 import GoogleMapReact from "google-map-react";
-import Cookies from "js-cookie";
+import { fetchUserData } from "../../store/actions/userAction";
+
 import axios from "axios";
 import Trip from "../../website/ViewSaves/components/Trip";
 import NearSlider from "./component/NearSlider";
 
 export default function EventDetail() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { id } = router.query;
-
+  const userData = useSelector((state) => state?.userId);
   const [postCounts, setPostCounts] = useState({});
   const [modalShow, setModalShow] = useState(false);
   const [user, setUser] = useState(null);
@@ -49,25 +51,16 @@ export default function EventDetail() {
     lat: 0,
     lng: 0,
   });
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userIds = localStorage.getItem("userID");
+    const userIds = localStorage.getItem("userID");
 
-        if (userIds) {
-          const apiUrl = `http://localhost:8000/api/users/username/${userIds}`;
-          const response = await axios.get(apiUrl);
-          setUser(response.data);
-          setLoadings(false);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        setLoadings(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
+    if (userIds) {
+      dispatch(fetchUserData(userIds));
+      setLoadings(false);
+      setUser(userData);
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     const totalTrips = localStorage.getItem("tripsLength");
@@ -267,7 +260,11 @@ export default function EventDetail() {
   const saveCount = postCounts && postCounts[postid] ? postCounts[postid] : 0;
 
   if (loadings) {
-    return <div>Loading...</div>;
+    return (
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    );
   }
 
   if (!user) {
@@ -281,17 +278,20 @@ export default function EventDetail() {
             className={`col-lg-7 col-12 col-md-12 mt-3 ${styles.scenerypara}`}
           >
             <div className={`row align-items-center ${styles.eventtopsection}`}>
-              <div className=" col-9 col-md-6 col-lg-12">
+              <div className=" col-9 col-md-6 col-lg-12 mt-2">
                 <h4 className="fw-600">{filteredData?.title}</h4>
               </div>
               {/* profile men */}
-              <div className="d-flex align-items-center gap-2">
+              <div className="d-flex align-items-center justify-content-start gap-3 mt-3">
                 <Image
-                  className={`${styles.menicon} mt-2`}
+                  className={`${styles.menicon} `}
                   src={profile}
                   alt="profile"
                 />
-                <h6 className="fw-600 mb-0">{user?.username}</h6>
+                <div>
+                  <h6 className="fw-600 mb-0">{user?.userId?.username}</h6>
+                  <p className="fw-600 mb-0 f-14">{user?.userId?.region}</p>
+                </div>
               </div>
             </div>
             <div className="row">
