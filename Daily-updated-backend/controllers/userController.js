@@ -11,7 +11,7 @@ const jwtKey = process.env.JWT_SECRET;
 // Create a new user
 exports.createUser = async (req, res) => {
   try {
-    const { firstName, lastName, image, email, username, password } = req.body;
+    const { firstName, lastName, region, email, username, password } = req.body;
 
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
@@ -28,7 +28,7 @@ exports.createUser = async (req, res) => {
     const user = new User({
       firstName,
       lastName,
-      image,
+      region,
       email,
       username,
       password: hashedPassword,
@@ -47,8 +47,8 @@ exports.createUser = async (req, res) => {
       host: "smtp.ethereal.email",
       port: 587,
       auth: {
-        user: "adrien26@ethereal.email",
-        pass: "R6w9c7pJzBTbfpmr2W",
+        user: "jaiden.rowe@ethereal.email",
+        pass: "7xyBzUvjMZTSNSxpQ4",
       },
     });
 
@@ -192,8 +192,8 @@ exports.forgotPassword = async (req, res) => {
       host: "smtp.ethereal.email",
       port: 587,
       auth: {
-        user: "adrien26@ethereal.email",
-        pass: "R6w9c7pJzBTbfpmr2W",
+        user: "jaiden.rowe@ethereal.email",
+        pass: "7xyBzUvjMZTSNSxpQ4",
       },
     });
 
@@ -272,6 +272,73 @@ exports.resetPassword = async (req, res) => {
     res.status(200).json({ message: "Password reset successfully" });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.getUsernameByID = async (req, res) => {
+  try {
+    // const { userID } = req.params;
+    let { userID } = req.params;
+    userID = userID.trim();
+    const user = await User.findById(userID);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { username, region, email } = user;
+    return res.status(200).json({ username, region, email });
+  } catch (error) {
+    console.error("Error fetching username:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Update user profile
+exports.updateProfile = async (req, res) => {
+  try {
+    // const { userID } = req.params;
+    let { userID } = req.params;
+    userID = userID.trim();
+    const { username, region, email, password } = req.body;
+
+    const user = await User.findById(userID);
+
+    if (!user) {
+      return res.status(404).json({ message: "User's Profile is not found" });
+    }
+
+    if (username !== user.username) {
+      const existingUser = await User.findOne({ username });
+      if (existingUser) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+    }
+
+    if (username) {
+      user.username = username;
+    }
+
+    if (region) {
+      user.region = region;
+    }
+
+    if (email) {
+      user.email = email;
+    }
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      user.password = hashedPassword;
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("Error updating profile:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

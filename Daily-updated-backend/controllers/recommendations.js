@@ -1,7 +1,7 @@
 const Recommendation = require("../models/recommendation");
 
 const getAllRecommendations = async (req, res) => {
-  const { title, region, descriptor, sort, select } = req.query;
+  const { title, region, descriptors, sort, select } = req.query;
   const queryObject = {};
 
   if (title) {
@@ -12,10 +12,14 @@ const getAllRecommendations = async (req, res) => {
     queryObject.region = region;
   }
 
-  if (descriptor) {
-    queryObject.descriptor = descriptor;
+  // if (descriptors) {
+  //   queryObject.descriptor = descriptors;
+  // }
+  if (descriptors) {
+    if (typeof descriptors === "string") {
+      queryObject.descriptor = descriptors;
+    }
   }
-
   let apiData = Recommendation.find(queryObject);
 
   if (sort) {
@@ -52,8 +56,9 @@ const createRecommendation = async (req, res) => {
     experience,
     description,
     location,
-    descriptor,
+    descriptors,
     region,
+    links
   } = req.body;
 
   try {
@@ -67,8 +72,9 @@ const createRecommendation = async (req, res) => {
       !experience ||
       !description ||
       !location ||
-      !descriptor ||
-      !region
+      !descriptors ||
+      !region ||
+      !links
     ) {
       return res
         .status(400)
@@ -95,8 +101,9 @@ const createRecommendation = async (req, res) => {
       experience,
       description,
       location,
-      descriptor,
+      descriptors,
       region,
+      links
     });
 
     console.log("New Recommendation:", newRecommendation);
@@ -142,8 +149,9 @@ const updateRecommendation = async (req, res) => {
     experience,
     description,
     location,
-    descriptor,
+    descriptors,
     region,
+    links
   } = req.body;
 
   try {
@@ -163,8 +171,9 @@ const updateRecommendation = async (req, res) => {
     if (experience) existingRecommendation.experience = experience;
     if (description) existingRecommendation.description = description;
     if (location) existingRecommendation.location = location;
-    if (descriptor) existingRecommendation.descriptor = descriptor;
+    if (descriptors) existingRecommendation.descriptors = descriptors;
     if (region) existingRecommendation.region = region;
+    if (links) existingRecommendation.links = links;
 
     // Save the updated recommendation
     const updatedRecommendation = await existingRecommendation.save();

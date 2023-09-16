@@ -17,4 +17,10 @@ router.post("/resetpassword", userController.resetPassword);
 // verify new user email
 router.get("/login/:token", userController.verifyEmail);
 
+// getbyid username
+router.get("/username/:userID", userController.getUsernameByID);
+
+// update profile
+router.put("/profile/:userID", userController.updateProfile);
+
 module.exports = router;

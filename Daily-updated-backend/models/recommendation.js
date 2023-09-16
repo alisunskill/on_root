@@ -6,7 +6,10 @@ const recommendationSchema = new mongoose.Schema({
     required: [true, "Title must be provided"],
   },
 
-  images: [String],
+  images:  {
+    type: [String], 
+    required: true,
+  },
 
   description: {
     type: String,
@@ -28,8 +31,8 @@ const recommendationSchema = new mongoose.Schema({
     required: true,
     default: "2 year",
   },
-  descriptor: {
-    type: String,
+  descriptors: {
+    type: [String],
     required: true,
   },
 
@@ -55,7 +58,10 @@ const recommendationSchema = new mongoose.Schema({
     },
   },
 
-  links: [String],
+  links: {
+    type: String,
+    required: true,
+  },
 });
 
 const Recommendation = mongoose.model("Recommendation", recommendationSchema);
