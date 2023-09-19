@@ -11,7 +11,8 @@ const jwtKey = process.env.JWT_SECRET;
 // Create a new user
 exports.createUser = async (req, res) => {
   try {
-    const { firstName, lastName, region, email, username, password } = req.body;
+    const { firstName, lastName, region, email, username, language, password } =
+      req.body;
 
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
@@ -31,6 +32,7 @@ exports.createUser = async (req, res) => {
       region,
       email,
       username,
+      language,
       password: hashedPassword,
     });
 
@@ -287,8 +289,8 @@ exports.getUsernameByID = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const { username, region, email } = user;
-    return res.status(200).json({ username, region, email });
+    const { username, region, email, language } = user;
+    return res.status(200).json({ username, region, email, language });
   } catch (error) {
     console.error("Error fetching username:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -301,7 +303,7 @@ exports.updateProfile = async (req, res) => {
     // const { userID } = req.params;
     let { userID } = req.params;
     userID = userID.trim();
-    const { username, region, email, password } = req.body;
+    const { username, region, email, language, password } = req.body;
 
     const user = await User.findById(userID);
 
@@ -328,6 +330,10 @@ exports.updateProfile = async (req, res) => {
       user.email = email;
     }
 
+    if (language) {
+      user.language = language;
+    }
+
     if (password) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -339,6 +345,26 @@ exports.updateProfile = async (req, res) => {
     res.status(200).json({ message: "Profile updated successfully" });
   } catch (error) {
     console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// delet the user profile
+exports.deleteProfile = async (req, res) => {
+  try {
+    const { userID } = req.params;
+
+    const user = await User.findById(userID);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await User.findByIdAndDelete(userID);
+
+    res.status(200).json({ message: "Profile deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting profile:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
