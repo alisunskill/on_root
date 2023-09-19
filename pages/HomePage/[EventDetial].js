@@ -42,6 +42,25 @@ export default function EventDetail() {
 
   const recData = recommendations.Recommendations;
 
+  useEffect(() => {
+    if (userData) {
+      const userDataJSON = JSON.stringify(userData);
+      localStorage.setItem("userData", userDataJSON);
+    } else {
+      console.error("userData is null or undefined");
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    const userDataJSON = localStorage.getItem("userData");
+    if (userDataJSON) {
+      const userData = JSON.parse(userDataJSON);
+      setUser(userData);
+    } else {
+      console.error("userData not found in local storage");
+    }
+  }, []);
+
   const filteredData =
     recData?.find((item) => item._id === postid) ||
     recData?.find((item) => item._id === id);

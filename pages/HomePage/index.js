@@ -23,6 +23,7 @@ import RecommendationGrid from "../../website/components/RecommendationGrid";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Modal from "react-bootstrap/Modal";
+import { miniSerializeError } from "@reduxjs/toolkit";
 
 function valuetext(value) {
   return `${value}°C`;
@@ -54,12 +55,14 @@ export default ({ data1 }) => {
   const router = useRouter();
   const { region } = router.query;
   const { descriptor } = router.query;
+  const { min, max } = router.query;
   const [filteredData, setFilteredData] = useState([]);
   const [selectedValue, setSelectedValue] = React.useState("a");
   const [selectedRegions, setSelectedRegions] = useState([]);
-  const [value, setValue] = useState([0, 1000]);
+  const [value, setValue] = useState([min || 0, max || 1000]);
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(1550);
+  const [filterPrice, setFilterPrice] = useState();
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -86,7 +89,6 @@ export default ({ data1 }) => {
 
   const handleDescriptorChange = (descriptor) => {
     if (selectedDescriptors.includes(descriptor)) {
-      // If the descriptor is already selected, remove it
       setSelectedDescriptors(
         selectedDescriptors.filter((d) => d !== descriptor)
       );
@@ -114,6 +116,22 @@ export default ({ data1 }) => {
       setFilteredData(filteredDescriptorData);
     }
   }, [descriptor, regionData]);
+
+  useEffect(() => {
+    if (recommendations && recommendations.Recommendations?.length > 0) {
+      const minCost = Math.min(
+        ...recommendations.Recommendations.map((post) => post.cost)
+      );
+      const maxCost = Math.max(
+        ...recommendations.Recommendations.map((post) => post.cost)
+      );
+      setMinValue(minCost);
+      setMaxValue(maxCost);
+      if (value[0] < minCost || value[1] > maxCost) {
+        setValue([minCost, maxCost]);
+      }
+    }
+  }, [value, recommendations]);
 
   const handleRegionChange = (region) => {
     if (selectedRegions.includes(region)) {
@@ -143,16 +161,6 @@ export default ({ data1 }) => {
     setValue(newValue);
   };
 
-  // const handleApply = () => {
-  //   const descriptorQuery =
-  //     selectedDescriptors.length > 0
-  //       ? `descriptor=${selectedDescriptors.join(",")}`
-  //       : "";
-  //   const regionQuery =
-  //     selectedRegions.length > 0 ? `region=${selectedRegions.join(",")}` : "";
-  //   const url = `/infinitescroll?${descriptorQuery}${regionQuery}&min=${value[0]}&max=${value[1]}`;
-  //   router.push(url);
-  // };
   const handleApply = () => {
     const descriptorQuery =
       selectedDescriptors.length > 0
@@ -227,8 +235,10 @@ export default ({ data1 }) => {
                       onChange={handleChanges1}
                       valueLabelDisplay="auto"
                       getAriaValueText={valuetext}
+                      // min={minValue}
+                      // max={1000}
                       min={minValue}
-                      max={1000}
+                      max={maxValue}
                     />
                     <div>
                       Min: ${value[0]} &#160; &#160; Max: ${value[1]}
@@ -274,9 +284,9 @@ export default ({ data1 }) => {
                   className={`btn-group px-2 d-flex w-100 d-flex align-center justify-content-between `}
                 >
                   <div
-                    className={`justify-between d-flex text-decoration-none text-dark gap-3 px-3 py-2 ${
+                    className={`justify-between d-flex text-decoration-none  gap-3 px-3 py-2 ${
                       styles.descripthero
-                    } ${
+                    }  ${
                       selectedDescriptors.includes("food")
                         ? styles.selected
                         : ""
@@ -291,7 +301,7 @@ export default ({ data1 }) => {
                     <span>Food</span>
                   </div>
                   <div
-                    className={`justify-between d-flex text-decoration-none align-items-center text-dark gap-3 px-3 py-2 ${
+                    className={`justify-between d-flex text-decoration-none align-items-center  gap-3 px-3 py-2 ${
                       styles.descripthero
                     } ${
                       selectedDescriptors.includes("Hiking")
@@ -308,7 +318,7 @@ export default ({ data1 }) => {
                     <span>Hiking</span>
                   </div>
                   <div
-                    className={`justify-between d-flex text-decoration-none align-items-center text-dark gap-3 px-3 py-2 ${
+                    className={`justify-between d-flex text-decoration-none align-items-center gap-3 px-3 py-2 ${
                       styles.descripthero
                     } ${
                       selectedDescriptors.includes("Art") ? styles.selected : ""

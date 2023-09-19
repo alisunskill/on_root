@@ -11,7 +11,11 @@ import styles from "../../styles/viewsave.module.css";
 const InfiniteScrollComponent = () => {
   const router = useRouter();
   const region = router.query.region?.toLowerCase();
-  const { imageUrl } = router.query;
+  const { min, max } = router.query;
+  console.log(region, "region");
+  const minCost = parseInt(min) || 0;
+  const maxCost = parseInt(max) || Number.MAX_VALUE;
+  console.log(minCost, maxCost, "minCost and maxCost");
   const descriptor = router.query.descriptor?.toLowerCase();
   // redux
   const dispatch = useDispatch();
@@ -34,29 +38,9 @@ const InfiniteScrollComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  const [minCost, setMinCost] = useState(0);
-  const [maxCost, setMaxCost] = useState(Number.MAX_VALUE);
-
-  const cost = router.query.minCost & maxCost;
-
   useEffect(() => {
     fetchPosts();
   }, []);
-  useEffect(() => {
-    dispatch(fetchRecommendations());
-
-    // Set the minimum and maximum cost range based on the URL parameters
-    const minParam = parseInt(router.query.min);
-    const maxParam = parseInt(router.query.max);
-
-    if (!isNaN(minParam)) {
-      setMinCost(minParam);
-    }
-
-    if (!isNaN(maxParam)) {
-      setMaxCost(maxParam);
-    }
-  }, [dispatch, router.query.min, router.query.max]);
 
   const handleLinkClick = (itemId, postTitle) => {
     router.push(
@@ -154,6 +138,29 @@ const InfiniteScrollComponent = () => {
     setHasMore(false);
   }, [router.query.descriptor]);
 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      // Fetch the posts based on the min and max cost values
+      const response = await fetch(
+        `recommendations?min=${minCost}&max=${maxCost}`
+      );
+      const data = await response.json();
+
+      const newPosts = data.Recommendations || [];
+
+      if (newPosts.length > 0) {
+        // Append new posts to the existing list
+        setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+        setPage((prevPage) => prevPage + 1);
+      } else {
+        // No more posts available
+        setHasMore(false);
+      }
+    };
+
+    fetchPosts();
+  }, [minCost, maxCost]);
+
   const itemData = [
     {
       img: "https://images.unsplash.com/photo-1663583784667-4a2a386fec62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
@@ -189,7 +196,6 @@ const InfiniteScrollComponent = () => {
       <div className="container-fluid px-5 pt-3 pb-5">
         <div className="row d-flex w-100">
           <h1 className="dark bold text-center fw-600">
-            {/* {filteredPosts.map((item) => item[0].region)} */}
             {filteredPosts.length > 0 && filteredPosts[0].region}
           </h1>
           <p className="text-center mb-3 fw-500 pb-3 px-lg-5">
@@ -215,6 +221,8 @@ const InfiniteScrollComponent = () => {
                     : recommendationData
                   ).map((item, index) => (
                     <div key={index} className="">
+                      {console.log(item, "item")}
+
                       <div
                         className={`text-decoration-none d-flex justify-content-center flex-column ${styles.savelink}`}
                         onClick={() => handleLinkClick(item._id, item.title)}
@@ -252,6 +260,8 @@ const InfiniteScrollComponent = () => {
                     : recommendationData
                   ).map((item, index) => (
                     <div key={index}>
+                      {console.log(item, "des")}
+
                       <Link
                         href="/infopage"
                         style={{
@@ -265,24 +275,12 @@ const InfiniteScrollComponent = () => {
                         }}
                       >
                         <img
-                          layout="fill"
-                          objectFit="cover"
-                          src={`${
-                            itemData[index % itemData.length].img
-                          }?w=162&auto=format`}
-                          srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                          alt={item.region}
-                          loading="lazy"
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            borderRadius: "15px",
-                            opacity: "0.99990000999",
-                          }}
+                          className={styles.uploadimg}
+                          src={item.images[0]}
+                          alt="Uploaded Image"
                         />
                         <div style={{ position: "absolute", zIndex: 9999 }}>
                           <h3 className="w-700 text-white">
-                            {" "}
                             {item.descriptor}
                           </h3>
                         </div>
@@ -307,20 +305,9 @@ const InfiniteScrollComponent = () => {
                         }}
                       >
                         <img
-                          layout="fill"
-                          objectFit="cover"
-                          src={`${
-                            itemData[index % itemData.length].img
-                          }?w=162&auto=format`}
-                          srcSet={`${item.img}?w=162&auto=format&dpr=2 2x`}
-                          alt={item.region}
-                          loading="lazy"
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            borderRadius: "15px",
-                            opacity: "0.99990000999",
-                          }}
+                          className={styles.uploadimg}
+                          src={item.images[0]}
+                          alt="Uploaded Image"
                         />
                         <div style={{ position: "absolute", zIndex: 9999 }}>
                           <h3 className="w-700 text-white"> {item.region}</h3>

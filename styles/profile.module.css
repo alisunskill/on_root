@@ -10,15 +10,31 @@
   width: 100%;
   max-width: 900px;
 }
+.fellpara {
+  color: #767676;
+  border: 1px solid #f9f9f9;
+  border-radius: 20px;
+  padding: 10px 10px 40px 10px;
+  font-size: 15px;
+  width: 40%;
+}
+.aboutheader {
+  color: #767676;
+}
+.lablenames {
+  color: #d9d9d9;
+  font-size: 14px;
+}
 .editbtn {
-  background-color: #f9f9f9;
+  background-color: #c4c1c1;
   border-radius: 20px;
   border: none;
   color: black;
   padding: 7px 20px;
 }
-.editbtn:hover{
-  background-color: #c4c1c1;
+.editbtn:hover {
+  background-color: #f9f9f9;
+  border: 1px solid #c4c1c1;
 }
 .profilebutton {
   height: 50px;
@@ -157,4 +173,30 @@
   padding: 30px;
   display: flex;
   flex-direction: column;
+}
+
+.cyclehero {
+  background-color: #cde9f5;
+  border-radius: 30px;
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 30px;
+}
+.cyclebg {
+  background-image: url(../public/images/cycle.png);
+}
+.signupbtns {
+  background-color: #4562b2;
+  font-weight: 600;
+  border-radius: 10px;
+  border: none;
+  font-size: 20px;
+  max-width: 350px;
+  width: 100%;
+  padding: 4px 20px;
+  height: max-content;
 }

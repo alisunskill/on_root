@@ -102,54 +102,6 @@ function Profile() {
 
   return (
     <>
-      {isEditing ? (
-        <div>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) =>
-              setProfileData({ ...profileData, username: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            value={region}
-            onChange={(e) =>
-              setProfileData({ ...profileData, region: e.target.value })
-            }
-          />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) =>
-              setProfileData({ ...profileData, email: e.target.value })
-            }
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) =>
-              setProfileData({ ...profileData, password: e.target.value })
-            }
-          />
-
-          <button onClick={handleSaveProfile}>Save Profile</button>
-        </div>
-      ) : (
-        <div>
-          <h6 className="fw-600 mb-0 mt-4">{userData?.userId?.username}</h6>
-          <h6 className="fw-600 mb-0 mt-4">{userData?.userId?.region}</h6>
-          <h6 className="fw-600 mb-0 mt-4">{userData?.userId?.email}</h6>
-          <p className="pt-3">Total shared experiences: 20</p>
-          <button
-            onClick={handleEditProfile}
-            className={`mt-3 fw-600 cursor-pointer ${styles.editbtn}`}
-          >
-            Edit Profile
-          </button>
-        </div>
-      )}
-
       <div className="row px-5 py-3">
         <div className=" col-lg-4 align-items-center gap-2 ">
           <div className="d-flex align-items-center gap-3">
@@ -167,23 +119,18 @@ function Profile() {
           </div>
           <h6 className="fw-600 mb-0 mt-4">{user?.userId?.username}</h6>
           <p className="pt-3">Where you’ve been: 30 countries, 112 cities</p>
-          <h6 className="fw-600">Total shared experiences: 20 </h6>
-          <button className={`mt-3 fw-600 cursor-pointer ${styles.editbtn}`}>
+          <h6 className="fw-600 mb-3 mb-lg-4">Total shared experiences: 20 </h6>
+          <Link
+            href="/editprofile"
+            className={` fw-600 cursor-pointer text-decoration-none fw-600 ${styles.editbtn}`}
+          >
             Edit Profile
-          </button>
+          </Link>
         </div>
         <div className="col-lg-8"></div>
       </div>
 
       <div className="container-fluid pb-4">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="text-center mt-5">
-              <Globe data={recData} />
-            </div>
-          </div>
-        </div>
-
         <div className="row py-5 mt-4">
           <div className="col-12 col-md-4 col-lg-4 text-center justify-content-center d-flex">
             <Link
@@ -195,7 +142,6 @@ function Profile() {
                 className={`d-flex align-items-center justify-content-start px-4 d-flex  ${styles.profilebutton}`}
               >
                 <h6 className="mb-0 fw-600">Trips</h6>
-                {/* <FontAwesomeIcon className={styles.profileplus} icon={faPlus} /> */}
               </button>
             </Link>
           </div>

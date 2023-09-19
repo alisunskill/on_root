@@ -19,23 +19,23 @@
 .landingfirstcard:hover .landingimage1 {
   transform: scale(1.2);
 }
-.regionbox{
-  width: 30% ;
+.regionbox {
+  width: 30%;
   padding: 10px;
   cursor: pointer;
   border-radius: 7px;
 }
-.regionbox1{
-  width: 24% ;
+.regionbox1 {
+  width: 24%;
   padding: 10px;
   cursor: pointer;
   border-radius: 7px;
 }
-.regionbox1:hover{
-background-color: #f3f3f3;
+.regionbox1:hover {
+  background-color: #f3f3f3;
 }
-.regionbox:hover{
-background-color: #f3f3f3;
+.regionbox:hover {
+  background-color: #f3f3f3;
 }
 .flexGrow {
   flex-grow: 1;
@@ -75,6 +75,10 @@ background-color: #f3f3f3;
 }
 .searchbarbox {
   height: auto;
+}
+.selected {
+  background-color: #0f3d95;
+  color: #ffffff !important;
 }
 .searchvally {
   height: auto;
@@ -587,14 +591,16 @@ background-color: #f3f3f3;
   font-size: 15px !important;
   cursor: auto;
 }
-.descripthero{
+.descripthero {
   width: 25%;
   border: 1px solid rgb(228, 228, 228);
   border-radius: 10px;
+  font-weight: 600;
 }
 .descripthero:hover {
-  background-color: #f3f3f3;
+  background-color: #0f3d95;
   border-radius: 7px;
+  color: #fff;
 }
 .landing_btn_width {
   width: 40px;
