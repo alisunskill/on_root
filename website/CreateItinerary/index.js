@@ -4,9 +4,10 @@ import calender from "../../public/images/calender.svg";
 import moneyicon from "../../public/images/moneyicon.svg";
 import burger from "../../public/images/burger.svg";
 import painticon from "../../public/images/painticon.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import travelicon from "../../public/images/travelicon.svg";
 import Image from "next/image";
-import axios, { all } from "axios";
 import { useRouter } from "next/router";
 import GoogleMapReact from "google-map-react";
 import {
@@ -71,7 +72,9 @@ export default () => {
   const userExists = userID;
   const { recommendations, loading, error } = recommendationsData;
   // console.log(recommendations, "recommendations");
-
+  const goBack = () => {
+    router.back();
+  };
   // const loading = true;
   useEffect(() => {
     dispatch(fetchRecommendations());
@@ -347,35 +350,13 @@ export default () => {
     }
   };
 
-  // const onSelectImages = (files) => {
-  //   const imageUrlsArray = files.map((file) => file.base64.toString()); // Get image URLs
-
-  //   // Combine all selected images into a single array
-  //   const allImages = imageFields.reduce(
-  //     (accumulator, field) => [...accumulator, ...field.images],
-  //     []
-  //   );
-
-  //   // Update the formData with the combined array of images
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     images: [...allImages, ...imageUrlsArray],
-  //   }));
-  // };
-
   const handleDescriptorChange = (descriptor) => {
-    // Clone the current array to avoid mutating state directly
     const updatedDescriptors = [...formData.descriptors];
-
     if (updatedDescriptors.includes(descriptor)) {
-      // If the descriptor is already in the array, remove it
       updatedDescriptors.splice(updatedDescriptors.indexOf(descriptor), 1);
     } else {
-      // If the descriptor is not in the array, add it
       updatedDescriptors.push(descriptor);
     }
-
-    // Update the state with the new array of descriptors
     setFormData((prevFormData) => ({
       ...prevFormData,
       descriptors: updatedDescriptors,
@@ -390,159 +371,384 @@ export default () => {
         </div>
       )}
       <div className="container-fluid pb-5">
-        <div className="row">
-          <div
-            className={`col-lg-5 col-12 col-md-12 mt-3  ${styles.scenerypara}`}
-          >
+        <div className={`row ${styles.createdhero}`}>
+          <div className={`col-12 ${styles.scenerypara}`}>
             <form
               id="recommendationForm"
               onSubmit={handleSubmit}
               encType="multipart/form-data"
             >
-              <div className="form-group mb-3">
+              <div className="form-group mb-3 d-flex justify-content-between align-items-center gap-3">
                 <input
                   type="text"
                   name="title"
-                  className="form-control py-3"
+                  className="form-control"
                   value={formData.title}
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
                   required
-                  placeholder="Enter Title..."
+                  placeholder="Enter a title..."
+                  style={{ width: "90%" }}
                 />
+                <div>
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className={` bg-light border-0 rounded-5 position-absolute z-3 p-2 fw-700  cursor-pointer  ${styles.crossbtn}`}
+                    onClick={goBack}
+                  />
+                </div>
               </div>
 
-              <div className="row justify-content-between gap-3">
-                <button className="savebtn" onClick={addOneMore}>
-                  Add Image
-                </button>
-
-                {imageFields.map((field) => (
-                  <div
-                    key={field.id}
-                    className={`col-lg-3 form-control-file p-0 custom-file-input parentcontainer`}
-                  >
-                    <FileBase64
-                      multiple
-                      onDone={(files) => onSelectImages(files, field.id)}
-                      style={{ width: "100px", height: "100px" }}
+              <div className="row">
+                <div className="col-lg-7 col-md-6 col-12">
+                  <div className="row justify-content-between gap-3 mx-1">
+                    <button className="savebtn" onClick={addOneMore}>
+                      Add Image
+                    </button>
+                    <div className="row">
+                      {/* image */}
+                      <div className="col-lg-6 col-12">
+                        {imageFields.map((field) => (
+                          <div
+                            key={field.id}
+                            className={`col-lg-3 form-control-file p-0 custom-file-input parentcontainer`}
+                          >
+                            <FileBase64
+                              multiple
+                              onDone={(files) =>
+                                onSelectImages(files, field.id)
+                              }
+                              style={{ width: "100%", height: "500px" }}
+                            />
+                            <h6 className={styles.addimg}>Add images</h6>
+                          </div>
+                        ))}
+                      </div>
+                      {/* video */}
+                      <div className="col-lg-6 col-12">
+                        {imageFields.map((field) => (
+                          <div
+                            key={field.id}
+                            className={`col-lg-3 form-control-file p-0 custom-file-input parentcontainer`}
+                          >
+                            <FileBase64
+                              multiple
+                              onDone={(files) =>
+                                onSelectImages(files, field.id)
+                              }
+                              style={{ width: "100%", height: "500px" }}
+                            />
+                            <h6 className={styles.addimg}>Add videos</h6>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row mt-5 align-items-center">
+                    {/* <div className="form-group col-lg-6 col-12 text-center">
+                      <Image
+                        width="45"
+                        height="30"
+                        src={moneyicon}
+                        className="mt-3 mb-3"
+                        alt="calender"
+                      />
+                      <input
+                        type="number"
+                        name="cost"
+                        className="form-control py-2"
+                        value={formData.cost}
+                        onChange={(e) =>
+                          setFormData({ ...formData, cost: e.target.value })
+                        }
+                        required
+                        placeholder="Cost to Attend"
+                      />
+                    </div>
+                    <div className="form-group col-lg-6 col-12 text-center">
+                      <Image
+                        width="40"
+                        height="30"
+                        src={calender}
+                        className="mt-3 mb-3 object-fit-cover"
+                        alt="calender"
+                      />
+                      <input
+                        type="text"
+                        name="hours"
+                        className="form-control py-2"
+                        value={formData.hours}
+                        onChange={(e) =>
+                          setFormData({ ...formData, hours: e.target.value })
+                        }
+                        required
+                        placeholder="Hours of Operation"
+                      />
+                    </div> */}
+                  </div>
+                  <div className="form-group pt-5">
+                    <input
+                      type="text"
+                      name="location"
+                      className="form-control py-2"
+                      value={locationInput}
+                      onChange={(e) => setLocationInput(e.target.value)}
+                      onBlur={handleLocationInputBlur}
+                      required
+                      placeholder="Provide a Location"
                     />
                   </div>
-                ))}
-              </div>
-              <div className="row mt-5 align-items-center">
-                <div className="form-group col-lg-6 col-12 text-center">
-                  <Image
-                    width="45"
-                    height="30"
-                    src={moneyicon}
-                    className="mt-3 mb-3"
-                    alt="calender"
-                  />
-                  <input
-                    type="number"
-                    name="cost"
-                    className="form-control py-2"
-                    value={formData.cost}
-                    onChange={(e) =>
-                      setFormData({ ...formData, cost: e.target.value })
-                    }
-                    required
-                    placeholder="Cost to Attend"
-                  />
-                </div>
-                <div className="form-group col-lg-6 col-12 text-center">
-                  <Image
-                    width="40"
-                    height="30"
-                    src={calender}
-                    className="mt-3 mb-3 object-fit-cover"
-                    alt="calender"
-                  />
-                  <input
-                    type="text"
-                    name="hours"
-                    className="form-control py-2"
-                    value={formData.hours}
-                    onChange={(e) =>
-                      setFormData({ ...formData, hours: e.target.value })
-                    }
-                    required
-                    placeholder="Hours of Operation"
-                  />
-                </div>
-              </div>
-              <div className="form-group pt-5">
-                <input
-                  type="text"
-                  name="location"
-                  className="form-control py-2"
-                  value={locationInput}
-                  onChange={(e) => setLocationInput(e.target.value)}
-                  onBlur={handleLocationInputBlur}
-                  required
-                  placeholder="Provide a Location"
-                />
-              </div>
-              <div className="form-group pt-5">
-                <input
-                  type="text"
-                  name="region"
-                  className="form-control py-2"
-                  value={formData.region}
-                  onChange={(e) =>
-                    setFormData({ ...formData, region: e.target.value })
-                  }
-                  required
-                  placeholder="Provide a Region"
-                />
-              </div>
+                  <div className="form-group pt-5">
+                    <h5 className="fw-600">General Information / Highlights</h5>
+                    <textarea
+                      type="text"
+                      name="region"
+                      className="form-control "
+                      id="exampleFormControlTextarea5"
+                      value={formData.region}
+                      onChange={(e) =>
+                        setFormData({ ...formData, region: e.target.value })
+                      }
+                      required
+                      rows="5"
+                      placeholder="General information you’d like to share..."
+                    />
+                  </div>
 
-              <div className="form-group mt-5">
-                <textarea
-                  placeholder="Personal anecdote of experience..."
-                  className="form-control p-3"
-                  id="exampleFormControlTextarea1"
-                  name="experience"
-                  onChange={(e) =>
-                    setFormData({ ...formData, experience: e.target.value })
-                  }
-                  required
-                  rows="6"
-                ></textarea>
-              </div>
+                  <div className="form-group mt-5">
+                    <h5 className="fw-600"> My Experience</h5>
+                    <textarea
+                      placeholder="Personal anecdote of experience..."
+                      className="form-control"
+                      id="exampleFormControlTextarea1"
+                      name="experience"
+                      onChange={(e) =>
+                        setFormData({ ...formData, experience: e.target.value })
+                      }
+                      required
+                      rows="5"
+                    ></textarea>
+                  </div>
 
-              <div className="form-group mt-4">
-                <textarea
-                  placeholder="Description..."
-                  className="form-control p-3"
-                  id="exampleFormControlTextarea2"
-                  rows="4"
-                  name="description"
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  required
-                ></textarea>
-              </div>
-              <div className="form-group mt-4">
-                <textarea
-                  placeholder="Additional Links..."
-                  className="form-control p-3"
-                  id="exampleFormControlTextarea3"
-                  rows="4"
-                  name="links"
-                  onChange={(e) =>
-                    setFormData({ ...formData, links: e.target.value })
-                  }
-                  required
-                ></textarea>
+                  <div className="form-group mt-4">
+                    <h5 className="fw-600"> Tips </h5>
+                    <textarea
+                      placeholder="List some important tips..."
+                      className="form-control p-3"
+                      id="exampleFormControlTextarea2"
+                      rows="4"
+                      name="description"
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
+                      required
+                    ></textarea>
+                  </div>
+                  <div className="form-group mt-4">
+                    <h5 className="fw-600">Useful Links</h5>
+                    <textarea
+                      placeholder="Additional Links..."
+                      className="form-control p-3"
+                      id="exampleFormControlTextarea3"
+                      rows="4"
+                      name="links"
+                      onChange={(e) =>
+                        setFormData({ ...formData, links: e.target.value })
+                      }
+                      required
+                    ></textarea>
+                  </div>
+                </div>
+                <div className="col-12 col-lg-1">
+                  <div className="row">
+                    <div
+                      className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
+                    >
+                      <div className={styles.eventicons}>
+                        <label>
+                          <input
+                            type="radio"
+                            value="food"
+                            checked={formData.descriptors.includes("food")}
+                            onChange={(e) =>
+                              handleDescriptorChange(e.target.value)
+                            }
+                            style={{ display: "none" }}
+                          />
+                          <Image
+                            className={`h-auto cursor-pointer ${styles.foodIcons}`}
+                            src={burger}
+                            alt=""
+                            style={
+                              formData.descriptors.includes("food")
+                                ? {
+                                    border: "2px solid green",
+                                    borderRadius: "50px",
+                                  }
+                                : { border: "none" }
+                            }
+                          />
+                        </label>
+                      </div>
+                      <div className={` ${styles.eventicons}`}>
+                        <label>
+                          <input
+                            type="radio"
+                            value="Art"
+                            checked={formData.descriptors.includes("Art")}
+                            onChange={(e) =>
+                              handleDescriptorChange(e.target.value)
+                            }
+                            style={{ display: "none" }}
+                          />
+                          <Image
+                            className={`h-auto cursor-pointer ${styles.foodIcons}`}
+                            src={painticon}
+                            alt=""
+                            style={
+                              formData.descriptors.includes("Art")
+                                ? {
+                                    border: "2px solid green",
+                                    borderRadius: "50px",
+                                  }
+                                : { border: "none" }
+                            }
+                          />
+                        </label>
+                      </div>
+                      <div className={` ${styles.eventicons}`}>
+                        <label>
+                          <input
+                            type="radio"
+                            value="Hiking"
+                            checked={formData.descriptors.includes("Hiking")}
+                            onChange={(e) =>
+                              handleDescriptorChange(e.target.value)
+                            }
+                            style={{ display: "none" }}
+                          />
+                          <Image
+                            className={`h-auto cursor-pointer ${styles.foodIcons}`}
+                            src={travelicon}
+                            alt=""
+                            style={
+                              formData.descriptors.includes("Hiking")
+                                ? {
+                                    border: "2px solid green",
+                                    borderRadius: "50px",
+                                  }
+                                : { border: "none" }
+                            }
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-4 col-md-4 col-12">
+                  <div style={{ height: "100vh", width: "100%" }}>
+                    {/* <GoogleMapReact
+                      bootstrapURLKeys={{
+                        key: "AIzaSyAX815OLgYZi7EbfQOgbBn6XeyCzwexMlM",
+                        libraries: ["places"],
+                      }}
+                      defaultCenter={{ lat: 31.5204, lng: 74.3587 }}
+                      defaultZoom={7}
+                      yesIWantToUseGoogleMapApiInternals
+                      onGoogleApiLoaded={({ map, maps }) =>
+                        handleApiLoaded(map, maps)
+                      }
+                      onDblClick={handleMapDoubleClick}
+                      center={mapCenter}
+                    >
+                      {recommendation?.map((form, index) => (
+                        <RedMarker
+                          key={index}
+                          lat={form.location.coordinates[1]}
+                          lng={form.location.coordinates[0]}
+                          text={form.title}
+                        />
+                      ))}
+                    </GoogleMapReact> */}
+                    <div class="responsive-map">
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2822.7806761080233!2d-93.29138368446431!3d44.96844997909819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x52b32b6ee2c87c91%3A0xc20dff2748d2bd92!2sWalker+Art+Center!5e0!3m2!1sen!2sus!4v1514524647889"
+                        width="600"
+                        height="450"
+                        frameborder="0"
+                        style={{ border: "0" }}
+                        allowfullscreen
+                      ></iframe>
+                    </div>
+
+                    <div className="form-group col-lg-12 col-12 text-center pt-2 pt-lg-2">
+                      <Image
+                        width="40"
+                        height="30"
+                        src={calender}
+                        className="mt-3 mb-3 object-fit-cover"
+                        alt="calender"
+                      />
+                      <h5 className="fw-600">Hours of Operation</h5>
+
+                      <div className="d-flex justify-content-center align-items-center">
+                        <input
+                          type="text"
+                          name="hours"
+                          className="form-control py-2 w-50"
+                          value={formData.hours}
+                          onChange={(e) =>
+                            setFormData({ ...formData, hours: e.target.value })
+                          }
+                          required
+                          placeholder="Hours of Operation"
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group col-lg-12 col-12 text-center align-items-center pt-3 pt-lg-5 justify-content-center flex-column d-flex">
+                      <Image
+                        width="45"
+                        height="30"
+                        src={moneyicon}
+                        className="mt-3 mb-3"
+                        alt="calender"
+                      />
+                      <h5 className="fw-600">Cost to Attend</h5>
+                      <div className="d-flex justify-content-center align-items-center">
+                        <input
+                          type="number"
+                          name="cost"
+                          className="form-control py-2"
+                          value={formData.cost}
+                          onChange={(e) =>
+                            setFormData({ ...formData, cost: e.target.value })
+                          }
+                          required
+                          placeholder="Cost to Attend"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </form>
+            <div className="d-flex justify-content-end mt-lg-5 mt-4">
+              <button
+                form="recommendationForm"
+                type="submit"
+                className="savebtn1"
+                style={{ marginRight: "50px" }}
+              >
+                Save
+              </button>
+            </div>
           </div>
 
-          <div className="col-12 col-lg-1">
+          {/* <div className="col-12 col-lg-1">
             <div className="row">
               <div
                 className={`col-12 col-md-12 col-lg-12 text-center ${styles.eventmidicons}`}
@@ -645,9 +851,9 @@ export default () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className="col-lg-6 text-align-right p-0">
+          {/* <div className="col-lg-6 text-align-right p-0">
             <div style={{ height: "100vh", width: "100%" }}>
               <GoogleMapReact
                 bootstrapURLKeys={{
@@ -673,19 +879,19 @@ export default () => {
                 ))}
               </GoogleMapReact>
             </div>
-          </div>
+          </div> */}
         </div>
 
-        <div className="text-center mt-lg-5 mt-4">
+        {/* <div className="text-center mt-lg-5 mt-4">
           <button
             form="recommendationForm"
             type="submit"
             className="savebtn"
             style={{ marginRight: "50px" }}
           >
-            Done
+            Save
           </button>
-        </div>
+        </div> */}
       </div>
     </>
   );

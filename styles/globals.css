@@ -145,16 +145,17 @@ input {
 }
 
 .custom-file-input {
-  height: 100px;
-  width: 100%;
+  height: 500px;
+  width: 100% !important;
   position: relative;
-  background-image: url("../public/images/plusimage.svg");
+  background-image: url("../public/images/close.png");
   color: transparent;
   background-position: center;
   border-radius: 10px;
   cursor: pointer;
   background-color: #fff;
   background-repeat: no-repeat;
+  background-size: 40%;
 }
 ::-webkit-file-upload-button {
   display: none;
@@ -210,7 +211,7 @@ input {
   font-size: 16px !important;
 }
 
-.f-14{
+.f-14 {
   font-size: 14px;
 }
 
@@ -255,8 +256,8 @@ iframe {
 }
 
 .parentcontainer input {
-  width: 100px !important;
-  height: 100px !important;
+  width: 100% !important;
+  height: 500px !important;
   cursor: pointer;
 }
 
@@ -330,3 +331,20 @@ iframe {
 .w-50 {
   width: 50%;
 }
+
+
+/* map */
+.responsive-map{
+  overflow: hidden;
+  padding-bottom:100%;
+  position:relative;
+  height:80%;
+  width:100%;
+  }
+  .responsive-map iframe{
+  left:0;
+  top:0;
+  height:100%;
+  width:100%;
+  position:absolute;
+  }
