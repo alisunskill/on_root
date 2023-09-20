@@ -1,10 +1,11 @@
 import React from 'react'
-import UpcomingtripsList from '../website/UpcomingTripList'
+// import UpcomingtripsList from '../website/UpcomingTripList'
 
 export default () => {
   return (
     <div>
-        <UpcomingtripsList />
+        {/* <UpcomingtripsList /> */}
+        Nothing
     </div>
   )
 }

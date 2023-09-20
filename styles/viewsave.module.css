@@ -20,6 +20,9 @@
   }
 }
 
+.tripsherobox {
+  padding: 40px 30px 60px 30px;
+}
 .yoursave_heading {
   font-size: 30px;
   font-weight: 700;
@@ -284,12 +287,15 @@
   font-size: 14px;
 }
 .herosaves {
-  border: 1px solid #dee2e6;
+  border: none;
   border-radius: 6px;
   padding: 3px 40px;
   margin-top: 10px;
   position: relative;
-  z-index: 999999999999999999 !important;
+  /* z-index: 999999999999999999 !important; */
+  background: #f9f9f9;
+  border-radius: 30px;
+  padding: 15px 30px;
 }
 .radiobtn:checked {
   color: black;
@@ -300,13 +306,28 @@
 .herobtn {
   border-radius: 7px;
   padding: 10px 20px;
-  background-color: #7cc5e5;
+  background-color: #4562b2;
   font-size: 22px;
   color: #fff;
   border: none;
   width: 100%;
   text-align: left;
   margin-top: 20px;
+}
+.herobtn1 {
+  border-radius: 7px;
+  padding: 10px 20px;
+  background-color: #f9f9f9;
+  font-size: 22px;
+  color: #818a91;
+  border: none;
+  width: 100%;
+  text-align: left;
+  margin-top: 20px;
+}
+.herobtn1:hover {
+  background-color: #4562b2;
+  color: #fff;
 }
 .modal-content {
   padding: 30px !important;

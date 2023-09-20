@@ -76,10 +76,10 @@ export default function Trip(props) {
       setSelectedTrips((prevSelectedTrips) => [...prevSelectedTrips, id]);
     }
   };
-  const handleSaveBtn = () => {
-    sendFavListToBackend(selectedTrips);
-    router.push("/createdtrips");
-  };
+  // const handleSaveBtn = () => {
+  //   sendFavListToBackend(selectedTrips);
+  //   router.push("/createdtrips");
+  // };
   const sendFavListToBackend = async (selectedIds) => {
     const userIDPerson = localStorage.getItem("userID"); // Use "userID" key
 
@@ -110,24 +110,21 @@ export default function Trip(props) {
 
   return (
     <div className="">
-      <Modal
+      <div
         {...props}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header
-          closeButton
-          style={{ padding: "20px 40px", border: "none" }}
-        >
-          <Modal.Title
+        <div style={{ padding: "20px 40px", border: "none" }}>
+          <h3
             id="contained-modal-title-vcenter"
             className={`text-center w-100 ${styles.thumbnail}`}
           >
             Upcoming Trips
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ padding: "20px 40px 40px 40px" }}>
+          </h3>
+        </div>
+        <div style={{ padding: "20px 40px 40px 40px" }}>
           {trips.length === 0 || trips === undefined ? (
             <h4>No Trips </h4>
           ) : (
@@ -211,19 +208,19 @@ export default function Trip(props) {
               Trip to “EUROPE”
             </label>
           </div> */}
-          <button className={`fw-500 ${styles.herobtn}`} onClick={handleClick}>
-            + New Trip
+          <button className={`fw-500 ${styles.herobtn1}`} onClick={handleClick}>
+            + Create New
           </button>
-          <div className="d-flex justify-content-center">
+          {/* <div className="d-flex justify-content-center">
             <button
               className={`fw-500 savebtn mt-3 mt-lg-4`}
               onClick={handleSaveBtn}
             >
               Save Trips
             </button>
-          </div>
-        </Modal.Body>
-      </Modal>
+          </div> */}
+        </div>
+      </div>
       {/* New Trip */}
       <div className="text-center w-100  d-flex justify-content-center align-items-center">
         <NewTrip

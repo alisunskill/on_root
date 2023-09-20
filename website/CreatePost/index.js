@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../../styles/post.module.css";
+import Link from "next/link";
 export default () => {
   return (
     <>
@@ -16,7 +17,12 @@ export default () => {
               className={` col-12 col-md-6 col-lg-5    ${styles.post_card_wrapper}`}
             >
               <div className={`${styles.post_central} `}>
-                <h3 className="savebtn2 fw-600 px-4">Itinerary</h3>
+                <Link
+                  href="/createitinerary"
+                  className="text-decoration-none text-light"
+                >
+                  <h3 className="savebtn2 fw-600 px-4"> Itinerary </h3>
+                </Link>
               </div>
             </div>
 
@@ -24,13 +30,24 @@ export default () => {
               className={` col-12 col-md-6 col-lg-5    ${styles.post_card_wrapper}`}
             >
               <div className={`${styles.post_central1} `}>
-                <h3 className="savebtn2 fw-600 px-4">Event</h3>
+                <Link
+                  href="/singleitinerarypost"
+                  className="savebtn2 px-4 text-decoration-none text-light"
+                >
+                  <h3 className="mb-0 fw-600"> Event</h3>
+                </Link>
               </div>
             </div>
           </div>
           <br /> <br />
           <div className="text-light text-center">
-            <button className="savebtn1">Next</button>
+            {/* <button className="savebtn1">Next</button> */}
+            <Link
+              href="/createitinerary"
+              className="text-decoration-none text-light"
+            >
+              <button className="savebtn1">Next</button>
+            </Link>
           </div>
         </div>
       </div>

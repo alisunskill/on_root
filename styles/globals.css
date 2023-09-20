@@ -136,10 +136,7 @@ input {
 .m1 {
   margin-top: 5px;
 }
-.zindextop {
-  z-index: 99999999999999999 !important;
-  position: relative;
-}
+
 .flex-column {
   flex-direction: column;
 }
