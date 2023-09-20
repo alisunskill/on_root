@@ -25,15 +25,19 @@ export default function NewTrip(props) {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
   const handleCreate = async (event) => {
-    console.log("ali");
+    if (!formData.title || !formData.region || !formData.email || !formData.sdate || !formData.edate) {
+      alert("Please fill in all fields.");
+      return; // Do not proceed with the API request
+    }
     event.preventDefault();
     try {
       const response = await axios.post(
         "http://localhost:8000/api/trips",
         formData
       );
-      router.push("/upcomingtrips");
+alert("Fill all fields")
 
+      router.push("/upcomingtrips");
       console.log(response.data);
 
       // props.onHide();

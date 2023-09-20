@@ -3,16 +3,15 @@ const Trips = require("../models/trips");
 // create itneraryPost
 const createTripsPost = async (req, res) => {
   try {
-    const { image, title, region, email, sdate, edate } = req.body;
-    console.log(image, title, region, email, sdate, edate, "allfields");
-    if (!image || !title || !region || !email || !sdate || !edate) {
+    const { title, region, email, sdate, edate } = req.body;
+    console.log(title, region, email, sdate, edate, "allfields");
+    if (!title || !region || !email || !sdate || !edate) {
       return res
         .status(400)
         .json({ error: "Missing required fields in the trip request." });
     }
 
     const itinerary = await Trips.create({
-      image,
       title,
       region,
       email,
@@ -67,7 +66,6 @@ const getTripsPost = async (req, res) => {
 // delete
 const deleteTripPost = async (req, res) => {
   const tripId = req.params.tripId;
-  console.log(tripId, "lll");
   try {
     const deletedTrip = await Trips.findByIdAndDelete(tripId);
 
@@ -84,13 +82,12 @@ const deleteTripPost = async (req, res) => {
 // Update Trip
 const updateTripPost = async (req, res) => {
   const tripId = req.params.tripId;
-  const { image, title, region, email, sdate, edate } = req.body;
+  const { title, region, email, sdate, edate } = req.body;
 
   try {
     const updatedTrip = await Trips.findByIdAndUpdate(
       tripId,
       {
-        image,
         title,
         region,
         email,
