@@ -6,6 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import styles from "../../styles/viewsave.module.css";
 import NewTrip from "./components/NewTrip";
 import axios from "axios";
+import Profile from "./components/Profile";
 // import { setTripId } from "../../../store/actions/tripsAction";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
@@ -114,7 +115,9 @@ export default () => {
 
   return (
     <div className={`row ${styles.tripsherobox}`}>
-      <div className="col-lg-4"></div>
+      <div className="col-lg-4">
+        <Profile />
+      </div>
 
       {/* <div className="col-lg-6 h-full">
         <div className="w-100">
@@ -185,7 +188,7 @@ export default () => {
         </div>
       </div> */}
       <div className="col-lg-8">
-        <div className="">
+        <div className={styles.tripbox}>
           <div centered>
             <div style={{ padding: "20px 40px", border: "none" }}>
               <h3
@@ -283,12 +286,7 @@ export default () => {
               Trip to “EUROPE”
             </label>
           </div> */}
-              <button
-                className={`fw-500 rounded-5 ${styles.herobtn1}`}
-                onClick={handleClick}
-              >
-                + New Trip
-              </button>
+
               {/* <div className="d-flex justify-content-center">
                 <button
                   className={`fw-500 savebtn mt-3 mt-lg-4`}
@@ -299,6 +297,7 @@ export default () => {
               </div> */}
             </div>
           </div>
+
           {/* New Trip */}
           <div className="text-center w-100  d-flex justify-content-center align-items-center">
             <NewTrip
@@ -307,6 +306,14 @@ export default () => {
               onHide={() => setModalTrip(false)}
             />
           </div>
+        </div>
+        <div className="mx-5 mt-3">
+          <button
+            className={`fw-500 rounded-5 ${styles.herobtn1}`}
+            onClick={handleClick}
+          >
+            + New Trip
+          </button>
         </div>
         {/* <Trip /> */}
       </div>

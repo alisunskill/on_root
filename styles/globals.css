@@ -142,7 +142,7 @@ input {
 }
 
 .custom-file-input {
-  height: 500px;
+  height: 250px;
   width: 100% !important;
   position: relative;
   background-image: url("../public/images/close.png");
@@ -152,7 +152,8 @@ input {
   cursor: pointer;
   background-color: #fff;
   background-repeat: no-repeat;
-  background-size: 40%;
+  background-size: 17%;
+  padding: 10px;
 }
 ::-webkit-file-upload-button {
   display: none;
@@ -254,8 +255,13 @@ iframe {
 
 .parentcontainer input {
   width: 100% !important;
-  height: 500px !important;
+  height: 250px !important;
   cursor: pointer;
+}
+.parentcontainer  {
+  width: 100% !important;
+  height: 250px !important;
+  border-radius: 10px;
 }
 
 .savebtn1 {
@@ -329,19 +335,18 @@ iframe {
   width: 50%;
 }
 
-
 /* map */
-.responsive-map{
+.responsive-map {
   overflow: hidden;
-  padding-bottom:100%;
-  position:relative;
-  height:80%;
-  width:100%;
-  }
-  .responsive-map iframe{
-  left:0;
-  top:0;
-  height:100%;
-  width:100%;
-  position:absolute;
-  }
+  padding-bottom: 100%;
+  position: relative;
+  height: 80%;
+  width: 100%;
+}
+.responsive-map iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}

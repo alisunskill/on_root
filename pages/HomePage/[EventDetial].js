@@ -71,6 +71,8 @@ export default function EventDetail() {
     lng: 0,
   });
 
+  const [likeCount, setLikeCount] = useState(filteredData?.like || 0);
+
   useEffect(() => {
     const userIds = localStorage.getItem("userID");
 
@@ -289,6 +291,28 @@ export default function EventDetail() {
   if (!user) {
     return <div>User not found.</div>;
   }
+
+  const handleLikeCount = (recommendationId) => {
+    console.log("Clicked Like for recommendationId:", recommendationId);
+
+    // Perform the API request and update the state here...
+
+    axios
+      .post(
+        `http://localhost:8000/api/recommendations/${recommendationId}/like`
+      )
+      .then((response) => {
+        if (response) {
+          const updatedLikeCount = response.data.likeCount;
+          console.log("Updated Like Count:", updatedLikeCount);
+          setLikeCount(updatedLikeCount);
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating like count:", error);
+      });
+  };
+
   return (
     <>
       <div className={`container-fluid pb-5 ${styles.singleventhero}`}>
@@ -539,6 +563,21 @@ export default function EventDetail() {
                   }}
                 />
               </div>
+            </div>
+            {/* LIKE LOGIC  */}
+            <div
+              className={`d-flex align-items-center justify-content-center bold1 ${styles.eventiconbox}`}
+            >
+              <FontAwesomeIcon
+                icon={faHeart}
+                className="heartbeat"
+                onClick={() => handleLikeCount(filteredData?._id)}
+                style={{
+                  color: selectedItems[filteredData?._id] ? "red" : "black",
+                  cursor: "pointer",
+                }}
+              />
+              {likeCount} Likes
             </div>
           </div>
         </div>

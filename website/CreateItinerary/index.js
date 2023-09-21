@@ -408,85 +408,102 @@ export default () => {
                     </button>
                     <div className="row">
                       {/* image */}
-                      <div className="col-lg-6 col-12">
+                      {/* <div className="col-lg-12 col-12 mt-3">
                         {imageFields.map((field) => (
                           <div
                             key={field.id}
-                            className={`col-lg-3 form-control-file p-0 custom-file-input parentcontainer`}
+                            className={`col-lg-12 form-control-file p-0 mt-3 custom-file-input parentcontainer`}
                           >
                             <FileBase64
                               multiple
                               onDone={(files) =>
                                 onSelectImages(files, field.id)
                               }
-                              style={{ width: "100%", height: "500px" }}
+                              style={{ width: "100%", height: "250px" }}
                             />
-                            <h6 className={styles.addimg}>Add images</h6>
+                            <h6 className={styles.addimg}>Add image/Video</h6>
+                            {field.selectedImage && (
+                              <img
+                                src={field.selectedImage}
+                                alt="Selected Image"
+                              />
+                            )}
                           </div>
-                        ))}
-                      </div>
-                      {/* video */}
-                      <div className="col-lg-6 col-12">
+                        ))} */}
+                      {/* </div> */}
+
+                      {/* 
+
+                      <div className="col-lg-12 col-12 mt-3">
+  {imageFields.map((field) => (
+    <div
+      key={field.id}
+      className={`col-lg-12 form-control-file p-0 mt-3 custom-file-input parentcontainer`}
+    >
+      <FileBase64
+        multiple
+        onDone={(files) => onSelectImages(files, field.id)}
+        style={{ width: "100%", height: "250px" }}
+      />
+      <h6 className={styles.addimg}>Add image/Video</h6>
+
+{console.log(field.images[0],'field')}
+      {field.selectedImage && (
+        field.selectedImage.endsWith(".mp4") ? ( 
+          <video controls width="250">
+            <source src={field.selectedImage} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        ) : ( // It's an image
+          <img src={field.selectedImage} alt="Selected Image" />
+        )
+      )}
+    </div>
+  ))}
+</div> */}
+
+                      <div className="col-lg-12 col-12 mt-3 ">
                         {imageFields.map((field) => (
                           <div
                             key={field.id}
-                            className={`col-lg-3 form-control-file p-0 custom-file-input parentcontainer`}
+                            className={`col-lg-12 form-control-file d-flex flex-column justify-content-center align-items-center p-0 mt-3 custom-file-input parentcontainer`}
                           >
                             <FileBase64
                               multiple
                               onDone={(files) =>
                                 onSelectImages(files, field.id)
                               }
-                              style={{ width: "100%", height: "500px" }}
+                              style={{ width: "100%", height: "250px" }}
                             />
-                            <h6 className={styles.addimg}>Add videos</h6>
+                            {field.images.length === 0 ? (
+                              <h6 className={styles.addimg}>Add image/Video</h6>
+                            ) : (
+                              ""
+                            )}
+
+                            {field.images[0] &&
+                              (field.images[0].endsWith(".mp4") ? (
+                                <video controls width="250">
+                                  <source
+                                    src={field.images[0]}
+                                    type="video/mp4"
+                                    className="parentcontainer"
+                                  />
+                                  Your browser does not support the video tag.
+                                </video>
+                              ) : (
+                                <img
+                                  src={field.images[0]}
+                                  className="parentcontainer"
+                                  alt="Selected Image"
+                                />
+                              ))}
                           </div>
                         ))}
                       </div>
                     </div>
                   </div>
-                  <div className="row mt-5 align-items-center">
-                    {/* <div className="form-group col-lg-6 col-12 text-center">
-                      <Image
-                        width="45"
-                        height="30"
-                        src={moneyicon}
-                        className="mt-3 mb-3"
-                        alt="calender"
-                      />
-                      <input
-                        type="number"
-                        name="cost"
-                        className="form-control py-2"
-                        value={formData.cost}
-                        onChange={(e) =>
-                          setFormData({ ...formData, cost: e.target.value })
-                        }
-                        required
-                        placeholder="Cost to Attend"
-                      />
-                    </div>
-                    <div className="form-group col-lg-6 col-12 text-center">
-                      <Image
-                        width="40"
-                        height="30"
-                        src={calender}
-                        className="mt-3 mb-3 object-fit-cover"
-                        alt="calender"
-                      />
-                      <input
-                        type="text"
-                        name="hours"
-                        className="form-control py-2"
-                        value={formData.hours}
-                        onChange={(e) =>
-                          setFormData({ ...formData, hours: e.target.value })
-                        }
-                        required
-                        placeholder="Hours of Operation"
-                      />
-                    </div> */}
-                  </div>
+                  <div className="row mt-5 align-items-center"></div>
                   <div className="form-group pt-5">
                     <input
                       type="text"

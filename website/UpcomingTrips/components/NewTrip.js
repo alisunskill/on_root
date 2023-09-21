@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import styles from "../../../styles/viewsave.module.css";
-import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { useRouter } from "next/router";
+import React, { useState } from "react";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import styles from "../../../styles/viewsave.module.css";
 
 export default function NewTrip(props) {
   const router = useRouter();
@@ -25,22 +25,16 @@ export default function NewTrip(props) {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
   const handleCreate = async (event) => {
-    if (!formData.title || !formData.region || !formData.email || !formData.sdate || !formData.edate) {
-      alert("Please fill in all fields.");
-      return; // Do not proceed with the API request
-    }
     event.preventDefault();
     try {
       const response = await axios.post(
         "http://localhost:8000/api/trips",
         formData
       );
-alert("Fill all fields")
-
       router.push("/upcomingtrips");
       console.log(response.data);
 
-      // props.onHide();
+      props.onHide();
     } catch (error) {
       console.error("Error creating trip:", error);
     }
@@ -65,7 +59,7 @@ alert("Fill all fields")
             Create a new trip{" "}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ padding: "20px 40px 20px 40px" }}>
+        <Modal.Body style={{ padding: "0px 40px 20px 40px" }}>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Control

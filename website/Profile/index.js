@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from "react";
-import styles from "../../styles/profile.module.css";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { faPlus, faHeart } from "@fortawesome/free-solid-svg-icons";
-import {
-  fetchFavPosts,
-  fetchRecommendations,
-} from "../../store/actions/recommendationActions";
-import profileicon from "../../public/images/men.svg";
 import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { useRouter } from "next/router";
-import Globe from "./Globe";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import profileicon from "../../public/images/men.svg";
+import { fetchRecommendations } from "../../store/actions/recommendationActions";
 import { fetchUserData } from "../../store/actions/userAction";
+import styles from "../../styles/profile.module.css";
 
 const itemData = [
   {
@@ -60,10 +55,6 @@ function Profile() {
 
   const { username, region, email, password } = profileData;
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
   useEffect(() => {
     dispatch(fetchRecommendations());
   }, [dispatch]);
@@ -76,29 +67,6 @@ function Profile() {
       setUser(userData);
     }
   }, [dispatch]);
-
-  const handleEditProfile = () => {
-    setIsEditing(true);
-  };
-
-  const handleSaveProfile = async () => {
-    console.log(profileData, "profileData");
-    try {
-      const response = await axios.put(
-        `http://localhost:8000/api/users/profile/${userID}`,
-        profileData
-      );
-
-      if (response.status === 200) {
-        setIsEditing(false);
-        // You may want to update the user's data in the Redux store or handle it accordingly
-      } else {
-        // Handle the case where the update was not successful (e.g., show an error message)
-      }
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
-  };
 
   return (
     <>

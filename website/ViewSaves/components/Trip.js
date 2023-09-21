@@ -1,11 +1,11 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "../../../styles/viewsave.module.css";
 import NewTrip from "./NewTrip";
-import axios from "axios";
 // import { setTripId } from "../../../store/actions/tripsAction";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 
 export default function Trip(props) {
   const router = useRouter();
