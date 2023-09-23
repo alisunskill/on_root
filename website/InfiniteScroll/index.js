@@ -221,8 +221,6 @@ const InfiniteScrollComponent = () => {
                     : recommendationData
                   ).map((item, index) => (
                     <div key={index} className="">
-                      {console.log(item, "item")}
-
                       <div
                         className={`text-decoration-none d-flex justify-content-center flex-column ${styles.savelink}`}
                         onClick={() => handleLinkClick(item._id, item.title)}

@@ -258,14 +258,14 @@ iframe {
   height: 250px !important;
   cursor: pointer;
 }
-.parentcontainer  {
+.parentcontainer {
   width: 100% !important;
   height: 250px !important;
   border-radius: 10px;
 }
 
 .savebtn1 {
-  background-color: #4562b2;
+  background-color: #4562b2 !important;
   padding: 8px 45px;
   font-weight: 600;
   border-radius: 10px;

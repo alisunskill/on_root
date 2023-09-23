@@ -65,7 +65,19 @@ export default function EventDetail() {
     recData?.find((item) => item._id === postid) ||
     recData?.find((item) => item._id === id);
 
-  const filterLoc = filteredData?.location;
+
+    const filteredd =
+    recData?.find((item) => item._id === id);
+    useEffect(() => {
+      const selectedIdFromFilteredData = filteredd?._id || id;
+      if (selectedIdFromFilteredData) {
+        localStorage.setItem("filterPostId", selectedIdFromFilteredData);
+      }
+    }, [filteredData, id]);
+
+
+
+    const filterLoc = filteredData?.location;
   const [staticMarkerPosition, setStaticMarkerPosition] = useState({
     lat: 0,
     lng: 0,
@@ -509,23 +521,7 @@ export default function EventDetail() {
           </div>
         </div>
 
-        {/* <div className={`row ${styles.recommendtriphero}`}>
-          <div className="col-3"></div>
-          <div
-            className={`col-5 col-lg-5 col-md-12 d-flex align-center justify-content-between p-3 px-4 ${styles.recommendtrip}`}
-          >
-            <div className="d-flex align-center gap-2">
-              <FontAwesomeIcon icon={faHeart} size="2x" color="red" />
-              <p className="bold mb-0">{saveCount}</p>
-              <p className="bold px-2 mb-0">Saves</p>
-            </div>
-            <div className="d-flex align-center gap-2">
-              <Image src={plane} width={70} height={50} />
-              <p className="bold mb-0">{tripCount} Trips are Added</p>
-            </div>
-          </div>
-          <div className="col-3"></div>
-        </div> */}
+
 
         {/* extra */}
         <div className="row d-flex justify-content-end mt-lg-5 mt-3 pt-lg-4 pt-3 px-lg-5  px-2 pb-2">
@@ -547,6 +543,7 @@ export default function EventDetail() {
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 setModalShow={setModalShow}
+                images1={filteredData?.images}
               />
             </div>
             <div

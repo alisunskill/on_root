@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { fetchSingleTrip } from "../../store/actions/singleTripAction";
-import newsletterimg from "../../public/images/card-two.svg";
 import {
   updateTripAction,
   removeTripAction,
 } from "../../store/actions/updateTripAction";
+import { Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../styles/viewsave.module.css";
-import NewsLetter from "../components/NewsLetter";
-// import Trip from "./components/Trip";
+// import InfiniteScroll from "react-infinite-scroll-component";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Box } from "@mui/material";
 import { Masonry } from "@mui/lab";
-import axios from "axios";
 import Link from "next/link";
 import {
   fetchGetTrips,
@@ -27,7 +25,10 @@ import Modal from "react-bootstrap/Modal";
 function ItiniraryDetail() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const recommendationsData = useSelector((state) => state.recommendation);
+  const { recommendations, loading, error } = recommendationsData;
 
+  const recData = recommendations.Recommendations;
   const [tripIds, setTripIds] = useState(new Set());
   const [singleTrips, setSingleTrips] = useState(null);
   const saveTripsData = useSelector((state) => state.tripIdSave.savetrips);
@@ -36,6 +37,18 @@ function ItiniraryDetail() {
   const savedTripsData = useSelector((state) => state.tripIdSave.savetrips);
   const singleTrip = useSelector((state) => state.singleTrip.singleTrip);
   const [editModalShow, setEditModalShow] = useState(false);
+  const [postid, setPostId] = useState("");
+
+  useEffect(() => {
+    const selectedIdsFromLocalStorage = localStorage.getItem("filterPostId");
+    if (selectedIdsFromLocalStorage) {
+      setPostId(selectedIdsFromLocalStorage);
+    }
+  }, []);
+
+  // const filteredData = recData?.find((item) => item._id === postid);
+
+  // console.log(filteredData, "image");
 
   const { id: singletripId } = router.query;
 
@@ -143,338 +156,80 @@ function ItiniraryDetail() {
               dataLength={trips.length}
               loader={<h4>Loading...</h4>}
             >
-              <Box>
+              <Box sx={{ minHeight: 829 }}>
                 <Masonry columns={3} spacing={2}>
-                  {trips.map((trip, index) => (
-                    <div>
-                      <div className="position-relative" key={trip._id}>
-                        <FontAwesomeIcon
-                          icon={faTimes}
-                          className={` bg-light border-0 rounded-5 text-dark position-absolute z-3 p-2 fw-700 animated cursor-pointer  ${styles.crossed}`}
-                          onClick={() => handleRemoveTrips(trip._id)}
-                        />
-                      </div>
-                      <Link
-                        key={index}
-                        href={`/trip/${trip._id}`}
-                        className="position-relative"
-                      >
-                        <div className={styles.placeImgWrapper}>
-                          <img
-                            src={trip.image}
-                            alt="tripImg"
-                            className={styles.placeImg}
-                            loading="lazy"
-                          />
-                        </div>
-                      </Link>
-
-                      <div className="d-flex justify-content-between mt-2">
-                        <h5 className="w-700 mb-0 fw-600 mb-2 text-dark">
-                          Title: {trip.title}
-                        </h5>
-                        <button
-                          className="savebtn text-light border-0 rounded-2 px-2 f-16"
-                          onClick={() => updateTripEditHandle(trip)}
-                        >
-                          Edit Trip
-                        </button>
-                      </div>
-                      <h5 className="w-700 fw-600 mb-0 text-dark">
-                        region: {trip.region}
-                      </h5>
-                      <div className="d-flex justify-content-between mt-2">
-                        <h5 className="w-700 fw-600 mb-0 text-dark">
-                          Start Date: {trip.sdate}
-                        </h5>
-                        <h5 className="w-700 fw-600 mb-0 text-dark">
-                          End Date: {trip.edate}
-                        </h5>
-                      </div>
-
-                      {/* {updateTrip.id === trip._id && (
-                          <div>
-                            <input
-                              type="text"
-                              value={updateTrip.title || ""}
-                              onChange={(e) =>
-                                setUpdateTrip({
-                                  ...updateTrip,
-                                  title: e.target.value,
-                                })
-                              }
-                              placeholder="Title"
-                            />
-                            <input
-                              type="text"
-                              value={updateTrip.region || ""}
-                              onChange={(e) =>
-                                setUpdateTrip({
-                                  ...updateTrip,
-                                  region: e.target.value,
-                                })
-                              }
-                              placeholder="region"
-                            />
-                            <input
-                              type="text"
-                              value={updateTrip.sdate || ""}
-                              onChange={(e) =>
-                                setUpdateTrip({
-                                  ...updateTrip,
-                                  sdate: e.target.value,
-                                })
-                              }
-                              placeholder="Start Date"
-                            />
-                            <input
-                              type="text"
-                              value={updateTrip.edate || ""}
-                              onChange={(e) =>
-                                setUpdateTrip({
-                                  ...updateTrip,
-                                  edate: e.target.value,
-                                })
-                              }
-                              placeholder="End Date"
-                            />
-                            <button
-                              // onClick={handleUpdateSubmit}
-                              onClick={() => handleUpdateSubmit(trip)}
-                              className="bg-success rounded-2 border-0"
+                  {trips.length > 0 ? (
+                    <>
+                      {trips.map((trip, index) => {
+                        const filteredData = recData?.find(
+                          (item) => item._id === trip._id
+                        );
+                        return (
+                          <div key={trip._id}>
+                            <div
+                              className={`text-decoration-none d-flex justify-content-center flex-column ${styles.savelink}`}
                             >
-                              Update
-                            </button>
+                              <img
+                                className={styles.uploadimg}
+                                src="https://upload.wikimedia.org/wikipedia/commons/6/68/Loire_Indre_Tours1_tango7174.jpg" // Replace with your default image URL
+                                alt="Uploaded Image"
+                              />
+
+                              <FontAwesomeIcon
+                                icon={faTimes}
+                                className={`bg-light border-0 rounded-5 text-dark position-absolute z-3 p-2 fw-700 animated cursor-pointer ${styles.crossed}`}
+                                onClick={() => handleRemoveTrips(trip._id)}
+                              />
+
+                              <div
+                                style={{ position: "absolute ", zIndex: 999 }}
+                              >
+                                <div className="text-center">
+                                  <p className={`mb-0 letterspac text-white`}>
+                                    Event
+                                  </p>
+                                  <h3 className="w-700 text-white">
+                                    {" "}
+                                    {trip.title}
+                                  </h3>
+                                  <p className={`mb-0 m1 text-white`}>
+                                    {" "}
+                                    {trip.region}
+                                  </p>
+                                  <button
+                                    className="savebtn text-light border-0 rounded-2 px-2 f-16"
+                                    onClick={() => updateTripEditHandle(trip)}
+                                  >
+                                    Edit Trip
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+
+                            
+                            {updateTrip.id && (
+                              <EditTripModal
+                                show={editModalShow}
+                                onHide={() => setEditModalShow(false)}
+                                updateTrip={updateTrip}
+                                handleUpdateSubmit={handleUpdateSubmit}
+                              />
+                            )}
                           </div>
-                        )} */}
-                      {updateTrip.id && (
-                        <EditTripModal
-                          show={editModalShow}
-                          onHide={() => setEditModalShow(false)}
-                          updateTrip={updateTrip}
-                          handleUpdateSubmit={handleUpdateSubmit}
-                        />
-                      )}
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="sr-only">Loading...</span>
                     </div>
-                  ))}
+                  )}
                 </Masonry>
               </Box>
             </InfiniteScroll>
           </div>
-
-          <div className="col-lg-12">
-            <h1 className="dark bold fw-700 pt-4 text-center mb-4">
-              Your Save Trips
-            </h1>
-            <InfiniteScroll
-              className="w-100 overflow-hidden"
-              dataLength={trips.length}
-              loader={<h4>Loading...</h4>}
-            >
-              <Box>
-                <Masonry columns={3} spacing={2}>
-                  {trips
-                    .filter((trip) => savedTripIds.includes(trip._id))
-                    .map((trip, index) => (
-                      <div>
-                        <div className="position-relative" key={trip._id}>
-                          <FontAwesomeIcon
-                            icon={faTimes}
-                            className={` bg-light border-0 rounded-5 text-dark position-absolute z-3 p-2 fw-700 animated cursor-pointer  ${styles.crossed}`}
-                            onClick={() => handleRemoveTrips(trip._id)}
-                          />
-                        </div>
-                        <Link
-                          key={index}
-                          href={`/trip/${trip._id}`}
-                          className="position-relative"
-                        >
-                          <div className={styles.placeImgWrapper}>
-                            <img
-                              src={trip.image}
-                              alt="tripImg"
-                              className={styles.placeImg}
-                              loading="lazy"
-                              style={{
-                                display: "block",
-                                width: "100%",
-                                borderRadius: "15px",
-                                opacity: "0.99990000999",
-                              }}
-                            />
-                          </div>
-                        </Link>
-
-                        <div className="d-flex justify-content-between mt-2">
-                          <h5 className="w-700 mb-2 fw-600 text-dark">
-                            Title: {trip.title}
-                          </h5>
-                          <button
-                            className="text-light border-0 savebtn rounded-2 px-2 f-16"
-                            onClick={() => updateTripEditHandle(trip)}
-                          >
-                            Edit Trip
-                          </button>
-                        </div>
-                        <h5 className="w-700 mb-2 fw-600 text-dark">
-                          region: {trip.region}
-                        </h5>
-                        <div className="d-flex justify-content-between mt-2">
-                          <h5 className="w-700 fw-600 mb-0 text-dark">
-                            Start Date: {trip.sdate}
-                          </h5>
-                          <h5 className="w-700 mb-0 fw-600 text-dark">
-                            End Date: {trip.edate}
-                          </h5>
-                        </div>
-
-                        {updateTrip.id && (
-                          <EditTripModal
-                            show={editModalShow}
-                            onHide={() => setEditModalShow(false)}
-                            updateTrip={updateTrip}
-                            handleUpdateSubmit={handleUpdateSubmit}
-                          />
-                        )}
-                      </div>
-                    ))}
-                </Masonry>
-              </Box>
-            </InfiniteScroll>
-          </div>
-
-          {/* <div className="col-lg-4 first-card position-relative">
-                <div
-                  className={` d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_image1}`}
-                >
-                  <div className="col-lg-12 yoursave_text">
-                    <FontAwesomeIcon
-                      onClick={() => setModalShow(true)}
-                      className={styles.plusicon}
-                      icon={faPlus}
-                    />
-                    <div className="text-center w-100  d-flex justify-content-center align-items-center">
-                      <Trip
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                        setModalShow={setModalShow}
-                      />
-                    </div>{" "}
-                    <p className="letterspac">ITINERARY</p>
-                    <h3 className="landingeventheading"> Saved Activity 1 </h3>
-                    <p className="mb-0 fw-500">Paris, France</p>
-                  </div>
-                </div>
-                <div className="row ">
-                  <div className="col-lg-12 col-md-12 pt-0 mt-0">
-                    <div
-                      className={`row  d-flex justify-content-center align-items-center ${styles.landingendcard1}`}
-                      style={{ background: "white" }}
-                    >
-                      <Trip
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                        setModalShow={setModalShow}
-                      />
-                      {eventData1.map((item, index) => {
-                        return (
-                          <PlaceFullSubCard
-                            key={index}
-                            imageUrl={item.bgImg}
-                            showIcon={showIcon}
-                            itinerary={item.itinerary}
-                            title={item.title}
-                            place={item.place}
-                            time={item.time}
-                            setModalShow={setModalShow}
-                          />
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-8">
-                <div className="row">
-                  <div className="col-lg-12 col-md-12 pt-0 mt-0">
-                    <div
-                      className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
-                      style={{ background: "white" }}
-                    >
-                      <Trip show={modalShow} onHide={() => setModalShow(false)} />
-                      {eventData.map((item, index) => {
-                        return (
-                          <PlaceFullSubCard
-                            key={index}
-                            imageUrl={item.bgImg}
-                            showIcon={showIcon}
-                            itinerary={item.itinerary}
-                            title={item.title}
-                            place={item.place}
-                            time={item.time}
-                            setModalShow={setModalShow}
-                          />
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="col-lg-4 first-card">
-                    <div className={styles.yoursave_image1}>
-                      <div
-                        className={`col-lg-12 position-relative d-flex flex-column justify-content-center align-items-center text-center  ${styles.yoursave_text}`}
-                      >
-                        <FontAwesomeIcon
-                          onClick={() => setModalShow(true)}
-                          className={styles.plusicon2}
-                          icon={faPlus}
-                        />
-                        <Trip show={modalShow} onHide={() => setModalShow(false)} />
-                        <p className="fw-500 ltr-shrt-spec">ITINERARY</p>
-                        <h3 className="landingeventheading"> Saved Activity 1 </h3>
-                        <p className="mb-0 fw-500">Paris, France</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-8">
-                    <div
-                      className={`row  d-flex justify-content-center flex-column align-items-center ${styles.landingendcard1}`}
-                      style={{ background: "white" }}
-                    >
-                      {eventData2.map((item, index) => {
-                        return (
-                          <PlaceFullSubCard
-                            key={index}
-                            imageUrl={item.bgImg}
-                            showIcon={showIcon}
-                            itinerary={item.itinerary}
-                            title={item.title}
-                            place={item.place}
-                            time={item.time}
-                            setModalShow={setModalShow}
-                          />
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div> */}
         </div>
       </div>
-
-      <div>
-        <NewsLetter
-          newsletterimg={newsletterimg}
-          heading={"Subscribe to our Newsletter"}
-          title={"Get Special Offers and more from Traveller"}
-          para={
-            "Subscribe to see secret deals prices drop the moment you sign up!"
-          }
-        />
-      </div>
-      <br />
     </>
   );
 }
@@ -490,54 +245,68 @@ function EditTripModal({ show, onHide, updateTrip, handleUpdateSubmit }) {
   };
 
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal size="md" show={show} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit Trip</Modal.Title>
+        <Modal.Title className="fw-600 d-flex justify-content-center">
+          Edit Trip
+        </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <div>
-          <input
-            type="text"
-            name="title"
-            value={editedTrip.title || ""}
-            onChange={handleInputChange}
-            placeholder="Title"
-          />
-          <input
-            type="text"
-            name="region"
-            value={editedTrip.region || ""}
-            onChange={handleInputChange}
-            placeholder="Region"
-          />
-          <input
-            type="text"
-            name="sdate"
-            value={editedTrip.sdate || ""}
-            onChange={handleInputChange}
-            placeholder="Start Date"
-          />
-          <input
-            type="text"
-            name="edate"
-            value={editedTrip.edate || ""}
-            onChange={handleInputChange}
-            placeholder="End Date"
-          />
-        </div>
+      <Modal.Body className={styles.edittrips}>
+        <Form>
+          <Form.Group controlId="title">
+            <Form.Label className="pt-3 fw-600 px-1">Title</Form.Label>
+            <Form.Control
+              type="text"
+              name="title"
+              value={editedTrip.title || ""}
+              onChange={handleInputChange}
+              placeholder="Title"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="region">
+            <Form.Label className="pt-3 fw-600 px-1">Region</Form.Label>
+            <Form.Control
+              type="text"
+              name="region"
+              value={editedTrip.region || ""}
+              onChange={handleInputChange}
+              placeholder="Region"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="sdate">
+            <Form.Label className="pt-3 fw-600 px-1">Start Date</Form.Label>
+            <Form.Control
+              type="text"
+              name="sdate"
+              value={editedTrip.sdate || ""}
+              onChange={handleInputChange}
+              placeholder="Start Date"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="edate">
+            <Form.Label className="pt-3 fw-600 px-1">End Date</Form.Label>
+            <Form.Control
+              type="text"
+              name="edate"
+              value={editedTrip.edate || ""}
+              onChange={handleInputChange}
+              placeholder="End Date"
+            />
+          </Form.Group>
+        </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Close
-        </Button>
+      <Modal.Footer className="d-flex justify-content-center pb-3">
         <Button
-          variant="success"
+          className="savebtn1 px-4 w-100 rounded-4 "
           onClick={() => {
             handleUpdateSubmit(editedTrip);
             onHide();
           }}
         >
-          Update
+          Finish
         </Button>
       </Modal.Footer>
     </Modal>

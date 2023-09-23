@@ -139,6 +139,10 @@
   height: 400px;
   overflow-y: scroll;
 }
+.edittrips{
+  padding: 20px 40px 30px 40px !important;
+}
+
 .crossed {
   width: 20px;
   height: 20px;
